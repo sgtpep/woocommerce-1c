@@ -1,4 +1,4 @@
-=== 1C:Enterprise Data Exchange with WooCommerce ===
+=== WooCommerce and 1C:Enterprise (1С:Предприятие) Data Exchange ===
 Contributors: sgtpep
 Donate link: http://
 Tags: 1c, 1c-enterprise, commerceml, integration, e-commerce, ecommerce, commerce, shop, cart, woothemes, woocommerce
@@ -12,7 +12,7 @@ Provides data exchange between eCommerce plugin WooCommerce and business applica
 
 == Description ==
 
-Plugin's features:
+Features:
 
 * Product exchange: group (categories), attributes and values, product list and product variations, images, properties, requisites, prices, remains for products.
 * Order exchange: two way exchange of order information between website and application.
@@ -20,6 +20,17 @@ Plugin's features:
 * Effective usage of RAM on server.
 * Support for compressed data exchange.
 * Transactions and strict error checking: DB updates on successfull data exchange only.
+
+Предоставляет обмен данными между плагином для электронной коммерции WooCommerce и приложением для бизнеса "1C:Предприятие 8. Управление торговлей".
+
+Особенности:
+
+* Выгрузка товаров: группы (категории), свойства и значения, список товаров и вариантов, изображения, свойства, реквизиты, цены, остатки товаров.
+* Обмен заказами: двусторонний обмен информацией о заказах на сайте и в приложении.
+* Полная и частичная синхронизация.
+* Экономичное использование оперативной памяти сервера.
+* Поддержка передачи данных в сжатом виде.
+* Транзакционность и строгая проверка на ошибки: данные обновляются в БД только в случае успешного обмена.
 
 == Installation ==
 
@@ -49,19 +60,6 @@ Initial release.
 == Upgrade Notice ==
 
 –
-
-== Описание ==
-
-Предоставляет обмен данными между плагином для электронной коммерции WooCommerce и приложением для бизнеса "1C:Предприятие 8. Управление торговлей".
-
-Особенности плагина:
-
-* Выгрузка товаров: группы (категории), свойства и значения, список товаров и вариантов, изображения, свойства, реквизиты, цены, остатки товаров.
-* Обмен заказами: двусторонний обмен информацией о заказах на сайте и в приложении.
-* Полная и частичная синхронизация.
-* Экономичное использование оперативной памяти сервера.
-* Поддержка передачи данных в сжатом виде.
-* Транзакционность и строгая проверка на ошибки: данные обновляются в БД только в случае успешного обмена.
 
 == Установка ==
 
