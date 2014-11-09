@@ -68,6 +68,8 @@ Yes, feel free to get in touch with me using [contact form](http://danil.iamsync
 
 == Screenshots ==
 
+TODO
+
 == Changelog ==
 
 = 0.1.0 =
