@@ -12,6 +12,8 @@ Provides data exchange between eCommerce plugin WooCommerce and business applica
 
 == Description ==
 
+Provides data exchange between eCommerce plugin WooCommerce and business application "1C:Enterprise 8. Trade Management".
+
 Features:
 
 * Product exchange: group (categories), attributes and values, product list and product variations, images, properties, requisites, prices, remains for products.
@@ -20,6 +22,8 @@ Features:
 * Effective usage of RAM on server.
 * Support for compressed data exchange.
 * Transactions and strict error checking: DB updates on successfull data exchange only.
+
+= In Russian =
 
 Предоставляет обмен данными между плагином для электронной коммерции WooCommerce и приложением для бизнеса "1C:Предприятие 8. Управление торговлей".
 
@@ -42,26 +46,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 You should provide website address for syncronization in "1C:Trade Management", like http://example.com/wc1c/exchange. You should also provide actual username and password of active website user with role "Shop Manager" or Administrator.
 
-== Frequently Asked Questions ==
-
-= Do you provide a support? =
-
-Yes, feel free to get in touch with me using [contact form](http://danil.iamsync.com/).
-
-== Screenshots ==
-
-–
-
-== Changelog ==
-
-= 0.1.0 =
-Initial release.
-
-== Upgrade Notice ==
-
-–
-
-== Установка ==
+= In Russian =
 
 Вначале вам необходимо установить и активировать плагин WooCommerce, т.к. этот плагин зависит от него.
 
@@ -71,21 +56,24 @@ Initial release.
 
 В "1С:Управление торговлей" в качестве адреса сайта для синхронизации необходимо указать адрес вида http://example.com/wp-content/plugins/woocommerce-1c/exchange.php. В качестве имени пользователя и пароля следует указать действующие на сайте имя и пароль активного пользователя с ролью "Shop Manager" или Администратор.
 
-== Часто задаваемые вопросы ==
+== Frequently Asked Questions ==
+
+= Do you provide a support? =
+Yes, feel free to get in touch with me using [contact form](http://danil.iamsync.com/).
+
+= In Russian =
 
 = Предоставляете ли вы поддержку? =
-
 Да, со мной можно свободно связаться, используя [форму обратной связи](http://danil.iamsync.ru/).
 
-== Скриншоты ==
+== Screenshots ==
 
-–
+== Changelog ==
 
-== История изменений ==
+= 0.1.0 =
+Initial release.
+
+= In Russian =
 
 = 0.1.0 =
 Первая версия.
-
-== Инструкции по обновлению ==
-
-–
