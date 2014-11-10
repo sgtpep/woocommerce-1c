@@ -44,7 +44,7 @@ Also this plugin requires enabled permalinks. You should enable them in Settings
 
 Automatic installation is the easiest option as WordPress handles the file transfers itself and you don’t need to leave your web browser. To do an automatic install of the plugin, log in to your WordPress dashboard, navigate to the Plugins menu and click "Add New". In the search field type part of the plugin name and click "Search Plugins". Once you’ve found the plugin you can view details about it and install it by simply clicking "Install Now".
 
-You should provide website address for syncronization in "1C:Trade Management", like http://example.com/?pagename=wc1c-exchange. You should also provide actual username and password of active website user with role "Shop Manager" or Administrator.
+You should provide website address for syncronization in "1C:Trade Management", like http://example.com/wc1c/exchange. You should also provide actual username and password of active website user with role "Shop Manager" or Administrator.
 
 = In Russian =
 
@@ -54,7 +54,7 @@ You should provide website address for syncronization in "1C:Trade Management", 
 
 Автоматическая установка является простейшим способом, т.к. WordPress сам осуществит передачу файлов и вам не нужно будет покидать браузер. Чтобы произвести автоматическую установку плагина, зайдите в вашу панель управления WordPress, перейдите в меню плагинов и кликните "Добавить новый". В поисковом поле введите часть названия плагина и кликните "Искать плагины". После того, как вы найдете плагин, вы можете просмотреть информацию о нем и установить его, кликнув "Установить сейчас".
 
-В "1С:Управление торговлей" в качестве адреса сайта для синхронизации необходимо указать адрес вида http://example.com/?pagename=wc1c-exchange. В качестве имени пользователя и пароля следует указать действующие на сайте имя и пароль активного пользователя с ролью "Shop Manager" или Администратор.
+В "1С:Управление торговлей" в качестве адреса сайта для синхронизации необходимо указать адрес вида http://example.com/wc1c/exchange. В качестве имени пользователя и пароля следует указать действующие на сайте имя и пароль активного пользователя с ролью "Shop Manager" или Администратор.
 
 == Frequently Asked Questions ==
 
