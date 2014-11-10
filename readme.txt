@@ -23,6 +23,8 @@ Features:
 * Support for compressed data exchange.
 * Transactions and strict error checking: DB updates on successfull data exchange only.
 
+If you have any question or proposal, please [contact the author](http://danil.iamsync.com/).
+
 = In Russian =
 
 Предоставляет обмен данными между плагином для электронной коммерции WooCommerce и приложением для бизнеса "1C:Предприятие 8. Управление торговлей".
@@ -35,6 +37,8 @@ Features:
 * Экономичное использование оперативной памяти сервера.
 * Поддержка передачи данных в сжатом виде.
 * Транзакционность и строгая проверка на ошибки: данные обновляются в БД только в случае успешного обмена.
+
+По всем вопросам и предложениям, пожалуйста, [свяжитесь с автором](http://danil.iamsync.com/).
 
 == Installation ==
 
@@ -58,13 +62,13 @@ You should provide website address for syncronization in "1C:Trade Management", 
 
 == Frequently Asked Questions ==
 
-= Do you provide a support? =
-Yes, feel free to get in touch with me using [contact form](http://danil.iamsync.com/).
+= Do you provide support? =
+Yes, feel free to get in touch with the author using [contact form](http://danil.iamsync.com/).
 
 = In Russian =
 
 = Предоставляете ли вы поддержку? =
-Да, со мной можно свободно связаться, используя [форму обратной связи](http://danil.iamsync.ru/).
+Да, с автором можно свободно связаться, используя [форму обратной связи](http://danil.iamsync.ru/).
 
 == Screenshots ==
 
