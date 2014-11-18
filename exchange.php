@@ -344,6 +344,7 @@ function wc1c_mode_import($type, $filename) {
 
   $namespace = pathinfo($filename, PATHINFO_FILENAME);
   list($namespace) = explode('-', $namespace, 2);
+  $namespace = preg_replace("/\d+$/", '', $namespace);
 
   $wc1c_namespace = $namespace;
   $wc1c_is_full = wc1c_xml_is_full($fp);
