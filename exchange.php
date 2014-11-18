@@ -3,6 +3,8 @@ if (!defined('ABSPATH')) exit;
 
 define('WC1C_TIMESTAMP', time());
 
+if (!defined('WP_ADMIN')) define('WP_ADMIN', true);
+
 function wc1c_exchange_init() {
   add_rewrite_rule("wc1c/exchange", "index.php?pagename=wc1c-exchange", 'top');
   flush_rewrite_rules();
