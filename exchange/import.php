@@ -20,6 +20,8 @@ function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $att
   elseif (@$names[$depth - 1] == 'Группа' && $name == 'Группы') {
     wc1c_replace_group($is_full, $wc1c_groups[$wc1c_group_depth], $wc1c_group_order);
     $wc1c_group_order++;
+
+    $wc1c_groups[$wc1c_group_depth]['Группы'] = true;
   }
   elseif (@$names[$depth - 1] == 'Классификатор' && $name == 'Свойства') {
     $wc1c_property_order = 1;
@@ -123,9 +125,14 @@ function wc1c_import_character_data_handler($is_full, $names, $depth, $name, $da
 }
 
 function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
-  global $wc1c_groups, $wc1c_group_depth, $wc1c_property, $wc1c_property_order, $wc1c_product;
+  global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_product;
 
   if (@$names[$depth - 1] == 'Группы' && $name == 'Группа') {
+    if (empty($wc1c_groups[$wc1c_group_depth]['Группы'])) {
+      wc1c_replace_group($is_full, $wc1c_groups[$wc1c_group_depth], $wc1c_group_order);
+      $wc1c_group_order++;
+    }
+
     array_pop($wc1c_groups);
     $wc1c_group_depth--;
   }
@@ -292,7 +299,7 @@ function wc1c_replace_property_option($property_option, $attribute_taxonomy, $or
 }
 
 function wc1c_replace_property($is_full, $property, $order) {
-  $attribute_type = $property['ТипЗначений'] == 'Справочник' ? 'select' : 'text';
+  $attribute_type = @$property['ТипЗначений'] == 'Справочник' ? 'select' : 'text';
   $attribute_id = wc1c_replace_woocommerce_attribute($is_full, $property['Ид'], $property['Наименование'], $attribute_type, $order);
 
   $attribute = wc1c_woocommerce_attribute_by_id($attribute_id);
