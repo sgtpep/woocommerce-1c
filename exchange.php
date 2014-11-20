@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) exit;
 define('WC1C_TIMESTAMP', time());
 
 function wc1c_exchange_init() {
-  add_rewrite_rule("wc1c/exchange/", "index.php?wc1c=exchange", 'top');
+  add_rewrite_rule("wc1c/exchange", "index.php?wc1c=exchange", 'top');
   flush_rewrite_rules();
 }
 add_action('init', 'wc1c_exchange_init');
