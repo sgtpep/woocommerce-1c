@@ -3,10 +3,8 @@ if (!defined('ABSPATH')) exit;
 
 define('WC1C_TIMESTAMP', time());
 
-if (!defined('WP_ADMIN')) define('WP_ADMIN', true);
-
 function wc1c_exchange_init() {
-  add_rewrite_rule("wc1c/exchange", "index.php?pagename=wc1c-exchange", 'top');
+  add_rewrite_rule("wc1c/exchange/", "index.php?wc1c=exchange", 'top');
   flush_rewrite_rules();
 }
 add_action('init', 'wc1c_exchange_init');
@@ -390,8 +388,15 @@ function wc1c_mode_success($type) {
   exit("success");
 }
 
+function wc1c_query_vars($query_vars) {
+  $query_vars[] = 'wc1c';
+
+  return $query_vars;
+}
+add_filter('query_vars', 'wc1c_query_vars');
+
 function wc1c_template_redirect() {
-  if (get_query_var('pagename') != 'wc1c-exchange') return;
+  if (get_query_var('wc1c') != 'exchange') return;
 
   header("Content-Type: text/plain; charset=utf-8");
 
