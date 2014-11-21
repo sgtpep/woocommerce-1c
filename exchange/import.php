@@ -169,7 +169,7 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
       }
     }
 
-    wc1c_replace_product($is_full, $wc1c_product['Ид'], $wc1c_product['Наименование'], $is_deleted, @$wc1c_product['Артикул'], @$wc1c_product['БазоваяЕдиница'], @$wc1c_product['Группы'], @$wc1c_product['Описание'], @$wc1c_product['Картинка'], @$wc1c_product['Изготовитель']['Наименование'], @$wc1c_product['ЗначенияСвойств'], @$wc1c_product['ЗначенияРеквизитов']);
+    wc1c_replace_product($is_full, $wc1c_product, $is_deleted);
   }
   elseif (@$names[$depth - 1] == 'Каталог' && $name == 'Товары') {
     wc1c_clean_products($is_full);
@@ -473,14 +473,14 @@ function wc1c_replace_post_attachments($post_id, $attachments) {
   return $attachment_ids;
 }
 
-function wc1c_replace_product($is_full, $guid, $title, $is_deleted, $sku, $unit, $group_guids, $description, $picture_paths, $producer, $properties, $requisites) {
+function wc1c_replace_product($is_full, $product, $is_deleted) {
   $post_meta = array(
-    '_sku' => $sku,
-    'wc1c_unit' => $unit,
-    'wc1c_producer' => $producer,
+    '_sku' => @$product['Артикул'],
+    'wc1c_unit' => @$product['БазоваяЕдиница'],
+    'wc1c_producer' => @$product['Изготовитель']['Наименование'],
   );
 
-  list($post_id, $post_meta) = wc1c_replace_post($guid, $title, 'product', $is_deleted, $description, $post_meta, 'product_cat', $group_guids);
+  list($post_id, $post_meta) = wc1c_replace_post($product['Ид'], $product['Наименование'], 'product', $is_deleted, @$product['Описание'], $post_meta, 'product_cat', @$product['Группы']);
 
   $current_product_attributes = isset($post_meta['_product_attributes']) ? maybe_unserialize($post_meta['_product_attributes']) : array();
 
@@ -494,9 +494,9 @@ function wc1c_replace_product($is_full, $guid, $title, $is_deleted, $sku, $unit,
 
   $product_attributes = array();
 
-  if ($properties) {
+  if ($product['ЗначенияСвойств']) {
     $attribute_guids = get_option('wc1c_guid_attributes', array());
-    foreach ($properties as $property) {
+    foreach ($product['ЗначенияСвойств'] as $property) {
       $attribute_guid = $property['Ид'];
       $attribute_id = @$attribute_guids[$attribute_guid];
       if (!$attribute_id) continue;
@@ -537,24 +537,22 @@ function wc1c_replace_product($is_full, $guid, $title, $is_deleted, $sku, $unit,
     }
   }
 
-  if ($requisites) {
-    foreach ($requisites as $requisite) {
-      $attribute_values = @$requisite['Значение'];
-      if (!$attribute_values) continue;
-      if (strpos($attribute_values[0], "import_files/") === 0) continue;
+  foreach ($product['ЗначенияРеквизитов'] as $requisite) {
+    $attribute_values = @$requisite['Значение'];
+    if (!$attribute_values) continue;
+    if (strpos($attribute_values[0], "import_files/") === 0) continue;
 
-      $attribute_name = $requisite['Наименование'];
-      $product_attribute_key = sanitize_title($attribute_name);
-      $product_attribute_position = count($product_attributes);
-      $product_attributes[$product_attribute_key] = array(
-        'name' => wc_clean($attribute_name),
-        'value' => implode(" | ", $attribute_values),
-        'position' => $product_attribute_position,
-        'is_visible' => 0,
-        'is_variation' => 0,
-        'is_taxonomy' => 0,
-      );
-    }
+    $attribute_name = $requisite['Наименование'];
+    $product_attribute_key = sanitize_title($attribute_name);
+    $product_attribute_position = count($product_attributes);
+    $product_attributes[$product_attribute_key] = array(
+      'name' => wc_clean($attribute_name),
+      'value' => implode(" | ", $attribute_values),
+      'position' => $product_attribute_position,
+      'is_visible' => 0,
+      'is_variation' => 0,
+      'is_taxonomy' => 0,
+    );
   }
 
   $old_product_attributes = array_diff_key($current_product_attributes, $product_attributes);
@@ -573,17 +571,13 @@ function wc1c_replace_product($is_full, $guid, $title, $is_deleted, $sku, $unit,
   }
 
   $attachments = array();
-  if ($picture_paths) {
-    foreach ($picture_paths as $picture_path) {
-      $attachments[$picture_path] = array();
-    }
-  }
+  if (!empty($product['Картинка'])) $attachments = array_fill_keys($product['Картинка'], array());
 
-  if ($requisites) {
+  if ($product['ЗначенияРеквизитов']) {
     $attachment_keys = array(
       'ОписаниеФайла' => 'description',
     );
-    foreach ($requisites as $requisite) {
+    foreach ($product['ЗначенияРеквизитов'] as $requisite) {
       $attribute_name = $requisite['Наименование'];
       if (!isset($attachment_keys[$attribute_name])) continue;
 
