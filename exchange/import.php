@@ -557,9 +557,6 @@ function wc1c_replace_product($is_full, $product) {
     );
   }
 
-  $product_attributes = apply_filters('wc1c_product_attributes', $product_attributes);
-  if (!$product_attributes) $product_attributes = array();
-
   $old_product_attributes = array_diff_key($current_product_attributes, $product_attributes);
   $old_taxonomies = array();
   foreach ($old_product_attributes as $old_product_attribute) {
@@ -616,6 +613,8 @@ function wc1c_replace_product($is_full, $product) {
       if ($meta_value != @$post_meta[$meta_key]) update_post_meta($post_id, $meta_key, $meta_value);
     }
   }
+
+  do_action('wc1c_post_product', $post_id, $product);
 }
 
 function wc1c_clean_woocommerce_categories($is_full) {
