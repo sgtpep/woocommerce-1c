@@ -20,7 +20,7 @@ function wc1c_wpdb_end($is_commit = false, $no_check = false) {
   $wpdb->query($sql_query);
   if (!$no_check) wc1c_check_wpdb_error();
 
-  if (defined('WP_DEBUG')) echo "\n" . strtolower($sql_query);
+  if (WP_DEBUG) echo "\n" . strtolower($sql_query);
 }
 
 function wc1c_error($message, $type = "Error", $no_exit = false) {
@@ -35,7 +35,7 @@ function wc1c_error($message, $type = "Error", $no_exit = false) {
   error_log($message);
   echo "$message\n";
 
-  if (defined('WP_DEBUG')) {
+  if (WP_DEBUG) {
     echo "\n";
     debug_print_backtrace();
   }
@@ -131,8 +131,6 @@ function wc1c_check_auth() {
   }
 
   wc1c_check_permissions($user);
-
-  if (!defined('WP_DEBUG')) define('WP_DEBUG', true);
 }
 
 function wc1c_clean_data_dir($type) {
