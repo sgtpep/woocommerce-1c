@@ -6,7 +6,7 @@ require_once ABSPATH . "wp-admin/includes/file.php";
 require_once ABSPATH . "wp-admin/includes/image.php";
 
 function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $attrs) {
-  global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_individual_properties, $wc1c_product;
+  global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_requisite_properties, $wc1c_product;
 
   if (@$names[$depth - 1] == 'Классификатор' && $name == 'Группы') {
     $wc1c_groups = array();
@@ -25,7 +25,7 @@ function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $att
   }
   elseif (@$names[$depth - 1] == 'Классификатор' && $name == 'Свойства') {
     $wc1c_property_order = 1;
-    $wc1c_individual_properties = array();
+    $wc1c_requisite_properties = array();
   }
   elseif (@$names[$depth - 1] == 'Свойства' && $name == 'Свойство') {
     $wc1c_property = array();
@@ -123,7 +123,7 @@ function wc1c_import_character_data_handler($is_full, $names, $depth, $name, $da
 }
 
 function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
-  global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_individual_properties, $wc1c_product;
+  global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_requisite_properties, $wc1c_product;
 
   if (@$names[$depth - 1] == 'Группы' && $name == 'Группа') {
     if (empty($wc1c_groups[$wc1c_group_depth]['Группы'])) {
@@ -146,7 +146,7 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
       wc1c_clean_woocommerce_attribute_options($attribute_taxonomy);
     }
     else {
-      $wc1c_individual_properties[$wc1c_property['Ид']] = $wc1c_property;
+      $wc1c_requisite_properties[$wc1c_property['Ид']] = $wc1c_property;
     }
   }
   elseif (@$names[$depth - 1] == 'Классификатор' && $name == 'Свойства') {
@@ -155,11 +155,11 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
     delete_transient('wc_attribute_taxonomies');
   }
   elseif (@$names[$depth - 1] == 'Товары' && $name == 'Товар') {
-    if ($wc1c_individual_properties) {
+    if ($wc1c_requisite_properties) {
       foreach ($wc1c_product['ЗначенияСвойств'] as $product_property) {
-        if (!array_key_exists($product_property['Ид'], $wc1c_individual_properties)) continue;
+        if (!array_key_exists($product_property['Ид'], $wc1c_requisite_properties)) continue;
 
-        $property = $wc1c_individual_properties[$product_property['Ид']];
+        $property = $wc1c_requisite_properties[$product_property['Ид']];
         $wc1c_product['ЗначенияРеквизитов'][] = array(
           'Наименование' => $property['Наименование'],
           'Значение' => $product_property['Значение'],

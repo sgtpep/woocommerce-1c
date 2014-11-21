@@ -4,7 +4,7 @@ Donate link: http://
 Tags: 1c, 1c-enterprise, commerceml, integration, e-commerce, ecommerce, commerce, shop, cart, woothemes, woocommerce
 Requires at least: 3.8
 Tested up to: 4.0
-Stable tag: 0.1.0
+Stable tag: 0.2.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -76,10 +76,16 @@ TODO
 
 == Changelog ==
 
+= 0.2.0 =
+Added basic API using filters and actions.
+
 = 0.1.0 =
 Initial release.
 
 = In Russian =
+
+= 0.2.0 =
+Добавлено базовое API с помощью фильтров и действий.
 
 = 0.1.0 =
 Первая версия.
