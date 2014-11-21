@@ -18,8 +18,8 @@ function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $att
     $wc1c_groups[] = array('ИдРодителя' => @$wc1c_groups[$wc1c_group_depth - 1]['Ид']);
   }
   elseif (@$names[$depth - 1] == 'Группа' && $name == 'Группы') {
-    wc1c_replace_group($is_full, $wc1c_groups[$wc1c_group_depth], $wc1c_group_order);
-    $wc1c_group_order++;
+    $result = wc1c_replace_group($is_full, $wc1c_groups[$wc1c_group_depth], $wc1c_group_order);
+    if ($result) $wc1c_group_order++;
 
     $wc1c_groups[$wc1c_group_depth]['Группы'] = true;
   }
@@ -127,8 +127,8 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
 
   if (@$names[$depth - 1] == 'Группы' && $name == 'Группа') {
     if (empty($wc1c_groups[$wc1c_group_depth]['Группы'])) {
-      wc1c_replace_group($is_full, $wc1c_groups[$wc1c_group_depth], $wc1c_group_order);
-      $wc1c_group_order++;
+      $result = wc1c_replace_group($is_full, $wc1c_groups[$wc1c_group_depth], $wc1c_group_order);
+      if ($result) $wc1c_group_order++;
     }
 
     array_pop($wc1c_groups);
@@ -252,6 +252,9 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
 }
 
 function wc1c_replace_group($is_full, $group, $order) {
+  $group = apply_filters('wc1c_import_xml_group', $group);
+  if (!$group) return;
+
   wc1c_replace_term($is_full, $group['Ид'], $group['ИдРодителя'], $group['Наименование'], 'product_cat', $order);
 }
 
