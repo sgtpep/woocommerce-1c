@@ -250,7 +250,7 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
 }
 
 function wc1c_replace_group($is_full, $group, $order) {
-  $group = apply_filters('wc1c_import_xml_group', $group);
+  $group = apply_filters('wc1c_xml_import_group', $group);
   if (!$group) return;
 
   wc1c_replace_term($is_full, $group['Ид'], $group['ИдРодителя'], $group['Наименование'], 'product_cat', $order);
@@ -317,7 +317,7 @@ function wc1c_replace_property_option($property_option, $attribute_taxonomy, $or
 }
 
 function wc1c_replace_property($is_full, $property, $order) {
-  $property = apply_filters('wc1c_import_xml_property', $property);
+  $property = apply_filters('wc1c_xml_import_property', $property);
   if (!$property) return;
 
   $attribute_type = @$property['ТипЗначений'] == 'Справочник' ? 'select' : 'text';
@@ -472,7 +472,7 @@ function wc1c_replace_post_attachments($post_id, $attachments) {
 }
 
 function wc1c_replace_product($is_full, $product) {
-  $product = apply_filters('wc1c_import_xml_product', $product);
+  $product = apply_filters('wc1c_xml_import_product', $product);
   if (!$product) return;
 
   $post_meta = array(
