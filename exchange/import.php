@@ -155,8 +155,6 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
     delete_transient('wc_attribute_taxonomies');
   }
   elseif (@$names[$depth - 1] == 'Товары' && $name == 'Товар') {
-    $is_deleted = @$wc1c_product['Статус'] == 'Удален';
-
     if ($wc1c_individual_properties) {
       foreach ($wc1c_product['ЗначенияСвойств'] as $product_property) {
         if (!array_key_exists($product_property['Ид'], $wc1c_individual_properties)) continue;
@@ -169,7 +167,7 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
       }
     }
 
-    wc1c_replace_product($is_full, $wc1c_product, $is_deleted);
+    wc1c_replace_product($is_full, $wc1c_product);
   }
   elseif (@$names[$depth - 1] == 'Каталог' && $name == 'Товары') {
     wc1c_clean_products($is_full);
@@ -473,13 +471,17 @@ function wc1c_replace_post_attachments($post_id, $attachments) {
   return $attachment_ids;
 }
 
-function wc1c_replace_product($is_full, $product, $is_deleted) {
+function wc1c_replace_product($is_full, $product) {
+  $product = apply_filters('wc1c_import_xml_product', $product);
+  if (!$product) return;
+
   $post_meta = array(
     '_sku' => @$product['Артикул'],
     'wc1c_unit' => @$product['БазоваяЕдиница'],
     'wc1c_producer' => @$product['Изготовитель']['Наименование'],
   );
 
+  $is_deleted = @$product['Статус'] == 'Удален';
   list($post_id, $post_meta) = wc1c_replace_post($product['Ид'], $product['Наименование'], 'product', $is_deleted, @$product['Описание'], $post_meta, 'product_cat', @$product['Группы']);
 
   $current_product_attributes = isset($post_meta['_product_attributes']) ? maybe_unserialize($post_meta['_product_attributes']) : array();
