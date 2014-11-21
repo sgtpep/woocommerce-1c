@@ -320,7 +320,7 @@ function wc1c_replace_property($is_full, $property, $order) {
   $property = apply_filters('wc1c_xml_import_property', $property);
   if (!$property) return;
 
-  $attribute_type = @$property['ТипЗначений'] == 'Справочник' ? 'select' : 'text';
+  $attribute_type = (empty($property['ТипЗначений']) || $property['ТипЗначений'] == 'Справочник') ? 'select' : 'text';
   $attribute_id = wc1c_replace_woocommerce_attribute($is_full, $property['Ид'], $property['Наименование'], $attribute_type, $order);
 
   $attribute = wc1c_woocommerce_attribute_by_id($attribute_id);
@@ -328,7 +328,7 @@ function wc1c_replace_property($is_full, $property, $order) {
 
   register_taxonomy($attribute['taxonomy'], null);
 
-  if ($attribute_type == 'select') {
+  if ($attribute_type == 'select' && !empty($property['ВариантыЗначений'])) {
     foreach ($property['ВариантыЗначений'] as $i => $property_option) {
       wc1c_replace_property_option($property_option, $attribute['taxonomy'], $i + 1);
     }
@@ -510,11 +510,11 @@ function wc1c_replace_product($is_full, $product) {
       $attribute_values = @$property['Значение'];
       if ($attribute_values) {
         foreach ($attribute_values as $attribute_value) {
-          if ($attribute['attribute_type'] == 'select') {
+          if ($attribute['attribute_type'] == 'select' && preg_match("/^\w+-\w+-\w+-\w+-\w+$/", $attribute_value)) {
             $term_id = wc1c_term_id_by_meta('wc1c_guid', $attribute_value);
             if ($term_id) $terms[] = (int) $term_id;
           }
-          elseif ($attribute['attribute_type'] == 'text') {
+          else {
             $terms[] = $attribute_value;
           }
         }
@@ -557,10 +557,18 @@ function wc1c_replace_product($is_full, $product) {
     );
   }
 
+  $product_attributes = apply_filters('wc1c_product_attributes', $product_attributes);
+  if (!$product_attributes) $product_attributes = array();
+
   $old_product_attributes = array_diff_key($current_product_attributes, $product_attributes);
   $old_taxonomies = array();
   foreach ($old_product_attributes as $old_product_attribute) {
-    if ($old_product_attribute['is_taxonomy']) $old_taxonomies[] = $old_product_attribute['name'];
+    if ($old_product_attribute['is_taxonomy']) {
+      $old_taxonomies[] = $old_product_attribute['name'];
+    }
+    else {
+      $product_attributes = array_diff($product_attributes, array($old_product_attribute));
+    }
   }
   wp_delete_object_term_relationships($post_id, $old_taxonomies);
 
