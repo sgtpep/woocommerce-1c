@@ -6,7 +6,7 @@ require_once ABSPATH . "wp-admin/includes/file.php";
 require_once ABSPATH . "wp-admin/includes/image.php";
 
 function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $attrs) {
-  global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_product;
+  global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_individual_properties, $wc1c_product;
 
   if (@$names[$depth - 1] == 'Классификатор' && $name == 'Группы') {
     $wc1c_groups = array();
@@ -25,6 +25,7 @@ function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $att
   }
   elseif (@$names[$depth - 1] == 'Классификатор' && $name == 'Свойства') {
     $wc1c_property_order = 1;
+    $wc1c_individual_properties = array();
   }
   elseif (@$names[$depth - 1] == 'Свойства' && $name == 'Свойство') {
     $wc1c_property = array();
@@ -36,7 +37,10 @@ function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $att
     $wc1c_property['ВариантыЗначений'][] = array();
   }
   elseif (@$names[$depth - 1] == 'Товары' && $name == 'Товар') {
-    $wc1c_product = array();
+    $wc1c_product = array(
+      'ЗначенияСвойств' => array(),
+      'ЗначенияРеквизитов' => array(),
+    );
   }
   elseif (@$names[$depth - 1] == 'Товар' && $name == 'Группы') {
     $wc1c_product['Группы'] = array();
@@ -51,9 +55,6 @@ function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $att
   elseif (@$names[$depth - 1] == 'Товар' && $name == 'Изготовитель') {
     $wc1c_product['Изготовитель'] = array();
   }
-  elseif (@$names[$depth - 1] == 'Товар' && $name == 'ЗначенияСвойств') {
-    $wc1c_product['ЗначенияСвойств'] = array();
-  }
   elseif (@$names[$depth - 1] == 'ЗначенияСвойств' && $name == 'ЗначенияСвойства') {
     $wc1c_product['ЗначенияСвойств'][] = array();
   }
@@ -61,9 +62,6 @@ function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $att
     $i = count($wc1c_product['ЗначенияСвойств']) - 1;
     if (!isset($wc1c_product['ЗначенияСвойств'][$i]['Значение'])) $wc1c_product['ЗначенияСвойств'][$i]['Значение'] = array();
     $wc1c_product['ЗначенияСвойств'][$i]['Значение'][] = '';
-  }
-  elseif (@$names[$depth - 1] == 'Товар' && $name == 'ЗначенияРеквизитов') {
-    $wc1c_product['ЗначенияРеквизитов'] = array();
   }
   elseif (@$names[$depth - 1] == 'ЗначенияРеквизитов' && $name == 'ЗначениеРеквизита') {
     $wc1c_product['ЗначенияРеквизитов'][] = array();
@@ -125,7 +123,7 @@ function wc1c_import_character_data_handler($is_full, $names, $depth, $name, $da
 }
 
 function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
-  global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_product;
+  global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_individual_properties, $wc1c_product;
 
   if (@$names[$depth - 1] == 'Группы' && $name == 'Группа') {
     if (empty($wc1c_groups[$wc1c_group_depth]['Группы'])) {
@@ -140,10 +138,16 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
     wc1c_clean_woocommerce_categories($is_full);
   }
   elseif (@$names[$depth - 1] == 'Свойства' && $name == 'Свойство') {
-    $attribute_taxonomy = wc1c_replace_property($is_full, $wc1c_property, $wc1c_property_order);
-    $wc1c_property_order++;
+    $result = wc1c_replace_property($is_full, $wc1c_property, $wc1c_property_order);
+    if ($result) {
+      $attribute_taxonomy = $result;
+      $wc1c_property_order++;
 
-    wc1c_clean_woocommerce_attribute_options($attribute_taxonomy);
+      wc1c_clean_woocommerce_attribute_options($attribute_taxonomy);
+    }
+    else {
+      $wc1c_individual_properties[$wc1c_property['Ид']] = $wc1c_property;
+    }
   }
   elseif (@$names[$depth - 1] == 'Классификатор' && $name == 'Свойства') {
     wc1c_clean_woocommerce_attributes($is_full);
@@ -152,6 +156,19 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
   }
   elseif (@$names[$depth - 1] == 'Товары' && $name == 'Товар') {
     $is_deleted = @$wc1c_product['Статус'] == 'Удален';
+
+    if ($wc1c_individual_properties) {
+      foreach ($wc1c_product['ЗначенияСвойств'] as $product_property) {
+        if (!array_key_exists($product_property['Ид'], $wc1c_individual_properties)) continue;
+
+        $property = $wc1c_individual_properties[$product_property['Ид']];
+        $wc1c_product['ЗначенияРеквизитов'][] = array(
+          'Наименование' => $property['Наименование'],
+          'Значение' => $product_property['Значение'],
+        );
+      }
+    }
+
     wc1c_replace_product($is_full, $wc1c_product['Ид'], $wc1c_product['Наименование'], $is_deleted, @$wc1c_product['Артикул'], @$wc1c_product['БазоваяЕдиница'], @$wc1c_product['Группы'], @$wc1c_product['Описание'], @$wc1c_product['Картинка'], @$wc1c_product['Изготовитель']['Наименование'], @$wc1c_product['ЗначенияСвойств'], @$wc1c_product['ЗначенияРеквизитов']);
   }
   elseif (@$names[$depth - 1] == 'Каталог' && $name == 'Товары') {
@@ -299,6 +316,9 @@ function wc1c_replace_property_option($property_option, $attribute_taxonomy, $or
 }
 
 function wc1c_replace_property($is_full, $property, $order) {
+  $property = apply_filters('wc1c_import_xml_property', $property);
+  if (!$property) return;
+
   $attribute_type = @$property['ТипЗначений'] == 'Справочник' ? 'select' : 'text';
   $attribute_id = wc1c_replace_woocommerce_attribute($is_full, $property['Ид'], $property['Наименование'], $attribute_type, $order);
 
