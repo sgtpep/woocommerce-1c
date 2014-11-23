@@ -20,7 +20,7 @@ function wc1c_wpdb_end($is_commit = false, $no_check = false) {
   $wpdb->query($sql_query);
   if (!$no_check) wc1c_check_wpdb_error();
 
-  if (WP_DEBUG) echo "\n" . strtolower($sql_query);
+  if (defined('WP_DEBUG') && WP_DEBUG) echo "\n" . strtolower($sql_query);
 }
 
 function wc1c_error($message, $type = "Error", $no_exit = false) {
@@ -35,7 +35,7 @@ function wc1c_error($message, $type = "Error", $no_exit = false) {
   error_log($message);
   echo "$message\n";
 
-  if (WP_DEBUG) {
+  if (defined('WP_DEBUG') && WP_DEBUG) {
     echo "\n";
     debug_print_backtrace();
   }
