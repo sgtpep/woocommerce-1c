@@ -705,10 +705,11 @@ function wc1c_clean_product_terms() {
   $wpdb->query("UPDATE $wpdb->term_taxonomy tt SET count = (SELECT COUNT(*) FROM $wpdb->term_relationships WHERE term_taxonomy_id = tt.term_taxonomy_id) WHERE taxonomy LIKE 'pa_%'");
   wc1c_check_wpdb_error();
 
-  $rows = $wpdb->get_results("SELECT term_id, taxonomy FROM $wpdb->term_taxonomy LEFT JOIN $wpdb->woocommerce_termmeta ON term_id = woocommerce_term_id AND meta_key = 'wc1c_guid' WHERE meta_value IS NULL AND taxonomy LIKE 'pa_%' AND COUNT = 0");
+  $rows = $wpdb->get_results("SELECT term_id, taxonomy FROM $wpdb->term_taxonomy LEFT JOIN $wpdb->woocommerce_termmeta ON term_id = woocommerce_term_id AND meta_key = 'wc1c_guid' WHERE meta_value IS NULL AND taxonomy LIKE 'pa_%' AND count = 0");
   wc1c_check_wpdb_error();
 
   foreach ($rows as $row) {
+    register_taxonomy($row->taxonomy, null);
     $result = wp_delete_term($row->term_id, $row->taxonomy);
     wc1c_check_wp_error($result);
   }
