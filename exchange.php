@@ -428,4 +428,4 @@ function wc1c_template_redirect() {
     exit;
   }
 }
-add_action('template_redirect', 'wc1c_template_redirect');
+add_action('template_redirect', 'wc1c_template_redirect', -10);
