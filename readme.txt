@@ -23,6 +23,8 @@ Features:
 * Support for compressed data exchange.
 * Transactions and strict error checking: DB updates on successfull data exchange only.
 
+Please, read [installation instructions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/installation/) and [frequently asked questions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/faq/) before use.
+
 If you have any question or proposal, please [contact the author](http://danil.iamsync.com/).
 
 = In Russian =
@@ -37,6 +39,8 @@ If you have any question or proposal, please [contact the author](http://danil.i
 * Экономичное использование оперативной памяти сервера.
 * Поддержка передачи данных в сжатом виде.
 * Транзакционность и строгая проверка на ошибки: данные обновляются в БД только в случае успешного обмена.
+
+Пожалуйста, перед использованием прочитайте [инструкцию по установке](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/installation/) и [часто задаваемые вопросы](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/faq/).
 
 По всем вопросам и предложениям, пожалуйста, [свяжитесь с автором](http://danil.iamsync.com/).
 
