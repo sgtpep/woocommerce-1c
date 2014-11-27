@@ -14,6 +14,8 @@ if (!defined('ABSPATH')) exit;
 
 require_once ABSPATH . "wp-admin/includes/plugin.php";
 
+if (!defined('__DIR__')) define('__DIR__', dirname(__FILE__));
+
 define('WC1C_PLUGIN_DIR', __DIR__ . '/');
 define('WC1C_PLUGIN_BASENAME', plugin_basename(__FILE__));
 define('WC1C_PLUGIN_BASEDIR', dirname(WC1C_PLUGIN_BASENAME) . '/');
