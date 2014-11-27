@@ -396,7 +396,7 @@ add_filter('query_vars', 'wc1c_query_vars');
 function wc1c_template_redirect() {
   if (get_query_var('wc1c') != 'exchange') return;
 
-  header("Content-Type: text/plain; charset=utf-8");
+  if (!headers_sent()) header("Content-Type: text/plain; charset=utf-8");
 
   wc1c_set_strict_mode();
 
