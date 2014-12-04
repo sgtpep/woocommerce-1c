@@ -135,7 +135,7 @@ foreach ($order_posts as $order_post) {
   $documents[] = $document;
 }
 
-function wc1c_xml_output_callback($buffer) {
+function wc1c_query_output_callback($buffer) {
   global $wc1c_is_error;
 
   if ($wc1c_is_error) return $buffer;
@@ -144,7 +144,7 @@ function wc1c_xml_output_callback($buffer) {
 
   return iconv('utf8', 'cp1251', $buffer);
 }
-ob_start('wc1c_xml_output_callback');
+ob_start('wc1c_query_output_callback');
 
 echo '<?xml version="1.0" encoding="windows-1251"?>';
 ?>
