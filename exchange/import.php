@@ -564,7 +564,8 @@ function wc1c_replace_product($is_full, $product) {
       $old_taxonomies[] = $old_product_attribute['name'];
     }
     else {
-      $product_attributes = array_diff($product_attributes, array($old_product_attribute));
+      $key = array_search($old_product_attribute, $product_attributes);
+      if ($key !== false) unset($product_attributes[$key]);
     }
   }
   wp_delete_object_term_relationships($post_id, $old_taxonomies);
