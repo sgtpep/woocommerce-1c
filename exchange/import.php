@@ -568,6 +568,9 @@ function wc1c_replace_product($is_full, $product) {
       if ($key !== false) unset($product_attributes[$key]);
     }
   }
+  foreach ($old_taxonomies as $old_taxonomy) {
+    register_taxonomy($old_taxonomy, null);
+  }
   wp_delete_object_term_relationships($post_id, $old_taxonomies);
 
   ksort($current_product_attributes);
