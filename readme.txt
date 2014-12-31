@@ -12,21 +12,6 @@ Provides data exchange between eCommerce plugin WooCommerce and business applica
 
 == Description ==
 
-Provides data exchange between eCommerce plugin WooCommerce and business application "1C:Enterprise 8. Trade Management".
-
-Features:
-
-* Product exchange: group (categories), attributes and values, product list and product variations, images, properties, requisites, prices, remains for products.
-* Order exchange: two way exchange of order information between website and application.
-* Partial and full syncronization.
-* Effective usage of RAM on server.
-* Support for compressed data exchange.
-* Transactions and strict error checking: DB updates on successfull data exchange only.
-
-Please, read [installation instructions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/installation/) and [frequently asked questions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/faq/) before use.
-
-If you have any question or proposal, please [contact the author](http://danil.iamsync.com/).
-
 = In Russian =
 
 Предоставляет обмен данными между плагином для электронной коммерции WooCommerce и приложением для бизнеса "1C:Предприятие 8. Управление торговлей".
@@ -44,17 +29,24 @@ If you have any question or proposal, please [contact the author](http://danil.i
 
 По всем вопросам и предложениям, пожалуйста, [свяжитесь с автором](http://danil.iamsync.com/).
 
+= In English =
+
+Provides data exchange between eCommerce plugin WooCommerce and business application "1C:Enterprise 8. Trade Management".
+
+Features:
+
+* Product exchange: group (categories), attributes and values, product list and product variations, images, properties, requisites, prices, remains for products.
+* Order exchange: two way exchange of order information between website and application.
+* Partial and full syncronization.
+* Effective usage of RAM on server.
+* Support for compressed data exchange.
+* Transactions and strict error checking: DB updates on successfull data exchange only.
+
+Please, read [installation instructions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/installation/) and [frequently asked questions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/faq/) before use.
+
+If you have any question or proposal, please [contact the author](http://danil.iamsync.com/).
+
 == Installation ==
-
-First, you should install and activate WooCommerce plugin, as this plugin depends on it.
-
-Also this plugin requires enabled permalinks. You should enable them in Settings → Permalinks panel.
-
-Automatic installation is the easiest option as WordPress handles the file transfers itself and you don’t need to leave your web browser. To do an automatic install of the plugin, log in to your WordPress dashboard, navigate to the Plugins menu and click "Add New". In the search field type part of the plugin name and click "Search Plugins". Once you’ve found the plugin you can view details about it and install it by simply clicking "Install Now".
-
-You should provide website address for syncronization in "1C:Trade Management", like http://example.com/wc1c/exchange/. You should also provide actual username and password of active website user with role "Shop Manager" or Administrator.
-
-= In Russian =
 
 Вначале вам необходимо установить и активировать плагин WooCommerce, т.к. этот плагин зависит от него.
 
@@ -66,11 +58,6 @@ You should provide website address for syncronization in "1C:Trade Management", 
 
 == Frequently Asked Questions ==
 
-= Do you provide support? =
-Yes, feel free to get in touch with the author using [contact form](http://danil.iamsync.com/).
-
-= In Russian =
-
 = Предоставляете ли вы поддержку? =
 Да, с автором можно свободно связаться, используя [форму обратной связи](http://danil.iamsync.ru/).
 
@@ -79,12 +66,6 @@ Yes, feel free to get in touch with the author using [contact form](http://danil
 TODO
 
 == Changelog ==
-
-= 0.2.0 =
-Added basic API using filters and actions.
-
-= 0.1.0 =
-Initial release.
 
 = In Russian =
 
