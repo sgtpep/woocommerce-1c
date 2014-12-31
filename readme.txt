@@ -56,6 +56,11 @@ If you have any question or proposal, please [contact the author](http://danil.i
 
 В "1С:Управление торговлей" в качестве адреса сайта для синхронизации необходимо указать адрес вида http://example.com/wc1c/exchange/. В качестве имени пользователя и пароля следует указать действующие на сайте имя и пароль активного пользователя с ролью "Shop Manager" или Администратор.
 
+Если PHP работает в режиме FastCGI, а 1С при проверке соединения с сервером просит проверить имя пользователя и пароль, хотя они указаны верно, то в файл .htaccess перед строкой:
+`RewriteRule . /index.php [L]`
+необходимо вставить строку:
+`RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]`
+
 == Frequently Asked Questions ==
 
 = Предоставляете ли вы поддержку? =
