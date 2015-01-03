@@ -78,7 +78,7 @@ function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
 }
 
 function wc1c_update_currency($currency) {
-  if (!array_key_exists($currency, get_woocommerce_currencies())) wc1c_error(sprintf("Unsupported currency %s", $currency));
+  if (!array_key_exists($currency, get_woocommerce_currencies())) return;
 
   update_option('woocommerce_currency', $currency);
 
