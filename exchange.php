@@ -249,7 +249,6 @@ function wc1c_unpack_files($type) {
 
   $data_dir = WC1C_DATA_DIR . $type;
   $zip_paths = glob("$data_dir/*.zip");
-  if ($zip_paths === false) wc1c_error("Failed to find archives");
   if (!$zip_paths) return;
 
   foreach ($zip_paths as $zip_path) {
