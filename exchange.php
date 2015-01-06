@@ -82,6 +82,13 @@ function wc1c_strict_exception_handler($exception) {
   wc1c_error($message, "Exception");
 }
 
+function wc1c_fix_fastcgi_get() {
+  if (!$_GET && isset($_SERVER['REQUEST_URI'])) {
+    $query = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
+    parse_str($query, $_GET);
+  }
+}
+
 function wc1c_check_permissions($user) {
   if (!user_can($user, 'shop_manager') && !user_can($user, 'administrator')) wc1c_error("No permissions");
 }
@@ -398,6 +405,8 @@ function wc1c_template_redirect() {
   if (!headers_sent()) header("Content-Type: text/plain; charset=utf-8");
 
   wc1c_set_strict_mode();
+
+  wc1c_fix_fastcgi_get();
 
   if (empty($_GET['type'])) wc1c_error("No type");
   if (empty($_GET['mode'])) wc1c_error("No mode");
