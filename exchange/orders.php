@@ -227,10 +227,17 @@ function wc1c_replace_document($document) {
       'customer_note' => @$document['Комментарий'],
     );
 
-    list($first_name, $last_name) = explode(' ', $document['Контрагенты'][0]['Наименование'], 2);
-    $user_id = $wpdb->get_var($wpdb->prepare("SELECT u1.user_id FROM $wpdb->usermeta u1 JOIN $wpdb->usermeta u2 ON u1.user_id = u2.user_id WHERE (u1.meta_key = 'billing_first_name' AND u1.meta_value = %s AND u2.meta_key = 'billing_last_name' AND u2.meta_value = %s) OR (u1.meta_key = 'shipping_first_name' AND u1.meta_value = %s AND u2.meta_key = 'shipping_last_name' AND u2.meta_value = %s)", $first_name, $last_name, $first_name, $last_name));
-    wc1c_check_wpdb_error();
-    if ($user_id) $args['customer_id'] = $user_id;
+    $contragent_name = $document['Контрагенты'][0]['Наименование'];
+    if ($contragent_name == "Гость") {
+      $user_id = 0;
+    }
+    elseif (strpos($contragent_name, ' ') !== false) {
+      list($first_name, $last_name) = explode(' ', $contragent_name, 2);
+      $result = $wpdb->get_var($wpdb->prepare("SELECT u1.user_id FROM $wpdb->usermeta u1 JOIN $wpdb->usermeta u2 ON u1.user_id = u2.user_id WHERE (u1.meta_key = 'billing_first_name' AND u1.meta_value = %s AND u2.meta_key = 'billing_last_name' AND u2.meta_value = %s) OR (u1.meta_key = 'shipping_first_name' AND u1.meta_value = %s AND u2.meta_key = 'shipping_last_name' AND u2.meta_value = %s)", $first_name, $last_name, $first_name, $last_name));
+      wc1c_check_wpdb_error();
+      if ($result) $user_id = $result;
+    }
+    if (isset($user_id)) $args['customer_id'] = $user_id;
 
     $order = wc_create_order($args);
     wc1c_check_wp_error($order);
