@@ -7,7 +7,7 @@ function wc1c_exchange_init() {
   add_rewrite_rule("wc1c/exchange", "index.php?wc1c=exchange", 'top');
   flush_rewrite_rules();
 }
-add_action('init', 'wc1c_exchange_init');
+add_action('init', 'wc1c_exchange_init', 1000);
 
 function wc1c_wpdb_end($is_commit = false, $no_check = false) {
   global $wpdb, $wc1c_is_transaction;
