@@ -91,15 +91,14 @@ function wc1c_update_currency($currency) {
 
 function wc1c_replace_product_meta($post_id, $price, $quantity, $coefficient, $attributes = array()) {
   if (isset($price)) $price = (float) $price;
-  if (isset($quantity)) {
-    $quantity = (float) $quantity;
-    if (isset($coefficient)) $quantity *= (float) $coefficient;
-  }
+
+  $quantity = isset($quantity) ? (float) $quantity : 0;
+  if (isset($coefficient)) $quantity *= (float) $coefficient;
 
   $post_meta = array(
     '_price' => $price,
     '_regular_price' => $price,
-    '_manage_stock' => isset($quantity) ? 'yes' : null,
+    '_manage_stock' => 'yes',
     '_stock' => $quantity,
   );
 
