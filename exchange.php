@@ -177,7 +177,9 @@ function wc1c_filesize_to_bytes($filesize) {
 function wc1c_mode_init($type) {
   wc1c_clean_data_dir($type);
 
-  $zip = @system("which unzip") || class_exists('ZipArchive') ? 'yes' : 'no';
+  @exec("which unzip", $output, $status);
+  $zip = !$status || class_exists('ZipArchive') ? 'yes' : 'no';
+
   $file_limit = wc1c_filesize_to_bytes(ini_get('post_max_size'));
 
   exit("zip=$zip\nfile_limit=$file_limit");
@@ -257,9 +259,9 @@ function wc1c_unpack_files($type) {
   if (!$zip_paths) return;
 
   $command = sprintf("unzip -qqo -x %s -d %s", implode(' ', array_map('escapeshellarg', $zip_paths)), escapeshellarg($data_dir));
-  @system($command, $command_status);
+  @exec($command, $output, $status);
 
-  if (!isset($command_status) || $command_status) {
+  if (!isset($status) || $status) {
     foreach ($zip_paths as $zip_path) {
       $zip = new ZipArchive();
       $result = $zip->open($zip_path);
