@@ -250,7 +250,7 @@ echo '<?xml version="1.0" encoding="windows-1251"?>';
           <Значение><?php echo !in_array($order_post->post_status, array('trash', 'wc-on-hold', 'wc-pending', 'wc-processing')) ? 'true' : 'false' ?></Значение>
         </ЗначениеРеквизита>
         <ЗначениеРеквизита>
-          <Наименование>Статус заказа ИД</Наименование>
+          <Наименование>Статус заказа</Наименование>
           <Значение><?php echo $order_status_name ?></Значение>
         </ЗначениеРеквизита>
         <ЗначениеРеквизита>
