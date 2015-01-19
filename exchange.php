@@ -177,7 +177,7 @@ function wc1c_filesize_to_bytes($filesize) {
 function wc1c_mode_init($type) {
   wc1c_clean_data_dir($type);
 
-  $zip = class_exists('ZipArchive') ? 'yes' : 'no';
+  $zip = @system("which unzip") || class_exists('ZipArchive') ? 'yes' : 'no';
   $file_limit = wc1c_filesize_to_bytes(ini_get('post_max_size'));
 
   exit("zip=$zip\nfile_limit=$file_limit");
@@ -252,20 +252,25 @@ function wc1c_transaction_shutdown_function() {
 }
 
 function wc1c_unpack_files($type) {
-  if (!class_exists('ZipArchive')) return;
-
   $data_dir = WC1C_DATA_DIR . $type;
   $zip_paths = glob("$data_dir/*.zip");
   if (!$zip_paths) return;
 
+  $command = sprintf("unzip -qqo -x %s -d %s", implode(' ', array_map('escapeshellarg', $zip_paths)), escapeshellarg($data_dir));
+  @system($command, $command_status);
+
+  if (!isset($command_status) || $command_status) {
+    foreach ($zip_paths as $zip_path) {
+      $zip = new ZipArchive();
+      $result = $zip->open($zip_path);
+      if ($result !== true) wc1c_error(sprintf("Failed open archive %s with error code %d", $zip_path, $result));
+
+      $zip->extractTo($data_dir) or wc1c_error(sprintf("Failed to extract from archive %s", $zip_path));
+      $zip->close() or wc1c_error(sprintf("Failed to close archive %s", $zip_path));
+    }
+  }
+
   foreach ($zip_paths as $zip_path) {
-    $zip = new ZipArchive();
-    $result = $zip->open($zip_path);
-    if ($result !== true) wc1c_error(sprintf("Failed open archive %s with error code %d", $zip_path, $result));
-
-    $zip->extractTo($data_dir) or wc1c_error(sprintf("Failed to extract from archive %s", $zip_path));
-    $zip->close() or wc1c_error(sprintf("Failed to close archive %s", $zip_path));
-
     unlink($zip_path) or wc1c_error(sprintf("Failed to unlink file %s", $zip_path));
   }
 
