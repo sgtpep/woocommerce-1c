@@ -427,7 +427,7 @@ function wc1c_replace_post_attachments($post_id, $attachments) {
   $attachment_path_by_hash = array();
   foreach ($attachments as $attachment_path => $attachment) {
     $attachment_path = "$data_dir/$attachment_path";
-    $attachment_hash = md5_file($attachment_path);
+    $attachment_hash = basename($attachment_path) . md5_file($attachment_path);
     $attachment_path_by_hash[$attachment_hash] = $attachment_path;
   }
   $attachment_hash_by_path = array_flip($attachment_path_by_hash);
@@ -435,8 +435,8 @@ function wc1c_replace_post_attachments($post_id, $attachments) {
   $post_attachments = get_attached_media('image', $post_id);
   $post_attachment_id_by_hash = array();
   foreach ($post_attachments as $post_attachment) {
-    $post_attachment_path = get_attached_file($post_attachment->ID);
-    $post_attachment_hash = md5_file($post_attachment_path);
+    $post_attachment_path = get_attached_file($post_attachment->ID, true);
+    $post_attachment_hash = basename($post_attachment_path) . md5_file($post_attachment_path);
     $post_attachment_id_by_hash[$post_attachment_hash] = $post_attachment->ID;
 
     if (isset($attachment_path_by_hash[$post_attachment_hash])) {
