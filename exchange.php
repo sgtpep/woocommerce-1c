@@ -1,7 +1,18 @@
 <?php
-if (!defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) {
+  require_once("../../../wp-load.php");
+
+  define('WC1C_IS_STANDALONE', true);
+}
 
 define('WC1C_TIMESTAMP', time());
+
+function wc1c_query_vars($query_vars) {
+  $query_vars[] = 'wc1c';
+
+  return $query_vars;
+}
+add_filter('query_vars', 'wc1c_query_vars');
 
 function wc1c_exchange_init() {
   add_rewrite_rule("wc1c/exchange", "index.php?wc1c=exchange", 'top');
@@ -399,16 +410,7 @@ function wc1c_mode_success($type) {
   exit("success");
 }
 
-function wc1c_query_vars($query_vars) {
-  $query_vars[] = 'wc1c';
-
-  return $query_vars;
-}
-add_filter('query_vars', 'wc1c_query_vars');
-
-function wc1c_template_redirect() {
-  if (get_query_var('wc1c') != 'exchange') return;
-
+function wc1c_exchange() {
   if (!headers_sent()) header("Content-Type: text/plain; charset=utf-8");
 
   wc1c_set_strict_mode();
@@ -443,4 +445,10 @@ function wc1c_template_redirect() {
     exit;
   }
 }
+
+function wc1c_template_redirect() {
+  if (get_query_var('wc1c') == 'exchange') wc1c_exchange();
+}
 add_action('template_redirect', 'wc1c_template_redirect', -10);
+
+if (defined('WC1C_IS_STANDALONE')) wc1c_exchange();
