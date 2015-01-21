@@ -1,11 +1,6 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
-header("Content-Type: text/xml; charset=UTF-8");
-
-echo file_get_contents("/tmp/orders.xml");
-exit;
-
 $documents = array();
 $order_posts = get_posts("post_type=shop_order&post_status=any,trash");
 foreach ($order_posts as $order_post) {
