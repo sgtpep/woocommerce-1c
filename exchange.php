@@ -71,7 +71,7 @@ function wc1c_output_callback($buffer) {
     $content_type = empty($wc1c_is_xml) ? 'text/plain' : 'text/xml';
     header("Content-Type: $content_type; charset=windows-1251");
 
-    return iconv('utf8', "cp1251//TRANSLIT", $buffer);
+    return iconv("UTF-8", "Windows-1251//TRANSLIT", $buffer);
   }
 
   return $buffer;
