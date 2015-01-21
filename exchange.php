@@ -64,6 +64,23 @@ function wc1c_set_strict_mode() {
   set_exception_handler('wc1c_strict_exception_handler');
 }
 
+function wc1c_output_callback($buffer) {
+  global $wc1c_is_xml;
+
+  if (!headers_sent()) {
+    $content_type = empty($wc1c_is_xml) ? 'text/plain' : 'text/xml';
+    header("Content-Type: $content_type; charset=windows-1251");
+
+    return iconv('utf8', "cp1251//TRANSLIT", $buffer);
+  }
+
+  return $buffer;
+}
+
+function wc1c_set_output_callback() {
+  ob_start('wc1c_output_callback');
+}
+
 function wc1c_strict_error_handler($errno, $errstr, $errfile, $errline, $errcontext) {
   if (error_reporting() === 0) return false;
 
@@ -411,9 +428,11 @@ function wc1c_mode_success($type) {
 }
 
 function wc1c_exchange() {
-  if (!headers_sent()) header("Content-Type: text/plain; charset=utf-8");
+  global $wc1c_is_xml;
 
   wc1c_set_strict_mode();
+
+  wc1c_set_output_callback();
 
   wc1c_fix_fastcgi_get();
 
@@ -436,6 +455,7 @@ function wc1c_exchange() {
     wc1c_mode_import($_GET['type'], $_GET['filename']);
   }
   elseif ($_GET['mode'] == 'query') {
+    $wc1c_is_xml = true;
     wc1c_mode_query($_GET['type']);
   }
   elseif ($_GET['mode'] == 'success') {
