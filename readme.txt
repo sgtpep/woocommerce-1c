@@ -4,7 +4,7 @@ Donate link: http://
 Tags: 1c, 1c-enterprise, commerceml, integration, e-commerce, ecommerce, commerce, shop, cart, woothemes, woocommerce
 Requires at least: 3.8
 Tested up to: 4.1
-Stable tag: 0.2.0
+Stable tag: 0.3.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -77,7 +77,8 @@ TODO
 
 == Changelog ==
 
-= In Russian =
+= 0.3.0 =
+Добавлена поддержка распаковки архивов средствами системы. Добавлена возможность указания прямого адреса скрипта без необходимости включения постоянных ссылок. Исправления.
 
 = 0.2.0 =
 Добавлено базовое API с помощью фильтров и действий.
