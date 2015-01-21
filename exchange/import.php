@@ -196,8 +196,10 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
   $term_id = wc1c_term_id_by_meta('wc1c_guid', $guid);
 
   if (!$term_id) {
+    $slug = wp_unique_term_slug($name, (object) array('taxonomy' => $taxonomy));
     $args = array(
       'parent' => wc1c_term_id_by_meta('wc1c_guid', $parent_guid),
+      'slug' => $slug,
     );
     $result = wp_insert_term($name, $taxonomy, $args);
 
