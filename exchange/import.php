@@ -192,11 +192,53 @@ function wc1c_term_id_by_meta($key, $value) {
   return $term_id;
 }
 
+// TEMP
+function wc1c_wp_unique_term_slug($slug, $term) {
+  global $wpdb;
+
+  if (!term_exists($slug)) return $slug;
+
+  if (is_taxonomy_hierarchical($term->taxonomy) && !empty($term->parent)) {
+    $the_parent = $term->parent;
+    while (!empty($the_parent)) {
+      $parent_term = get_term($the_parent, $term->taxonomy);
+      if (is_wp_error($parent_term) || empty($parent_term)) break;
+      $slug .= '-' . $parent_term->slug;
+      if (!term_exists($slug)) return $slug;
+
+      if (empty($parent_term->parent)) break;
+      $the_parent = $parent_term->parent;
+    }
+  }
+
+  if (!empty($term->term_id)) {
+    $query = $wpdb->prepare("SELECT slug FROM $wpdb->terms WHERE slug = %s AND term_id != %d", $slug, $term->term_id);
+  }
+  else {
+    $query = $wpdb->prepare("SELECT slug FROM $wpdb->terms WHERE slug = %s", $slug);
+  }
+
+  if ($wpdb->get_var($query)) {
+    $num = 2;
+    do {
+      $alt_slug = $slug . "-$num";
+      $num++;
+      $slug_check = $wpdb->get_var($wpdb->prepare("SELECT slug FROM $wpdb->terms WHERE slug = %s", $alt_slug));
+    }
+    while ($slug_check);
+    $slug = $alt_slug;
+  }               
+                  
+  return $slug;           
+}                       
+
 function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $order) {
   $term_id = wc1c_term_id_by_meta('wc1c_guid', $guid);
 
   if (!$term_id) {
-    $slug = wp_unique_term_slug($name, (object) array('taxonomy' => $taxonomy));
+    $slug = sanitize_title($name);
+    $slug = wc1c_wp_unique_term_slug($slug, (object) array('taxonomy' => $taxonomy));
+
     $args = array(
       'parent' => wc1c_term_id_by_meta('wc1c_guid', $parent_guid),
       'slug' => $slug,
@@ -225,25 +267,9 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
     $args = array(
       'parent' => wc1c_term_id_by_meta('wc1c_guid', $parent_guid),
       'name' => $name,
-      'slug' => sanitize_title($name),
     );
     $result = wp_update_term($term_id, $taxonomy, $args);
-
-    if (is_wp_error($result)) {
-      foreach ($result->get_error_codes() as $error_code) {
-        if ($error_code == 'duplicate_term_slug') {
-          $term = get_term($term_id, $taxonomy);
-          wc1c_check_wp_error($term);
-
-          $args['slug'] = wp_unique_term_slug($args['slug'], $term);
-          $result = wp_update_term($term_id, $taxonomy, $args);
-          wc1c_check_wp_error($result);
-        }
-        else {
-          wc1c_wp_error($result, $error_code);
-        }
-      }
-    }
+    wc1c_check_wp_error($result);
   }
 
   if ($is_full) wc_set_term_order($term_id, $order, $taxonomy);
@@ -522,17 +548,18 @@ function wc1c_replace_product($is_full, $product) {
       if (!$attribute) wc1c_error("Failed to get attribute");
 
       $terms = array();
-      $attribute_values = @$property['Значение'];
-      if ($attribute_values) {
-        foreach ($attribute_values as $attribute_value) {
-          if (!$attribute_value) continue;
+      $attribute_values = array();
+      $property_values = @$property['Значение'];
+      if ($property_values) {
+        foreach ($property_values as $property_value) {
+          if (!$property_value) continue;
 
-          if ($attribute['attribute_type'] == 'select' && preg_match("/^\w+-\w+-\w+-\w+-\w+$/", $attribute_value)) {
-            $term_id = wc1c_term_id_by_meta('wc1c_guid', $attribute_value);
+          if ($attribute['attribute_type'] == 'select' && preg_match("/^\w+-\w+-\w+-\w+-\w+$/", $property_value)) {
+            $term_id = wc1c_term_id_by_meta('wc1c_guid', $property_value);
             if ($term_id) $terms[] = (int) $term_id;
           }
           else {
-            $terms[] = $attribute_value;
+            $attribute_values[] = $property_value;
           }
         }
       }
@@ -541,17 +568,26 @@ function wc1c_replace_product($is_full, $product) {
       $result = wp_set_post_terms($post_id, $terms, $attribute['taxonomy']);
       wc1c_check_wp_error($result);
 
-      if ($terms) {
-        $product_attribute_key = sanitize_title($attribute['taxonomy']);
-        $product_attribute_position = count($product_attributes);
-        $product_attributes[$product_attribute_key] = array(
+      if ($terms || $attribute_values) {
+        $product_attribute = array(
           'name' => $attribute['taxonomy'],
           'value' => '',
-          'position' => $product_attribute_position,
-          'is_visible' => 1,
+          'position' => count($product_attributes),
+          'is_visible' => 0,
           'is_variation' => 0,
-          'is_taxonomy' => 1,
+          'is_taxonomy' => 0,
         );
+
+        if ($terms) {
+          $product_attribute['is_visible'] = 1;
+          $product_attribute['is_taxonomy'] = 1;
+        }
+        elseif ($attribute_values) {
+          $product_attribute['value'] = implode(" | ", $attribute_values);
+        }
+
+        $product_attribute_key = sanitize_title($attribute['taxonomy']);
+        $product_attributes[$product_attribute_key] = $product_attribute;
       }
     }
   }
