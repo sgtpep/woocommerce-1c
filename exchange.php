@@ -77,7 +77,7 @@ function wc1c_set_content_type() {
 }
 
 function wc1c_output_callback($buffer) {
-  return iconv("UTF-8", "Windows-1251//TRANSLIT", $buffer);
+  return mb_convert_encoding($buffer, "Windows-1251", "UTF-8");
 }
 
 function wc1c_set_output_callback() {
