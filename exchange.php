@@ -64,17 +64,16 @@ function wc1c_set_strict_mode() {
   set_exception_handler('wc1c_strict_exception_handler');
 }
 
+function wc1c_set_content_type() {
+  if (headers_sent()) return;
+
+  $is_xml = $_GET['mode'] == 'query';
+  $content_type = $is_xml ? 'text/plain' : 'text/xml';
+  header("Content-Type: $content_type; charset=windows-1251");
+}
+
 function wc1c_output_callback($buffer) {
-  global $wc1c_is_xml;
-
-  if (!headers_sent()) {
-    $content_type = empty($wc1c_is_xml) ? 'text/plain' : 'text/xml';
-    header("Content-Type: $content_type; charset=windows-1251");
-
-    return iconv("UTF-8", "Windows-1251//TRANSLIT", $buffer);
-  }
-
-  return $buffer;
+  return iconv("UTF-8", "Windows-1251//TRANSLIT", $buffer);
 }
 
 function wc1c_set_output_callback() {
@@ -428,12 +427,9 @@ function wc1c_mode_success($type) {
 }
 
 function wc1c_exchange() {
-  global $wc1c_is_xml;
-
   wc1c_set_strict_mode();
-
+  wc1c_set_content_type();
   wc1c_set_output_callback();
-
   wc1c_fix_fastcgi_get();
 
   if (empty($_GET['type'])) wc1c_error("No type");
@@ -455,7 +451,6 @@ function wc1c_exchange() {
     wc1c_mode_import($_GET['type'], $_GET['filename']);
   }
   elseif ($_GET['mode'] == 'query') {
-    $wc1c_is_xml = true;
     wc1c_mode_query($_GET['type']);
   }
   elseif ($_GET['mode'] == 'success') {
