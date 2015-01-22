@@ -20,6 +20,10 @@ function wc1c_exchange_init() {
 }
 add_action('init', 'wc1c_exchange_init', 1000);
 
+function wc1c_is_debug() {
+  return defined('WP_DEBUG') && WP_DEBUG || defined('WC1C_DEBUG');
+}
+
 function wc1c_wpdb_end($is_commit = false, $no_check = false) {
   global $wpdb, $wc1c_is_transaction;
 
@@ -31,7 +35,7 @@ function wc1c_wpdb_end($is_commit = false, $no_check = false) {
   $wpdb->query($sql_query);
   if (!$no_check) wc1c_check_wpdb_error();
 
-  if (defined('WP_DEBUG') && WP_DEBUG) echo "\n" . strtolower($sql_query);
+  if (wc1c_is_debug()) echo "\n" . strtolower($sql_query);
 }
 
 function wc1c_error($message, $type = "Error", $no_exit = false) {
@@ -46,7 +50,7 @@ function wc1c_error($message, $type = "Error", $no_exit = false) {
   error_log($message);
   echo "$message\n";
 
-  if (defined('WP_DEBUG') && WP_DEBUG) {
+  if (wc1c_is_debug()) {
     echo "\n";
     debug_print_backtrace();
   }
@@ -440,6 +444,8 @@ function wc1c_exchange() {
   }
 
   wc1c_check_auth();
+
+  define('WC1C_DEBUG', true);
 
   if ($_GET['mode'] == 'init') {
     wc1c_mode_init($_GET['type']);
