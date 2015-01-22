@@ -509,6 +509,7 @@ function wc1c_replace_product($is_full, $product) {
 
   $post_meta = array(
     '_sku' => @$product['Артикул'],
+    '_manage_stock' => 'yes',
     'wc1c_unit' => @$product['БазоваяЕдиница'],
     'wc1c_producer' => @$product['Изготовитель']['Наименование'],
   );

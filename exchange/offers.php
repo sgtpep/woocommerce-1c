@@ -92,14 +92,9 @@ function wc1c_update_currency($currency) {
 function wc1c_replace_product_meta($post_id, $price, $quantity, $coefficient, $attributes = array()) {
   if (isset($price)) $price = (float) $price;
 
-  $quantity = isset($quantity) ? (float) $quantity : 0;
-  if (isset($coefficient)) $quantity *= (float) $coefficient;
-
   $post_meta = array(
     '_price' => $price,
     '_regular_price' => $price,
-    '_manage_stock' => 'yes',
-    '_stock' => $quantity,
   );
 
   foreach ($attributes as $attribute_name => $attribute_value) {
@@ -125,6 +120,10 @@ function wc1c_replace_product_meta($post_id, $price, $quantity, $coefficient, $a
 
     update_post_meta($post_id, $meta_key, $meta_value);
   }
+
+  $quantity = isset($quantity) ? (float) $quantity : 0;
+  if (isset($coefficient)) $quantity *= (float) $coefficient;
+  wc_update_product_stock($post_id, $quantity);
 }
 
 function wc1c_replace_offer($guid, $price, $quantity, $coefficient) {
