@@ -68,7 +68,7 @@ function wc1c_set_content_type() {
   if (headers_sent()) return;
 
   $is_xml = $_GET['mode'] == 'query';
-  $content_type = $is_xml ? 'text/plain' : 'text/xml';
+  $content_type = !$is_xml ? 'text/plain' : 'text/xml';
   header("Content-Type: $content_type; charset=windows-1251");
 }
 
