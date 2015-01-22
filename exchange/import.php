@@ -603,8 +603,10 @@ function wc1c_replace_product($is_full, $product) {
     if (!$attribute_values) continue;
     if (strpos($attribute_values[0], "import_files/") === 0) continue;
 
-    $attribute_name = $requisite['Наименование'];
-    $product_attribute_key = sanitize_title($attribute_name);
+    $requisite_name = $requisite['Наименование'];
+    $attribute_name = preg_replace("/(?<!^)\p{Lu}/eu", "' ' . mb_convert_case('$0', MB_CASE_LOWER, 'UTF-8')", $requisite_name);
+
+    $product_attribute_key = sanitize_title($requisite_name);
     $product_attribute_position = count($product_attributes);
     $product_attributes[$product_attribute_key] = array(
       'name' => wc_clean($attribute_name),
