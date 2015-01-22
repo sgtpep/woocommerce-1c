@@ -483,8 +483,17 @@ function wc1c_replace_product($is_full, $product) {
     'wc1c_producer' => @$product['Изготовитель']['Наименование'],
   );
 
+  $post_title = $product['Наименование'];
+  foreach ($product['ЗначенияРеквизитов'] as $requisite) {
+    if ($requisite['Наименование'] != "Полное наименование") continue;
+
+    if (@$requisite['Значение']) $post_title = $requisite['Значение'][0];
+    break;
+  }
+
   $is_deleted = @$product['Статус'] == 'Удален';
-  list($post_id, $post_meta) = wc1c_replace_post($product['Ид'], $product['Наименование'], 'product', $is_deleted, @$product['Описание'], $post_meta, 'product_cat', @$product['Группы']);
+
+  list($post_id, $post_meta) = wc1c_replace_post($product['Ид'], $post_title, 'product', $is_deleted, @$product['Описание'], $post_meta, 'product_cat', @$product['Группы']);
 
   $current_product_attributes = isset($post_meta['_product_attributes']) ? maybe_unserialize($post_meta['_product_attributes']) : array();
 
