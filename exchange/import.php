@@ -460,7 +460,7 @@ function wc1c_replace_post_attachments($post_id, $attachments) {
         'tmp_name' => $attachment_path,
         'name' => basename($attachment_path),
       );
-      $attachment_id = media_handle_sideload($file, $post_id, @$attachment['description']);
+      $attachment_id = @media_handle_sideload($file, $post_id, @$attachment['description']);
       wc1c_check_wp_error($attachment_id);
       
       $uploaded_attachment_path = get_attached_file($attachment_id);
