@@ -507,11 +507,13 @@ function wc1c_replace_product($is_full, $product) {
 
       $attribute = wc1c_woocommerce_attribute_by_id($attribute_id);
       if (!$attribute) wc1c_error("Failed to get attribute");
-      
+
       $terms = array();
       $attribute_values = @$property['Значение'];
       if ($attribute_values) {
         foreach ($attribute_values as $attribute_value) {
+          if (!$attribute_value) continue;
+
           if ($attribute['attribute_type'] == 'select' && preg_match("/^\w+-\w+-\w+-\w+-\w+$/", $attribute_value)) {
             $term_id = wc1c_term_id_by_meta('wc1c_guid', $attribute_value);
             if ($term_id) $terms[] = (int) $term_id;
