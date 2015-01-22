@@ -365,10 +365,10 @@ function wc1c_replace_property($is_full, $property, $order) {
   return $attribute['taxonomy'];
 }
 
-function wc1c_replace_post($guid, $post_title, $post_type, $is_deleted, $post_content, $post_meta, $category_taxonomy, $category_guids) {
+function wc1c_replace_post($guid, $post_type, $is_deleted, $post_title, $post_excerpt, $post_content, $post_meta, $category_taxonomy, $category_guids) {
   $post_id = wc1c_post_id_by_meta('wc1c_guid', $guid);
 
-  $args = compact('post_type', 'post_title', 'post_content');
+  $args = compact('post_type', 'post_title', 'post_excerpt', 'post_content');
 
   if (!$post_id) {
     $args = array_merge($args, array(
@@ -507,6 +507,21 @@ function wc1c_replace_product($is_full, $product) {
   $product = apply_filters('wc1c_xml_import_product', $product);
   if (!$product) return;
 
+  $is_deleted = @$product['Статус'] == 'Удален';
+
+  $post_title = $product['Наименование'];
+  $post_content = '';
+  foreach ($product['ЗначенияРеквизитов'] as $i => $requisite) {
+    if ($requisite['Наименование'] == "Полное наименование" && @$requisite['Значение']) {
+      $post_title = $requisite['Значение'][0];
+      unset($product['ЗначенияРеквизитов'][$i]);
+    }
+    elseif ($requisite['Наименование'] == "ОписаниеВФорматеHTML" && @$requisite['Значение']) {
+      $post_content = $requisite['Значение'][0];
+      unset($product['ЗначенияРеквизитов'][$i]);
+    }
+  }
+
   $post_meta = array(
     '_sku' => @$product['Артикул'],
     'wc1c_unit' => @$product['БазоваяЕдиница'],
@@ -515,17 +530,7 @@ function wc1c_replace_product($is_full, $product) {
     '_stock_status' => 'outofstock',
   );
 
-  $post_title = $product['Наименование'];
-  foreach ($product['ЗначенияРеквизитов'] as $requisite) {
-    if ($requisite['Наименование'] != "Полное наименование") continue;
-
-    if (@$requisite['Значение']) $post_title = $requisite['Значение'][0];
-    break;
-  }
-
-  $is_deleted = @$product['Статус'] == 'Удален';
-
-  list($post_id, $post_meta) = wc1c_replace_post($product['Ид'], $post_title, 'product', $is_deleted, @$product['Описание'], $post_meta, 'product_cat', @$product['Группы']);
+  list($post_id, $post_meta) = wc1c_replace_post($product['Ид'], 'product', $is_deleted, $post_title, @$product['Описание'], $post_content, $post_meta, 'product_cat', @$product['Группы']);
 
   $current_product_attributes = isset($post_meta['_product_attributes']) ? maybe_unserialize($post_meta['_product_attributes']) : array();
 
@@ -597,8 +602,6 @@ function wc1c_replace_product($is_full, $product) {
   }
 
   foreach ($product['ЗначенияРеквизитов'] as $requisite) {
-    if ($requisite['Наименование'] == "Полное наименование") continue;
-
     $attribute_values = @$requisite['Значение'];
     if (!$attribute_values) continue;
     if (strpos($attribute_values[0], "import_files/") === 0) continue;
