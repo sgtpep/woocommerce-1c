@@ -429,6 +429,8 @@ function wc1c_replace_post_attachments($post_id, $attachments) {
   $attachment_path_by_hash = array();
   foreach ($attachments as $attachment_path => $attachment) {
     $attachment_path = "$data_dir/$attachment_path";
+    if (!file_exists($attachment_path)) continue;
+
     $attachment_hash = basename($attachment_path) . md5_file($attachment_path);
     $attachment_path_by_hash[$attachment_hash] = $attachment_path;
   }
@@ -453,6 +455,8 @@ function wc1c_replace_post_attachments($post_id, $attachments) {
   $attachment_ids = array();
   foreach ($attachments as $attachment_path => $attachment) {
     $attachment_path = "$data_dir/$attachment_path";
+    if (!file_exists($attachment_path)) continue;
+
     $attachment_hash = $attachment_hash_by_path[$attachment_path];
     $attachment_id = @$post_attachment_id_by_hash[$attachment_hash];
     if (!$attachment_id) {
@@ -553,6 +557,8 @@ function wc1c_replace_product($is_full, $product) {
   }
 
   foreach ($product['ЗначенияРеквизитов'] as $requisite) {
+    if ($requisite['Наименование'] == "Полное наименование") continue;
+
     $attribute_values = @$requisite['Значение'];
     if (!$attribute_values) continue;
     if (strpos($attribute_values[0], "import_files/") === 0) continue;
