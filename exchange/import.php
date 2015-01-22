@@ -572,7 +572,7 @@ function wc1c_replace_product($is_full, $product) {
 
       if ($terms || $attribute_values) {
         $product_attribute = array(
-          'name' => $attribute['taxonomy'],
+          'name' => null,
           'value' => '',
           'position' => count($product_attributes),
           'is_visible' => 0,
@@ -581,10 +581,12 @@ function wc1c_replace_product($is_full, $product) {
         );
 
         if ($terms) {
+          $product_attribute['name'] = $attribute['taxonomy'];
           $product_attribute['is_visible'] = 1;
           $product_attribute['is_taxonomy'] = 1;
         }
         elseif ($attribute_values) {
+          $product_attribute['name'] = $attribute['attribute_label'];
           $product_attribute['value'] = implode(" | ", $attribute_values);
         }
 
