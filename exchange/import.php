@@ -503,6 +503,10 @@ function wc1c_replace_post_attachments($post_id, $attachments) {
   return $attachment_ids;
 }
 
+function wc1c_replace_requisite_name_callback($matches) {
+  return ' ' . mb_convert_case($matches[0], MB_CASE_LOWER, "UTF-8");
+}
+
 function wc1c_replace_product($is_full, $product) {
   $product = apply_filters('wc1c_xml_import_product', $product);
   if (!$product) return;
@@ -607,7 +611,7 @@ function wc1c_replace_product($is_full, $product) {
     if (strpos($attribute_values[0], "import_files/") === 0) continue;
 
     $requisite_name = $requisite['Наименование'];
-    $attribute_name = preg_replace("/(?<!^)\p{Lu}/eu", "' ' . mb_convert_case('$0', MB_CASE_LOWER, 'UTF-8')", $requisite_name);
+    $attribute_name = preg_replace_callback("/(?<!^)\p{Lu}/u", 'wc1c_replace_requisite_name_callback', $requisite_name);
 
     $product_attribute_key = sanitize_title($requisite_name);
     $product_attribute_position = count($product_attributes);
