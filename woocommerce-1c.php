@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WooCommerce and 1C:Enterprise (1С:Предприятие) Data Exchange
-Version: 0.3.0
+Version: 0.4
 Description: Provides data exchange between eCommerce plugin WooCommerce and business application "1C:Enterprise 8. Trade Management".
 Author: Danil Semelenov
 Author URI: mailto:mail@danil.mobi
