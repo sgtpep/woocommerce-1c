@@ -528,8 +528,6 @@ function wc1c_replace_product($is_full, $product) {
 
   $post_meta = array(
     '_sku' => @$product['Артикул'],
-    'wc1c_unit' => @$product['БазоваяЕдиница'],
-    'wc1c_producer' => @$product['Изготовитель']['Наименование'],
     '_manage_stock' => 'yes',
     '_stock_status' => 'outofstock',
   );
@@ -547,6 +545,23 @@ function wc1c_replace_product($is_full, $product) {
   }
 
   $product_attributes = array();
+
+  $product_attribute_values = array(
+    "Базовая единица" => @$product['БазоваяЕдиница'],
+    "Наименование изготовителя" => @$product['Изготовитель']['Наименование'],
+  );
+  foreach ($product_attribute_values as $product_attribute_name => $product_attribute_value) {
+    $product_attribute_key = sanitize_title($product_attribute_name);
+    $product_attribute_position = count($product_attributes);
+    $product_attributes[$product_attribute_key] = array(
+      'name' => wc_clean($product_attribute_name),
+      'value' => $product_attribute_value,
+      'position' => $product_attribute_position,
+      'is_visible' => 0,
+      'is_variation' => 0,
+      'is_taxonomy' => 0,
+    );
+  }
 
   if ($product['ЗначенияСвойств']) {
     $attribute_guids = get_option('wc1c_guid_attributes', array());
@@ -611,12 +626,11 @@ function wc1c_replace_product($is_full, $product) {
     if (strpos($attribute_values[0], "import_files/") === 0) continue;
 
     $requisite_name = $requisite['Наименование'];
-    if (strpos($requisite_name, ' ') === false) $attribute_name = preg_replace_callback("/(?<!^)\p{Lu}/u", 'wc1c_replace_requisite_name_callback', $requisite_name);
-
+    $product_attribute_name = strpos($requisite_name, ' ') === false ? preg_replace_callback("/(?<!^)\p{Lu}/u", 'wc1c_replace_requisite_name_callback', $requisite_name) : $requisite_name;
     $product_attribute_key = sanitize_title($requisite_name);
     $product_attribute_position = count($product_attributes);
     $product_attributes[$product_attribute_key] = array(
-      'name' => wc_clean($attribute_name),
+      'name' => wc_clean($product_attribute_name),
       'value' => implode(" | ", $attribute_values),
       'position' => $product_attribute_position,
       'is_visible' => 0,
