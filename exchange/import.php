@@ -611,7 +611,7 @@ function wc1c_replace_product($is_full, $product) {
     if (strpos($attribute_values[0], "import_files/") === 0) continue;
 
     $requisite_name = $requisite['Наименование'];
-    $attribute_name = preg_replace_callback("/(?<!^)\p{Lu}/u", 'wc1c_replace_requisite_name_callback', $requisite_name);
+    if (strpos($requisite_name, ' ') === false) $attribute_name = preg_replace_callback("/(?<!^)\p{Lu}/u", 'wc1c_replace_requisite_name_callback', $requisite_name);
 
     $product_attribute_key = sanitize_title($requisite_name);
     $product_attribute_position = count($product_attributes);
