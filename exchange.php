@@ -53,6 +53,7 @@ function wc1c_error($message, $type = "Error", $no_exit = false) {
   if (wc1c_is_debug()) {
     echo "\n";
     debug_print_backtrace();
+    printf("\nversion: %s\n", WC1C_VERSION);
   }
 
   if (!$no_exit) {

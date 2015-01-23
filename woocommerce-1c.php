@@ -48,6 +48,9 @@ function wc1c_plugins_loaded() {
   $plugin_data = get_plugin_data(__FILE__);
   $languages_dir = WC1C_PLUGIN_BASEDIR . $plugin_data['DomainPath'];
   load_plugin_textdomain('woocommerce-1c', false, $languages_dir);
+
+  $revision = trim(str_replace('Revision', '', '$Revision$'), "$: ");
+  define('WC1C_VERSION', sprintf("%sr%s", $plugin_data['Version'], $revision));
 }
 add_action('plugins_loaded', 'wc1c_plugins_loaded');
 
