@@ -383,12 +383,17 @@ function wc1c_replace_post($guid, $post_type, $preserve_properties, $is_deleted,
 
     $is_added = true;
   }
+  else {
+    $is_added = false;
+  }
 
   $post = get_post($post_id);
   if (!$post) wc1c_error("Failed to get post");
 
-  if (empty($is_added)) {
+  if (!$is_added) {
     if (in_array('title', $preserve_properties)) unset($args['post_title']);
+    if (in_array('excerpt', $preserve_properties)) unset($args['post_excerpt']);
+    if (in_array('body', $preserve_properties)) unset($args['post_content']);
 
     foreach ($args as $key => $value) {
       if ($post->$key == $value) continue;
@@ -448,7 +453,7 @@ function wc1c_replace_post($guid, $post_type, $preserve_properties, $is_deleted,
 
   update_post_meta($post_id, 'wc1c_timestamp', WC1C_TIMESTAMP);
 
-  return array($post_id, $current_post_meta);
+  return array($is_added, $post_id, $current_post_meta);
 }
 
 function wc1c_replace_post_attachments($post_id, $attachments) {
@@ -537,7 +542,7 @@ function wc1c_replace_product($is_full, $product) {
     '_stock_status' => 'outofstock',
   );
 
-  list($post_id, $post_meta) = wc1c_replace_post($product['Ид'], 'product', $preserve_properties, $is_deleted, $post_title, @$product['Описание'], $post_content, $post_meta, 'product_cat', @$product['Группы']);
+  list($is_added, $post_id, $post_meta) = wc1c_replace_post($product['Ид'], 'product', $preserve_properties, $is_deleted, $post_title, @$product['Описание'], $post_content, $post_meta, 'product_cat', @$product['Группы']);
 
   $current_product_attributes = isset($post_meta['_product_attributes']) ? maybe_unserialize($post_meta['_product_attributes']) : array();
 
@@ -694,14 +699,16 @@ function wc1c_replace_product($is_full, $product) {
   }
 
   if ($attachments || $is_full) {
-    $attachment_ids = wc1c_replace_post_attachments($post_id, $attachments);
+    if (!in_array('gallery', $preserve_properties) || $is_added) {
+      $attachment_ids = wc1c_replace_post_attachments($post_id, $attachments);
 
-    $new_post_meta = array(
-      '_product_image_gallery' => implode(',', array_slice($attachment_ids, 1)),
-      '_thumbnail_id' => @$attachment_ids[0],
-    );
-    foreach ($new_post_meta as $meta_key => $meta_value) {
-      if ($meta_value != @$post_meta[$meta_key]) update_post_meta($post_id, $meta_key, $meta_value);
+      $new_post_meta = array(
+        '_product_image_gallery' => implode(',', array_slice($attachment_ids, 1)),
+        '_thumbnail_id' => @$attachment_ids[0],
+      );
+      foreach ($new_post_meta as $meta_key => $meta_value) {
+        if ($meta_value != @$post_meta[$meta_key]) update_post_meta($post_id, $meta_key, $meta_value);
+      }
     }
   }
 
