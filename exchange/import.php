@@ -366,7 +366,7 @@ function wc1c_replace_property($is_full, $property, $order) {
 }
 
 function wc1c_replace_post($guid, $post_type, $preserve_properties, $is_deleted, $post_title, $post_excerpt, $post_content, $post_meta, $category_taxonomy, $category_guids) {
-  $post_id = wc1c_post_id_by_meta('wc1c_guid', $guid);
+  $post_id = wc1c_post_id_by_meta('_wc1c_guid', $guid);
 
   $args = compact('post_type', 'post_title', 'post_excerpt', 'post_content');
 
@@ -379,7 +379,7 @@ function wc1c_replace_post($guid, $post_type, $preserve_properties, $is_deleted,
     wc1c_check_wp_error($post_id);
 
     update_post_meta($post_id, '_visibility', 'visible');
-    update_post_meta($post_id, 'wc1c_guid', $guid);
+    update_post_meta($post_id, '_wc1c_guid', $guid);
 
     $is_added = true;
   }
@@ -451,7 +451,7 @@ function wc1c_replace_post($guid, $post_type, $preserve_properties, $is_deleted,
     wc1c_check_wp_error($result);
   }
 
-  update_post_meta($post_id, 'wc1c_timestamp', WC1C_TIMESTAMP);
+  update_post_meta($post_id, '_wc1c_timestamp', WC1C_TIMESTAMP);
 
   return array($is_added, $post_id, $current_post_meta);
 }
@@ -783,7 +783,7 @@ function wc1c_clean_woocommerce_attribute_options($attribute_taxonomy) {
 function wc1c_clean_posts($post_type) {
   global $wpdb;
 
-  $post_ids = $wpdb->get_col($wpdb->prepare("SELECT post_id FROM $wpdb->postmeta JOIN $wpdb->posts ON post_id = ID WHERE post_type = %s AND meta_key = 'wc1c_timestamp' AND meta_value != %s", $post_type, WC1C_TIMESTAMP));
+  $post_ids = $wpdb->get_col($wpdb->prepare("SELECT post_id FROM $wpdb->postmeta JOIN $wpdb->posts ON post_id = ID WHERE post_type = %s AND meta_key = '_wc1c_timestamp' AND meta_value != %s", $post_type, WC1C_TIMESTAMP));
   wc1c_check_wpdb_error();
 
   foreach ($post_ids as $post_id) {

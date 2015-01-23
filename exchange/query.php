@@ -12,7 +12,7 @@ foreach ($order_posts as $order_post) {
   $has_missing_item = false;
   foreach ($order_line_items as $key => $order_line_item) {
     $product_id = $order_line_item['variation_id'] ? $order_line_item['variation_id'] : $order_line_item['product_id'];
-    $guid = get_post_meta($product_id, 'wc1c_guid', true);
+    $guid = get_post_meta($product_id, '_wc1c_guid', true);
     if (!$guid) {
       $has_missing_item = true;
       break;

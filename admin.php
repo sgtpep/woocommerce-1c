@@ -75,7 +75,7 @@ function wc1c_manage_product_posts_custom_column($column) {
   global $post;
 
   if ($column == 'wc1c_guid') {
-    $guid = get_post_meta($post->ID, 'wc1c_guid', true);
+    $guid = get_post_meta($post->ID, '_wc1c_guid', true);
     echo $guid ? "<small>$guid</small>" : '<span class="na">–</span>';
   }
 }

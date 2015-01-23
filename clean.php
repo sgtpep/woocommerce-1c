@@ -23,7 +23,7 @@ foreach ($option_names as $option_name) {
   delete_option($option_name);
 }
 
-$post_ids = $wpdb->get_col("SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'wc1c_guid'");
+$post_ids = $wpdb->get_col("SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_wc1c_guid'");
 foreach ($post_ids as $post_id) {
   $post_attachments = get_attached_media('image', $post_id);
   foreach ($post_attachments as $post_attachment) {

@@ -85,7 +85,7 @@ function wc1c_replace_document_products($order, $document_products) {
   $line_items = $order->get_items();
   $line_item_ids = array();
   foreach ($document_products as $i => $document_product) {
-    $product_id = wc1c_post_id_by_meta('wc1c_guid', $document_product['Ид']);
+    $product_id = wc1c_post_id_by_meta('_wc1c_guid', $document_product['Ид']);
     if (!$product_id) continue;
 
     $product = wc_get_product($product_id);

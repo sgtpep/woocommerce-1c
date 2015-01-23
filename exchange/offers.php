@@ -127,14 +127,14 @@ function wc1c_replace_product_meta($post_id, $price, $quantity, $coefficient, $a
 }
 
 function wc1c_replace_offer($guid, $price, $quantity, $coefficient) {
-  $post_id = wc1c_post_id_by_meta('wc1c_guid', $guid);
+  $post_id = wc1c_post_id_by_meta('_wc1c_guid', $guid);
   if (!$post_id) wc1c_error("Failed to get offer post");
 
   wc1c_replace_product_meta($post_id, $price, $quantity, $coefficient);
 }
 
 function wc1c_replace_product_variation($guid, $parent_post_id, $order) {
-  $post_id = wc1c_post_id_by_meta('wc1c_guid', $guid);
+  $post_id = wc1c_post_id_by_meta('_wc1c_guid', $guid);
 
   $args = array(
     'menu_order'=> $order,
@@ -150,7 +150,7 @@ function wc1c_replace_product_variation($guid, $parent_post_id, $order) {
     $post_id = wp_insert_post($args, true);
     wc1c_check_wp_error($post_id);
 
-    update_post_meta($post_id, 'wc1c_guid', $guid);
+    update_post_meta($post_id, '_wc1c_guid', $guid);
 
     $is_added = true;
   }
@@ -179,7 +179,7 @@ function wc1c_replace_product_variation($guid, $parent_post_id, $order) {
 }
 
 function wc1c_replace_suboffers($offer_guid, $suboffers) {
-  $post_id = wc1c_post_id_by_meta('wc1c_guid', $offer_guid);
+  $post_id = wc1c_post_id_by_meta('_wc1c_guid', $offer_guid);
   if (!$post_id) wc1c_error("Failed to get parent post ID");
 
   $result = wp_set_post_terms($post_id, 'variable', 'product_type');
