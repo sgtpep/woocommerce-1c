@@ -464,7 +464,7 @@ function wc1c_exchange() {
     wc1c_mode_success($_GET['type']);
   }
   else {
-    exit;
+    wc1c_error("Unknown mode");
   }
 }
 
