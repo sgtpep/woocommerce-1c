@@ -278,7 +278,7 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
 }
 
 function wc1c_replace_group($is_full, $group, $order) {
-  $group = apply_filters('wc1c_xml_import_group', $group);
+  $group = apply_filters('wc1c_import_group_xml', $group);
   if (!$group) return;
 
   wc1c_replace_term($is_full, $group['Ид'], $group['ИдРодителя'], $group['Наименование'], 'product_cat', $order);
@@ -345,7 +345,7 @@ function wc1c_replace_property_option($property_option, $attribute_taxonomy, $or
 }
 
 function wc1c_replace_property($is_full, $property, $order) {
-  $property = apply_filters('wc1c_xml_import_property', $property);
+  $property = apply_filters('wc1c_import_property_xml', $property);
   if (!$property) return;
 
   $attribute_type = (empty($property['ТипЗначений']) || $property['ТипЗначений'] == 'Справочник') ? 'select' : 'text';
@@ -365,7 +365,7 @@ function wc1c_replace_property($is_full, $property, $order) {
   return $attribute['taxonomy'];
 }
 
-function wc1c_replace_post($guid, $post_type, $is_deleted, $post_title, $post_excerpt, $post_content, $post_meta, $category_taxonomy, $category_guids) {
+function wc1c_replace_post($guid, $post_type, $preserve_properties, $is_deleted, $post_title, $post_excerpt, $post_content, $post_meta, $category_taxonomy, $category_guids) {
   $post_id = wc1c_post_id_by_meta('wc1c_guid', $guid);
 
   $args = compact('post_type', 'post_title', 'post_excerpt', 'post_content');
@@ -388,6 +388,8 @@ function wc1c_replace_post($guid, $post_type, $is_deleted, $post_title, $post_ex
   if (!$post) wc1c_error("Failed to get post");
 
   if (empty($is_added)) {
+    if (in_array('title', $preserve_properties)) unset($args['post_title']);
+
     foreach ($args as $key => $value) {
       if ($post->$key == $value) continue;
 
@@ -508,8 +510,11 @@ function wc1c_replace_requisite_name_callback($matches) {
 }
 
 function wc1c_replace_product($is_full, $product) {
-  $product = apply_filters('wc1c_xml_import_product', $product);
+  $product = apply_filters('wc1c_import_product_xml', $product);
   if (!$product) return;
+
+  $preserve_properties = apply_filters('wc1c_import_preserve_product_properties', array(), $product);
+  $preserve_properties = array_unique($preserve_properties);
 
   $is_deleted = @$product['Статус'] == 'Удален';
 
@@ -532,7 +537,7 @@ function wc1c_replace_product($is_full, $product) {
     '_stock_status' => 'outofstock',
   );
 
-  list($post_id, $post_meta) = wc1c_replace_post($product['Ид'], 'product', $is_deleted, $post_title, @$product['Описание'], $post_content, $post_meta, 'product_cat', @$product['Группы']);
+  list($post_id, $post_meta) = wc1c_replace_post($product['Ид'], 'product', $preserve_properties, $is_deleted, $post_title, @$product['Описание'], $post_content, $post_meta, 'product_cat', @$product['Группы']);
 
   $current_product_attributes = isset($post_meta['_product_attributes']) ? maybe_unserialize($post_meta['_product_attributes']) : array();
 
