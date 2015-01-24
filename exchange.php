@@ -218,25 +218,27 @@ function wc1c_mode_init($type) {
 }
 
 function wc1c_mode_file($type, $filename) {
-  $path = WC1C_DATA_DIR . "$type/" . ltrim($filename, "./\\");
-  $path_dir = dirname($path);
-  if (!is_dir($path_dir)) mkdir($path_dir, 0777, true) or wc1c_error(sprintf("Failed to create directories for file %s", $filename));
+  if ($filename) {
+    $path = WC1C_DATA_DIR . "$type/" . basename($filename);
+    $path_dir = dirname($path);
+    if (!is_dir($path_dir)) mkdir($path_dir, 0777, true) or wc1c_error(sprintf("Failed to create directories for file %s", $filename));
 
-  $dest_fp = fopen($path, 'a') or wc1c_error(sprintf("Failed to open file %s", $filename));
-  flock($dest_fp, LOCK_EX) or wc1c_error(sprintf("Failed to lock file %s", $filename));
+    $dest_fp = fopen($path, 'a') or wc1c_error(sprintf("Failed to open file %s", $filename));
+    flock($dest_fp, LOCK_EX) or wc1c_error(sprintf("Failed to lock file %s", $filename));
 
-  $source_fp = fopen("php://input", 'r') or wc1c_error("Failed to open input file");
+    $source_fp = fopen("php://input", 'r') or wc1c_error("Failed to open input file");
 
-  while (!feof($source_fp)) {
-    if (($data = fread($source_fp, 8192)) === false) wc1c_error("Failed to read from input file");
-    if (fwrite($dest_fp, $data) === false) wc1c_error(sprintf("Failed to write to file %s", $filename));
+    while (!feof($source_fp)) {
+      if (($data = fread($source_fp, 8192)) === false) wc1c_error("Failed to read from input file");
+      if (fwrite($dest_fp, $data) === false) wc1c_error(sprintf("Failed to write to file %s", $filename));
+    }
+
+    fflush($dest_fp) or wc1c_error(sprintf("Failed to flush file %s", $filename));
+    flock($dest_fp, LOCK_UN) or wc1c_error(sprintf("Failed to unlock file %s", $filename));
+
+    fclose($source_fp) or wc1c_error("Failed to close input file");
+    fclose($dest_fp) or wc1c_error(sprintf("Failed to close file %s", $filename));
   }
-
-  fflush($dest_fp) or wc1c_error(sprintf("Failed to flush file %s", $filename));
-  flock($dest_fp, LOCK_UN) or wc1c_error(sprintf("Failed to unlock file %s", $filename));
-
-  fclose($source_fp) or wc1c_error("Failed to close input file");
-  fclose($dest_fp) or wc1c_error(sprintf("Failed to close file %s", $filename));
 
   if ($type == 'catalog') {
     exit("success");
@@ -244,9 +246,9 @@ function wc1c_mode_file($type, $filename) {
   elseif ($type == 'sale') {
     wc1c_unpack_files($type);
 
-    $data_dir = WC1C_DATA_DIR . "$type/";
-    foreach (glob("{$data_dir}orders-*.xml") as $path) {
-      $filename = substr($path, strlen($data_dir));
+    $data_dir = WC1C_DATA_DIR . $type;
+    foreach (glob("$data_dir/*.xml") as $path) {
+      $filename = basename($path);
       wc1c_mode_import($type, $filename);
     }
   }
