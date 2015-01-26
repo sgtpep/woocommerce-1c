@@ -73,7 +73,7 @@ function wc1c_output_callback($buffer) {
   global $wc1c_is_error;
 
   if (!headers_sent()) {
-    $is_xml = $_GET['mode'] == 'query';
+    $is_xml = @$_GET['mode'] == 'query';
     $content_type = !$is_xml || $wc1c_is_error ? 'text/plain' : 'text/xml';
     header("Content-Type: $content_type; charset=windows-1251");
   }
