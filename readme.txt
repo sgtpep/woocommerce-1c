@@ -52,8 +52,8 @@ If you have any question or proposal, please [contact the author](http://danil.i
 
 В 1С в качестве адреса в настройках обмена с сайтом необходимо один из адресов вида:
 
-* http://example.com/wc1c/exchange/, если включены постоянные ссылки ("Настройки" → "Постоянные ссылки")
-* или http://example.com/wp-content/plugins/woocommerce-and-1centerprise-data-exchange/exchange.php
+* http://example.com/wp-content/plugins/woocommerce-and-1centerprise-data-exchange/exchange.php
+* или http://example.com/wc1c/exchange/, если на сайте включены постоянные ссылки ("Настройки" → "Постоянные ссылки")
 
 где example.com – доменное имя сайта интернет-магазина.
 
