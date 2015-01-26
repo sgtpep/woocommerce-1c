@@ -539,7 +539,6 @@ function wc1c_replace_product($is_full, $product) {
   $post_meta = array(
     '_sku' => @$product['Артикул'],
     '_manage_stock' => 'yes',
-    '_stock_status' => 'outofstock',
   );
 
   list($is_added, $post_id, $post_meta) = wc1c_replace_post($product['Ид'], 'product', $preserve_properties, $is_deleted, $post_title, @$product['Описание'], $post_content, $post_meta, 'product_cat', @$product['Группы']);

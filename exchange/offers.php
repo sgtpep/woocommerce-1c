@@ -92,7 +92,11 @@ function wc1c_update_currency($currency) {
 function wc1c_replace_product_meta($post_id, $price, $quantity, $coefficient, $attributes = array()) {
   if (isset($price)) $price = (float) $price;
 
-  $post_meta = array();
+  $post_meta = array(
+    '_regular_price' => $price,
+    '_manage_stock' => 'yes',
+  );
+
   foreach ($attributes as $attribute_name => $attribute_value) {
     $meta_key = 'attribute_' . sanitize_title($attribute_name);
     $post_meta[$meta_key] = $attribute_value;
@@ -109,7 +113,6 @@ function wc1c_replace_product_meta($post_id, $price, $quantity, $coefficient, $a
     delete_post_meta($post_id, $meta_key);
   }
 
-  $post_meta['_regular_price'] = $price;
   $sale_price = @$current_post_meta['_sale_price'];
   $sale_price_from = @$current_post_meta['_sale_price_dates_from'];
   $sale_price_to = @$current_post_meta['_sale_price_dates_to'];
