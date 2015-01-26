@@ -31,16 +31,6 @@ function wc1c_init() {
     }
     add_action('admin_notices', 'wc1c_woocommerce_admin_notices');
   }
-
-  if (!get_option('permalink_structure')) {
-    function wc1c_permalinks_admin_notices() {
-      $plugin_data = get_plugin_data(__FILE__);
-      $permalink_url = admin_url("options-permalink.php");
-      $message = sprintf(__("Plugin <strong>%1\$s</strong> requires <a href=\"%2\$s\">permalinks</a> to be enabled.", 'woocommerce-1c'), $plugin_data['Name'], $permalink_url);
-      printf('<div class="updated"><p>%s</p></div>', $message);
-    }
-    add_action('admin_notices', 'wc1c_permalinks_admin_notices');
-  }
 }
 add_action('init', 'wc1c_init');
 

@@ -50,14 +50,6 @@ msgstr ""
 "Плагин <strong>%s</strong> требует установки и активации плагина "
 "<strong>WooCommerce</strong>."
 
-#: woocommerce-1c.php:37
-msgid ""
-"Plugin <strong>%1$s</strong> requires <a href=\"%2$s\">permalinks</a> to be "
-"enabled."
-msgstr ""
-"Плагин <strong>%1$s</strong> требует включения <a href=\"%2$s\">постоянных "
-"ссылок</a>."
-
 #. Plugin Name of the plugin/theme
 msgid "WooCommerce and 1C:Enterprise (1С:Предприятие) Data Exchange"
 msgstr "Обмен данным между WooCommerce и 1С:Предприятием"
