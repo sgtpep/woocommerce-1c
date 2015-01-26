@@ -92,11 +92,7 @@ function wc1c_update_currency($currency) {
 function wc1c_replace_product_meta($post_id, $price, $quantity, $coefficient, $attributes = array()) {
   if (isset($price)) $price = (float) $price;
 
-  $post_meta = array(
-    '_price' => $price,
-    '_regular_price' => $price,
-  );
-
+  $post_meta = array();
   foreach ($attributes as $attribute_name => $attribute_value) {
     $meta_key = 'attribute_' . sanitize_title($attribute_name);
     $post_meta[$meta_key] = $attribute_value;
@@ -111,6 +107,30 @@ function wc1c_replace_product_meta($post_id, $price, $quantity, $coefficient, $a
     if (strpos($meta_key, 'attribute_') !== 0 || array_key_exists($meta_key, $post_meta)) continue;
 
     delete_post_meta($post_id, $meta_key);
+  }
+
+  $post_meta['_regular_price'] = $price;
+  $sale_price = @$current_post_meta['_sale_price'];
+  $sale_price_from = @$current_post_meta['_sale_price_dates_from'];
+  $sale_price_to = @$current_post_meta['_sale_price_dates_to'];
+  if (empty($current_post_meta['_sale_price'])) {
+    $post_meta['_price'] = $price;
+  }
+  else {
+    if (empty($sale_price_from) && empty($sale_price_to)) {
+      $post_meta['_price'] = $current_post_meta['_sale_price'];
+    }
+    else {
+      $now = strtotime('now', current_time('timestamp'));
+      if (!empty($sale_price_from) && strtotime($sale_price_from) < $now) {
+        $post_meta['_price'] = $current_post_meta['_sale_price'];
+      }
+      if (!empty($sale_price_to) && strtotime($sale_price_to) < $now) {
+        $post_meta['_price'] = $price;
+        $post_meta['_sale_price_dates_from'] = '';
+        $post_meta['_sale_price_dates_to'] = '';
+      }
+    }
   }
 
   foreach ($post_meta as $meta_key => $meta_value) {
