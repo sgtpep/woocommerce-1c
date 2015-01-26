@@ -32,3 +32,5 @@ foreach ($post_ids as $post_id) {
 
   wp_delete_post($post_id, true);
 }
+
+echo "\x07";
