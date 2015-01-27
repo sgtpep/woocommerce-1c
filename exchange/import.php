@@ -192,23 +192,6 @@ function wc1c_term_id_by_meta($key, $value) {
   return $term_id;
 }
 
-function wc1c_unique_term_name($name, $taxonomy) {
-  global $wpdb;
-
-  $sql = "SELECT t.* FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy = %s AND name = %s LIMIT 1";
-  $term = $wpdb->get_row($wpdb->prepare($sql, $taxonomy, $name));
-  if (!$term) return $name;
-
-  $number = 2;
-  while (true) {
-    $new_name = "$name $number";
-    $number++;
-
-    $term = $wpdb->get_row($wpdb->prepare($sql, $taxonomy, $new_name));
-    if (!$term) return $new_name;
-  }
-}
-
 function wc1c_unique_term_slug($slug) {
   global $wpdb;
 
@@ -240,12 +223,12 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
   if ($term_id) $term = get_term($term_id, $taxonomy);
 
   if (!$term_id || !$term) {
-    $name = wc1c_unique_term_name($name, $taxonomy);
+    $parent = $parent_guid ? wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$parent_guid") : null;
     $slug = wc1c_unique_term_slug($name);
     $args = array(
       'slug' => $slug,
+      'parent' => $parent,
     );
-    if ($parent_guid) $args['parent'] = wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$parent_guid");
 
     $result = wp_insert_term($name, $taxonomy, $args);
     wc1c_check_wp_error($result);
@@ -257,18 +240,14 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
   }
 
   if (empty($is_added)) {
-    $args = array();
-    if ($parent_guid) $args['parent'] = wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$parent_guid");
+    $parent = $parent_guid ? wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$parent_guid") : null;
+    $args = array(
+      'name' => $name,
+      'parent' => $parent,
+    );
 
-    if ($name != $term->name) {
-      $term_name = preg_replace("/ \d+$/", '', $term->name);
-      if ($name != $term_name) $args['name'] = $name;
-    }
-
-    if ($args) {
-      $result = wp_update_term($term_id, $taxonomy, $args);
-      wc1c_check_wp_error($result);
-    }
+    $result = wp_update_term($term_id, $taxonomy, $args);
+    wc1c_check_wp_error($result);
   }
 
   if ($is_full) wc_set_term_order($term_id, $order, $taxonomy);
