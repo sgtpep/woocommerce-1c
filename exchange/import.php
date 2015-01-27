@@ -192,88 +192,86 @@ function wc1c_term_id_by_meta($key, $value) {
   return $term_id;
 }
 
-// TEMP
-function wc1c_wp_unique_term_slug($slug, $term) {
+function wc1c_unique_term_name($name, $taxonomy) {
   global $wpdb;
 
-  if (!term_exists($slug)) return $slug;
+  $sql = "SELECT t.* FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy = %s AND name = %s LIMIT 1";
+  $term = $wpdb->get_row($wpdb->prepare($sql, $taxonomy, $name));
+  if (!$term) return $name;
 
-  if (is_taxonomy_hierarchical($term->taxonomy) && !empty($term->parent)) {
-    $the_parent = $term->parent;
-    while (!empty($the_parent)) {
-      $parent_term = get_term($the_parent, $term->taxonomy);
-      if (is_wp_error($parent_term) || empty($parent_term)) break;
-      $slug .= '-' . $parent_term->slug;
-      if (!term_exists($slug)) return $slug;
+  $number = 2;
+  while (true) {
+    $new_name = "$name $number";
+    $number++;
 
-      if (empty($parent_term->parent)) break;
-      $the_parent = $parent_term->parent;
-    }
+    $term = $wpdb->get_row($wpdb->prepare($sql, $taxonomy, $new_name));
+    if (!$term) return $new_name;
+  }
+}
+
+function wc1c_unique_term_slug($slug) {
+  global $wpdb;
+
+  while (true) {
+    $sanitized_slug = sanitize_title($slug);
+    if (strlen($sanitized_slug) <= 195) break;
+
+    $slug = mb_substr($slug, 0, mb_strlen($slug) - 1);
   }
 
-  if (!empty($term->term_id)) {
-    $query = $wpdb->prepare("SELECT slug FROM $wpdb->terms WHERE slug = %s AND term_id != %d", $slug, $term->term_id);
-  }
-  else {
-    $query = $wpdb->prepare("SELECT slug FROM $wpdb->terms WHERE slug = %s", $slug);
-  }
+  $sql = "SELECT * FROM $wpdb->terms WHERE slug = %s LIMIT 1";
+  $term = $wpdb->get_row($wpdb->prepare($sql, $sanitized_slug));
+  if (!$term) return $slug;
 
-  if ($wpdb->get_var($query)) {
-    $num = 2;
-    do {
-      $alt_slug = $slug . "-$num";
-      $num++;
-      $slug_check = $wpdb->get_var($wpdb->prepare("SELECT slug FROM $wpdb->terms WHERE slug = %s", $alt_slug));
-    }
-    while ($slug_check);
-    $slug = $alt_slug;
-  }               
-                  
-  return $slug;           
-}                       
+  $number = 2;
+  while (true) {
+    $new_slug = "$slug-$number";
+    $new_sanitized_slug = "$sanitized_slug-$number";
+    $number++;
 
+    $term = $wpdb->get_row($wpdb->prepare($sql, $new_sanitized_slug));
+    if (!$term) return $new_slug;
+  }
+}
 function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $order) {
-  $term_id = wc1c_term_id_by_meta('wc1c_guid', $guid);
+  global $wpdb;
 
-  if (!$term_id) {
-    $slug = sanitize_title($name);
-    $slug = wc1c_wp_unique_term_slug($slug, (object) array('taxonomy' => $taxonomy));
+  $term_id = wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$guid");
+  if ($term_id) $term = get_term($term_id, $taxonomy);
+
+  if (!$term_id || !$term) {
+    $name = wc1c_unique_term_name($name, $taxonomy);
+    $slug = wc1c_unique_term_slug($name);
 
     $args = array(
       'parent' => wc1c_term_id_by_meta('wc1c_guid', $parent_guid),
       'slug' => $slug,
     );
     $result = wp_insert_term($name, $taxonomy, $args);
+    wc1c_check_wp_error($result);
 
-    if (!is_wp_error($result)) {
-      $term_id = $result['term_id'];
-      $is_added = true;
-    }
-    else {
-      foreach ($result->get_error_codes() as $error_code) {
-        if ($error_code == 'term_exists') {
-          $term_id = $result->get_error_data('term_exists');
-        }
-        else {
-          wc1c_wp_error($result, $error_code);
-        }
-      }
-    }
+    $term_id = $result['term_id'];
+    update_woocommerce_term_meta($term_id, 'wc1c_guid', "$taxonomy::$guid");
 
-    update_woocommerce_term_meta($term_id, 'wc1c_guid', $guid);
+    $is_added = true;
   }
 
   if (empty($is_added)) {
     $args = array(
       'parent' => wc1c_term_id_by_meta('wc1c_guid', $parent_guid),
-      'name' => $name,
     );
+
+    if ($name != $term->name) {
+      $term_name = preg_replace("/ \d+$/", '', $term->name);
+      if ($name != $term_name) $args['name'] = $name;
+    }
+
     $result = wp_update_term($term_id, $taxonomy, $args);
     wc1c_check_wp_error($result);
   }
 
   if ($is_full) wc_set_term_order($term_id, $order, $taxonomy);
-    
+
   update_woocommerce_term_meta($term_id, 'wc1c_timestamp', WC1C_TIMESTAMP);
 }
 
