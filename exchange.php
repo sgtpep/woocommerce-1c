@@ -38,6 +38,16 @@ function wc1c_wpdb_end($is_commit = false, $no_check = false) {
   if (wc1c_is_debug()) echo "\n" . strtolower($sql_query);
 }
 
+function wc1c_full_request_uri() {
+  $uri = 'http';
+  if (@$_SERVER['HTTPS'] == 'on') $uri .= 's';
+  $uri .= "://{$_SERVER['SERVER_NAME']}";
+  if ($_SERVER['SERVER_PORT'] != 80) $uri .= ":{$_SERVER['SERVER_PORT']}";
+  if (isset($_SERVER['REQUEST_URI'])) $uri .= $_SERVER['REQUEST_URI'];
+
+  return $uri;
+}
+
 function wc1c_error($message, $type = "Error", $no_exit = false) {
   global $wc1c_is_error;
 
@@ -53,7 +63,9 @@ function wc1c_error($message, $type = "Error", $no_exit = false) {
   if (wc1c_is_debug()) {
     echo "\n";
     debug_print_backtrace();
-    printf("\nversion: %s\n", WC1C_VERSION);
+
+    $uri = wc1c_full_request_uri();
+    printf("\nURI: %s\nversion: %s\n", $uri, WC1C_VERSION);
   }
 
   if (!$no_exit) {
