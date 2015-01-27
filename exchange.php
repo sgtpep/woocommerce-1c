@@ -64,8 +64,18 @@ function wc1c_error($message, $type = "Error", $no_exit = false) {
     echo "\n";
     debug_print_backtrace();
 
-    $uri = wc1c_full_request_uri();
-    printf("\nURI: %s\nversion: %s\n", $uri, WC1C_VERSION);
+    $info = array(
+      "Request URI" => wc1c_full_request_uri(),
+      "Server API" => PHP_SAPI,
+      "Memory limit" => ini_get('memory_limit'),
+      "Maximum POST size" => ini_get('post_max_size'),
+      "WordPress version" => get_bloginfo('version'),
+      "Plugin version" => WC1C_VERSION,
+    );
+    echo "\n";
+    foreach ($info as $info_name => $info_value) {
+      echo "$info_name: $info_value\n";
+    }
   }
 
   if (!$no_exit) {
