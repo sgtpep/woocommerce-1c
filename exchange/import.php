@@ -216,7 +216,7 @@ function wc1c_unique_term_slug($slug) {
     $sanitized_slug = sanitize_title($slug);
     if (strlen($sanitized_slug) <= 195) break;
 
-    $slug = mb_substr($slug, 0, mb_strlen($slug) - 1);
+    $slug = mb_substr($slug, 0, mb_strlen($slug) - 3);
   }
 
   $sql = "SELECT * FROM $wpdb->terms WHERE slug = %s LIMIT 1";
