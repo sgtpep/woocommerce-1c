@@ -206,13 +206,13 @@ function wc1c_filesize_to_bytes($filesize) {
   switch (substr($filesize, -1)) {
     case 'G':
     case 'g':
-      return (int) $filesize * 1073741824;
+      return (int) $filesize * 1000000000;
     case 'M':
     case 'm':
-      return (int) $filesize * 1048576;
+      return (int) $filesize * 1000000;
     case 'K':
     case 'k':
-      return (int) $filesize * 1024;
+      return (int) $filesize * 1000;
     default:
       return $filesize;
   }
