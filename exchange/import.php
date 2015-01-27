@@ -242,11 +242,11 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
   if (!$term_id || !$term) {
     $name = wc1c_unique_term_name($name, $taxonomy);
     $slug = wc1c_unique_term_slug($name);
-
     $args = array(
-      'parent' => wc1c_term_id_by_meta('wc1c_guid', $parent_guid),
       'slug' => $slug,
     );
+    if ($parent_guid) $args['parent'] = wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$parent_guid");
+
     $result = wp_insert_term($name, $taxonomy, $args);
     wc1c_check_wp_error($result);
 
@@ -257,17 +257,18 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
   }
 
   if (empty($is_added)) {
-    $args = array(
-      'parent' => wc1c_term_id_by_meta('wc1c_guid', $parent_guid),
-    );
+    $args = array();
+    if ($parent_guid) $args['parent'] = wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$parent_guid");
 
     if ($name != $term->name) {
       $term_name = preg_replace("/ \d+$/", '', $term->name);
       if ($name != $term_name) $args['name'] = $name;
     }
 
-    $result = wp_update_term($term_id, $taxonomy, $args);
-    wc1c_check_wp_error($result);
+    if ($args) {
+      $result = wp_update_term($term_id, $taxonomy, $args);
+      wc1c_check_wp_error($result);
+    }
   }
 
   if ($is_full) wc_set_term_order($term_id, $order, $taxonomy);
