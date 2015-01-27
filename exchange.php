@@ -231,15 +231,19 @@ function wc1c_filesize_to_bytes($filesize) {
 function wc1c_mode_init($type) {
   wc1c_clean_data_dir($type);
 
-  @exec("which unzip", $output, $status);
+  @exec("which unzip", $_, $status);
   $zip = @$status === 0 || class_exists('ZipArchive') ? 'yes' : 'no';
 
-  if (preg_match("/-fcgi$/", PHP_SAPI)) {
-    $file_limit = 131072;
+  $file_limits = array(
+    wc1c_filesize_to_bytes(ini_get('post_max_size')),
+    wc1c_filesize_to_bytes(ini_get('memory_limit')),
+  );
+  @exec("grep ^MemFree: /proc/meminfo", $output, $status);
+  if (@$status === 0 && $output) {
+    $output = preg_split("/\s+/", $output[0]);
+    $file_limits[] = intval($output[1] * 1000 * 0.7);
   }
-  else {
-    $file_limit = wc1c_filesize_to_bytes(ini_get('post_max_size'));
-  }
+  $file_limit = min($file_limits);
 
   exit("zip=$zip\nfile_limit=$file_limit");
 }
@@ -320,7 +324,7 @@ function wc1c_unpack_files($type) {
   if (!$zip_paths) return;
 
   $command = sprintf("unzip -qqo -x %s -d %s", implode(' ', array_map('escapeshellarg', $zip_paths)), escapeshellarg($data_dir));
-  @exec($command, $output, $status);
+  @exec($command, $_, $status);
 
   if (@$status !== 0) {
     foreach ($zip_paths as $zip_path) {
