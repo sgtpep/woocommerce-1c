@@ -438,7 +438,7 @@ function wc1c_replace_post($guid, $post_type, $preserve_properties, $is_deleted,
   $category_ids = array();
   if ($category_guids) {
     foreach ($category_guids as $category_guid) {
-      $category_id = wc1c_term_id_by_meta('wc1c_guid', $category_guid);
+      $category_id = wc1c_term_id_by_meta('wc1c_guid', "product_cat::$category_guid");
       if ($category_id) $category_ids[] = $category_id;
     }
   }
@@ -589,7 +589,7 @@ function wc1c_replace_product($is_full, $product) {
           if (!$property_value) continue;
 
           if ($attribute['attribute_type'] == 'select' && preg_match("/^\w+-\w+-\w+-\w+-\w+$/", $property_value)) {
-            $term_id = wc1c_term_id_by_meta('wc1c_guid', $property_value);
+            $term_id = wc1c_term_id_by_meta('wc1c_guid', "{$attribute['taxonomy']}::$property_value");
             if ($term_id) $terms[] = (int) $term_id;
           }
           else {
