@@ -224,7 +224,12 @@ function wc1c_mode_init($type) {
   @exec("which unzip", $output, $status);
   $zip = @$status === 0 || class_exists('ZipArchive') ? 'yes' : 'no';
 
-  $file_limit = wc1c_filesize_to_bytes(ini_get('post_max_size'));
+  if (preg_match("/-fcgi$/", PHP_SAPI)) {
+    $file_limit = 131072;
+  }
+  else {
+    $file_limit = wc1c_filesize_to_bytes(ini_get('post_max_size'));
+  }
 
   exit("zip=$zip\nfile_limit=$file_limit");
 }
