@@ -281,7 +281,7 @@ function wc1c_mode_file($type, $filename) {
     $data_dir = WC1C_DATA_DIR . $type;
     foreach (glob("$data_dir/*.xml") as $path) {
       $filename = basename($path);
-      wc1c_mode_import($type, $filename);
+      wc1c_mode_import($type, $filename, 'orders');
     }
   }
 }
@@ -408,7 +408,7 @@ function wc1c_xml_is_full($fp) {
   return $is_full;
 }
 
-function wc1c_mode_import($type, $filename) {
+function wc1c_mode_import($type, $filename, $namespace = null) {
   global $wc1c_namespace, $wc1c_is_full, $wc1c_names, $wc1c_depth;
 
   if ($type == 'catalog') wc1c_unpack_files($type);
@@ -419,9 +419,7 @@ function wc1c_mode_import($type, $filename) {
 
   wc1c_set_transaction_mode();
 
-  $namespace = pathinfo($filename, PATHINFO_FILENAME);
-  list($namespace) = explode('-', $namespace, 2);
-  $namespace = preg_replace("/\d+$/", '', $namespace);
+  if (!$namespace) $namespace = pathinfo($filename, PATHINFO_FILENAME);
 
   $wc1c_namespace = $namespace;
   $wc1c_is_full = wc1c_xml_is_full($fp);
