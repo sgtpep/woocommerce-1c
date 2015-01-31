@@ -33,4 +33,9 @@ foreach ($post_ids as $post_id) {
   wp_delete_post($post_id, true);
 }
 
+$post_ids = $wpdb->get_col("SELECT DISTINCT post_id FROM $wpdb->postmeta WHERE meta_key = 'wc1c_querying' OR meta_key = 'wc1c_queried'");
+foreach ($post_ids as $post_id) {
+  wp_delete_post($post_id, true);
+}
+
 echo "\x07";
