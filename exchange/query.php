@@ -1,11 +1,25 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
+$order_statuses = array_keys(wc_get_order_statuses());
+$order_posts = get_posts(array(
+  'post_type' => 'shop_order',
+  'post_status' => $order_statuses,
+  'meta_query' => array(
+    array(
+      'key' => 'wc1c_querying',
+      'compare' => "NOT EXISTS",
+    ),
+  ),
+));
+
+$order_post_ids = array();
 $documents = array();
-$order_posts = get_posts("post_type=shop_order&post_status=any,trash");
 foreach ($order_posts as $order_post) {
   $order = wc_get_order($order_post);
   if (!$order) wc1c_error("Failed to get order");
+
+  $order_post_ids[] = $order_post->ID;
 
   $order_line_items = $order->get_items();
 
@@ -138,7 +152,7 @@ foreach ($order_posts as $order_post) {
 echo '<?xml version="1.0" encoding="windows-1251"?>';
 ?>
 
-<КоммерческаяИнформация ВерсияСхемы="2.08" ДатаФормирования="<?php echo date("Y-m-d", WC1C_TIMESTAMP) ?>T<?php echo date("H:i:s", WC1C_TIMESTAMP) ?>">
+<КоммерческаяИнформация ВерсияСхемы="2.08" ДатаФормирования="<?php echo date("Y-m-dTH:i:s", WC1C_TIMESTAMP) ?>">
   <?php foreach ($documents as $document): ?>
     <Документ>
       <Ид>wc1c#order#<?php echo $document['order_id'] ?></Ид>
@@ -250,3 +264,9 @@ echo '<?xml version="1.0" encoding="windows-1251"?>';
     </Документ>
   <?php endforeach ?>
 </КоммерческаяИнформация>
+
+<?php
+foreach ($order_post_ids as $order_post_id) {
+  update_post_meta($order_post_id, 'wc1c_querying', 1);
+}
+?>

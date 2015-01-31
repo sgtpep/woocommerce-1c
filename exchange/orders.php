@@ -255,10 +255,40 @@ function wc1c_replace_document($document) {
     wc1c_check_wp_error($result);
     if (!$result) wc1c_error("Failed to update order post");
   }
+  else {
+    $args = array(
+      'order_id' => $order->id,
+      'status' => 'on-hold',
+    );
+
+    $is_paid = false;
+    foreach ($document['ЗначенияРеквизитов'] as $requisite) {
+      if (!in_array($requisite['Наименование'], array("Дата оплаты по 1С", "Дата отгрузки по 1С"))) continue;
+        
+      $is_paid = true;
+      break;
+    }
+    if ($is_paid) $args['status'] = 'processing';
+
+    $is_passed = false;
+    foreach ($document['ЗначенияРеквизитов'] as $requisite) {
+      if ($requisite['Наименование'] != 'Проведен' || $requisite['Значение'] != 'true') continue;
+        
+      $is_passed = true;
+      break;
+    }
+    if ($is_passed) $args['status'] = 'completed';
+
+    $order = wc_update_order($args);
+    wc1c_check_wp_error($order);
+  }
 
   $is_deleted = false;
   foreach ($document['ЗначенияРеквизитов'] as $requisite) {
-    if ($requisite['Наименование'] == 'ПометкаУдаления' && $requisite['Значение'] == 'true') $is_deleted = true;
+    if ($requisite['Наименование'] != 'ПометкаУдаления' || $requisite['Значение'] != 'true') continue;
+      
+    $is_deleted = true;
+    break;
   }
 
   if ($is_deleted && $order->post_status != 'trash') {

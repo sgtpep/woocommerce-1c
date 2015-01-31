@@ -462,6 +462,8 @@ function wc1c_mode_query($type) {
 }
 
 function wc1c_mode_success($type) {
+  include WC1C_PLUGIN_DIR . "exchange/success.php";
+
   exit("success");
 }
 
