@@ -241,7 +241,7 @@ function wc1c_mode_init($type) {
   @exec("grep ^MemFree: /proc/meminfo", $output, $status);
   if (@$status === 0 && $output) {
     $output = preg_split("/\s+/", $output[0]);
-    $file_limits[] = intval($output[1] * 1000 * 0.5);
+    $file_limits[] = intval($output[1] * 1000 * 0.7);
   }
   if (defined('WC1C_FILE_LIMIT')) $file_limits[] = wc1c_filesize_to_bytes(WC1C_FILE_LIMIT);
   $file_limit = min($file_limits);
