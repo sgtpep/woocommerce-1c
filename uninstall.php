@@ -30,7 +30,7 @@ foreach ($option_names as $option_name) {
   delete_option($option_name);
 }
 
-$post_meta_keys = $wpdb->get_col("SELECT DISTINCT meta_key FROM $wpdb->postmeta WHERE meta_key LIKE 'wc1c_%'");
+$post_meta_keys = $wpdb->get_col("SELECT DISTINCT meta_key FROM $wpdb->postmeta WHERE meta_key LIKE '_wc1c_%' OR meta_key LIKE 'wc1c_%'");
 foreach ($post_meta_keys as $post_meta_key) {
   delete_post_meta_by_key($post_meta_key);
 }
