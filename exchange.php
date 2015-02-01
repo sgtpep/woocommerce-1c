@@ -231,8 +231,14 @@ function wc1c_filesize_to_bytes($filesize) {
 function wc1c_mode_init($type) {
   wc1c_clean_data_dir($type);
 
-  @exec("which unzip", $_, $status);
-  $zip = @$status === 0 || class_exists('ZipArchive') ? 'yes' : 'no';
+  if (!defined('WC1C_ZIP')) {
+    @exec("which unzip", $_, $status);
+    $is_zip = @$status === 0 || class_exists('ZipArchive');
+  }
+  else {
+    $is_zip = WC1C_ZIP;
+  }
+  $zip = $is_zip ? 'yes' : 'no';
 
   $file_limits = array(
     wc1c_filesize_to_bytes(ini_get('post_max_size')),
