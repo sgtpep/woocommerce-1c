@@ -7,7 +7,7 @@ $order_posts = get_posts(array(
   'post_status' => $order_statuses,
   'meta_query' => array(
     array(
-      'key' => 'wc1c_querying',
+      'key' => 'wc1c_queried',
       'compare' => "NOT EXISTS",
     ),
   ),
