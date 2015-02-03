@@ -72,7 +72,7 @@ foreach ($order_posts as $order_post) {
     $contragent['full_name'] = $full_name;
     $contragent['user_id'] = $full_name ? $order_post->post_author : 0;
 
-    if (isset($order_meta["_{$type}_country"])) {
+    if (!empty($order_meta["_{$type}_country"])) {
       $country_code = $order_meta["_{$type}_country"];
       $order_meta["_{$type}_country_name"] = WC()->countries->countries[$country_code];
     }
