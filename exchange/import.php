@@ -451,16 +451,17 @@ function wc1c_replace_post_attachments($post_id, $attachments) {
   $post_attachment_id_by_hash = array();
   foreach ($post_attachments as $post_attachment) {
     $post_attachment_path = get_attached_file($post_attachment->ID, true);
-    $post_attachment_hash = basename($post_attachment_path) . md5_file($post_attachment_path);
-    $post_attachment_id_by_hash[$post_attachment_hash] = $post_attachment->ID;
+    if (file_exists($post_attachment_path)) {
+      $post_attachment_hash = basename($post_attachment_path) . md5_file($post_attachment_path);
+      $post_attachment_id_by_hash[$post_attachment_hash] = $post_attachment->ID;
+      if (isset($attachment_path_by_hash[$post_attachment_hash])) {
+        unset($attachment_path_by_hash[$post_attachment_hash]);
+        continue;
+      }
+    }
 
-    if (isset($attachment_path_by_hash[$post_attachment_hash])) {
-      unset($attachment_path_by_hash[$post_attachment_hash]);
-    }
-    else {
-      $result = wp_delete_attachment($post_attachment->ID);
-      if ($result === false) wc1c_error("Failed to delete post attachment");
-    }
+    $result = wp_delete_attachment($post_attachment->ID);
+    if ($result === false) wc1c_error("Failed to delete post attachment");
   }
 
   $attachment_ids = array();
