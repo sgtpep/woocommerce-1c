@@ -587,14 +587,13 @@ function wc1c_replace_product($is_full, $product) {
           'name' => null,
           'value' => '',
           'position' => count($product_attributes),
-          'is_visible' => 0,
+          'is_visible' => 1,
           'is_variation' => 0,
           'is_taxonomy' => 0,
         );
 
         if ($terms) {
           $product_attribute['name'] = $attribute['taxonomy'];
-          $product_attribute['is_visible'] = 1;
           $product_attribute['is_taxonomy'] = 1;
         }
         elseif ($attribute_values) {
