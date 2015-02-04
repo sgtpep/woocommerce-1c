@@ -69,7 +69,7 @@ If you have any question or proposal, please [contact the author](http://danil.i
 
 1С закачивает на сервер выгрузку с помощью POST-запроса. Возможно, понадобится увеличить лимит объема данных, отправляемых по POST. В php.ini за это отвечает значение post_max_size. В случае использования FastCGI и/или nginx может понадобится увеличить этот лимит также в их настройках (например, FcgidMaxRequestLen для mod_fcgid; client_max_body_size, send_timeout для nginx).
 
-Если PHP выполняется в режиме FastCGI, а 1С при проверке соединения с сервером просит проверить имя пользователя и пароль, хотя они указаны верно, то необходимо в файл .htaccess перед строкой "RewriteRule . /index.php [L]" вставить строку "RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]".
+Если PHP выполняется в режиме FastCGI, а 1С при проверке соединения с сервером просит проверить имя пользователя и пароль, хотя они указаны верно, то необходимо в файл .htaccess перед строкой "RewriteRule . /index.php [L]" вставить строку "RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]" (без двойных кавычек).
 
 == Frequently Asked Questions ==
 
