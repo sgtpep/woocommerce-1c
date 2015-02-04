@@ -4,7 +4,7 @@ Donate link: http://
 Tags: 1c, 1c-enterprise, commerceml, integration, e-commerce, ecommerce, commerce, shop, cart, woothemes, woocommerce
 Requires at least: 3.8
 Tested up to: 4.1
-Stable tag: 0.4
+Stable tag: 0.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -85,8 +85,8 @@ If you have any question or proposal, please [contact the author](http://danil.i
 
 == Changelog ==
 
-= 0.5 (в разработке) =
-Добавлена в API возможность предотвращения перезаписи заголовка, краткого описания, полного описания и галереи продукта при каждом последующем обмене.
+= 0.5 =
+Добавлена в API возможность предотвращения перезаписи заголовка, краткого описания, полного описания и галереи продукта при каждом последующем обмене. Изменена логика обмена заказами.
 
 = 0.4 =
 Добавлено приведение наименований реквизитов к человекочитаемому виду. Добавлена поддержка импорта из поля 1С "Файл описания для сайта". Значение поля 1С "Текстовое описание" помещается в "Краткое описние товара" WooCommerce.
