@@ -651,7 +651,10 @@ function wc1c_replace_product($is_full, $product) {
   }
 
   $attachments = array();
-  if (!empty($product['Картинка'])) $attachments = array_fill_keys($product['Картинка'], array());
+  if (!empty($product['Картинка'])) {
+    $attachments = array_filter($product['Картинка']);
+    $attachments = array_fill_keys($attachments, array());
+  }
 
   if ($product['ЗначенияРеквизитов']) {
     $attachment_keys = array(
