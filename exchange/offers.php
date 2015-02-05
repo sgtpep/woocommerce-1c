@@ -40,7 +40,7 @@ function wc1c_offers_character_data_handler($is_full, $names, $depth, $name, $da
 }
 
 function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
-  global $wc1c_price_type, $wc1c_offer, $wc1c_offer_guid, $wc1c_suboffers, $wc1c_price;
+  global $wc1c_price_type, $wc1c_offer, $wc1c_suboffers, $wc1c_price;
 
   if (@$names[$depth - 1] == 'ПакетПредложений' && $name == 'ТипыЦен') {
     wc1c_update_currency($wc1c_price_type['Валюта']);
@@ -60,20 +60,23 @@ function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
       $guid = $wc1c_offer['Ид'];
       list($offer_guid, ) = explode('#', $guid, 2);
 
-      if ($wc1c_offer_guid != $offer_guid) {
-        if ($wc1c_offer_guid) wc1c_replace_suboffers($wc1c_offer_guid, $wc1c_suboffers);
+      if (empty($wc1c_suboffers) || $wc1c_suboffers[0]['offer_guid'] != $offer_guid) {
+        if ($wc1c_suboffers) wc1c_replace_suboffers($wc1c_suboffers);
         $wc1c_suboffers = array();
       }
-      $wc1c_offer_guid = $offer_guid;
 
       $wc1c_suboffers[] = array(
         'guid' => $wc1c_offer['Ид'],
+        'offer_guid' => $offer_guid,
         'price' => @$wc1c_price['ЦенаЗаЕдиницу'],
         'quantity' => @$wc1c_offer['Количество'],
         'coefficient' => @$wc1c_price['Коэффициент'],
         'characteristics' => isset($wc1c_offer['ХарактеристикиТовара']) ? $wc1c_offer['ХарактеристикиТовара'] : array(),
       );
     }
+  }
+  elseif (@$names[$depth - 1] == 'ПакетПредложений' && $name == 'Предложения') {
+    if ($wc1c_suboffers) wc1c_replace_suboffers($wc1c_suboffers);
   }
 }
 
@@ -201,7 +204,10 @@ function wc1c_replace_product_variation($guid, $parent_post_id, $order) {
   return $post_id;
 }
 
-function wc1c_replace_suboffers($offer_guid, $suboffers) {
+function wc1c_replace_suboffers($suboffers) {
+  if (!$suboffers) return;
+
+  $offer_guid = $suboffers[0]['offer_guid'];
   $post_id = wc1c_post_id_by_meta('_wc1c_guid', $offer_guid);
   if (!$post_id) wc1c_error("Failed to get parent post ID");
 
