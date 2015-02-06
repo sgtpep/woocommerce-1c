@@ -2,10 +2,13 @@
 if (!defined('ABSPATH')) exit;
 
 function wc1c_offers_start_element_handler($is_full, $names, $depth, $name, $attrs) {
-  global $wc1c_price_type, $wc1c_offer, $wc1c_price;
+  global $wc1c_price_types, $wc1c_offer, $wc1c_price;
 
-  if (@$names[$depth - 1] == 'ТипыЦен' && $name == 'ТипЦены') {
-    if (!isset($wc1c_price_type)) $wc1c_price_type = array();
+  if (@$names[$depth - 1] == 'ПакетПредложений' && $name == 'ТипыЦен') {
+    $wc1c_price_types = array();
+  }
+  elseif (@$names[$depth - 1] == 'ТипыЦен' && $name == 'ТипЦены') {
+    $wc1c_price_types[] = array();
   }
   elseif (@$names[$depth - 1] == 'Предложения' && $name == 'Предложение') {
     $wc1c_offer = array();
@@ -22,10 +25,11 @@ function wc1c_offers_start_element_handler($is_full, $names, $depth, $name, $att
 }
 
 function wc1c_offers_character_data_handler($is_full, $names, $depth, $name, $data) {
-  global $wc1c_price_type, $wc1c_offer, $wc1c_price;
+  global $wc1c_price_types, $wc1c_offer, $wc1c_price;
 
   if (@$names[$depth - 2] == 'ТипыЦен' && @$names[$depth - 1] == 'ТипЦены' && $name != 'Налог') {
-    if (!isset($wc1c_price_type[$name])) @$wc1c_price_type[$name] .= $data;
+    $i = count($wc1c_price_types) - 1;
+    @$wc1c_price_types[$i][$name] .= $data;
   }
   elseif (@$names[$depth - 2] == 'Предложения' && @$names[$depth - 1] == 'Предложение' && !in_array($name, array('ХарактеристикиТовара', 'Цены'))) {
     @$wc1c_offer[$name] .= $data;
@@ -40,9 +44,22 @@ function wc1c_offers_character_data_handler($is_full, $names, $depth, $name, $da
 }
 
 function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
-  global $wc1c_price_type, $wc1c_offer, $wc1c_suboffers, $wc1c_price;
+  global $wc1c_price_types, $wc1c_price_type, $wc1c_price_type, $wc1c_offer, $wc1c_suboffers, $wc1c_price;
 
   if (@$names[$depth - 1] == 'ПакетПредложений' && $name == 'ТипыЦен') {
+    if (!defined('WC1C_PRICE_TYPE')) {
+      $wc1c_price_type = $wc1c_price_types[0];
+    }
+    else {
+      foreach ($wc1c_price_types as $price_type) {
+        if ($price_type['Ид'] != WC1C_PRICE_TYPE && $price_type['Наименование'] != WC1C_PRICE_TYPE) continue;
+
+        $wc1c_price_type = $price_type;
+        break;
+      }
+      if (!isset($wc1c_price_type)) wc1c_error("Failed to match price type");
+    }
+
     wc1c_update_currency($wc1c_price_type['Валюта']);
   }
   elseif (@$names[$depth - 1] == 'Цены' && $name == 'Цена') {
