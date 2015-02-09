@@ -257,7 +257,7 @@ function wc1c_mode_init($type) {
 
 function wc1c_mode_file($type, $filename) {
   if ($filename) {
-    $path = WC1C_DATA_DIR . "$type/" . basename($filename);
+    $path = WC1C_DATA_DIR . "$type/" . ltrim($filename, "./\\");
     $path_dir = dirname($path);
     if (!is_dir($path_dir)) mkdir($path_dir, 0777, true) or wc1c_error(sprintf("Failed to create directories for file %s", $filename));
 
