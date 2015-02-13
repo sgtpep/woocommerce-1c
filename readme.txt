@@ -29,8 +29,6 @@ Provides data exchange between WooCommerce plugin and business application "1C:E
 
 По всем вопросам и предложениям, пожалуйста, [свяжитесь с автором](http://danil.iamsync.com/).
 
-Страница проекта: https://github.com/sgtpep/woocommerce-1c.
-
 = In English =
 
 Provides data exchange between eCommerce plugin WooCommerce and business application "1C:Enterprise 8. Trade Management".
@@ -47,8 +45,6 @@ Features:
 Please, read [installation instructions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/installation/) and [frequently asked questions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/faq/) before use.
 
 If you have any question or proposal, please [contact the author](http://danil.iamsync.com/).
-
-Project page: https://github.com/sgtpep/woocommerce-1c.
 
 == Installation ==
 
