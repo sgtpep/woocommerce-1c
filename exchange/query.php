@@ -149,6 +149,8 @@ foreach ($order_posts as $order_post) {
   $documents[] = $document;
 }
 
+$documents = apply_filters('wc1c_query_documents', $documents);
+
 echo '<?xml version="1.0" encoding="windows-1251"?>';
 ?>
 
