@@ -28,7 +28,7 @@ Provides data exchange between WooCommerce plugin and business application "1C:E
 Пожалуйста, перед использованием плагина прочитайте следующее:
 
 * [инструкцию по установке](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/installation/)
-* [часто задаваемые вопросы](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/faq/).
+* [часто задаваемые вопросы](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/faq/)
 
 По возникшим вопросам и предложениям можно [связаться с автором](http://danil.iamsync.com/).
 
@@ -48,7 +48,7 @@ Features:
 Please, read the following before using this plugin:
 
 * [installation instructions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/installation/)
-* [frequently asked questions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/faq/).
+* [frequently asked questions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/faq/)
 
 If you have any question or proposal, please [contact the author](http://danil.iamsync.com/).
 
