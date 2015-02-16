@@ -25,7 +25,7 @@ Provides data exchange between WooCommerce plugin and business application "1C:E
 * Поддержка передачи данных в сжатом виде.
 * Транзакционность и строгая проверка на ошибки: данные обновляются в БД только в случае успешного обмена.
 
-Пожалуйста, перед использованием прочитайте:
+Пожалуйста, перед использованием плагина прочитайте следующее:
 
 * [инструкцию по установке](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/installation/)
 * [часто задаваемые вопросы](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/faq/).
@@ -45,12 +45,12 @@ Features:
 * Support for compressed data exchange.
 * Transactions and strict error checking: DB updates on successfull data exchange only.
 
-Please, read before use:
+Please, read the following before using this plugin:
 
 * [installation instructions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/installation/)
-* [frequently asked questions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/faq/) before use.
+* [frequently asked questions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/faq/).
 
-If you have any question or proposal, you could [contact the author](http://danil.iamsync.com/).
+If you have any question or proposal, please [contact the author](http://danil.iamsync.com/).
 
 == Installation ==
 
