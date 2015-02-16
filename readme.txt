@@ -25,9 +25,12 @@ Provides data exchange between WooCommerce plugin and business application "1C:E
 * Поддержка передачи данных в сжатом виде.
 * Транзакционность и строгая проверка на ошибки: данные обновляются в БД только в случае успешного обмена.
 
-Пожалуйста, перед использованием прочитайте [инструкцию по установке](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/installation/) и [часто задаваемые вопросы](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/faq/).
+Пожалуйста, перед использованием прочитайте:
 
-По всем вопросам и предложениям, пожалуйста, [свяжитесь с автором](http://danil.iamsync.com/).
+* [инструкцию по установке](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/installation/)
+* [часто задаваемые вопросы](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/faq/).
+
+По возникшим вопросам и предложениям можно [связаться с автором](http://danil.iamsync.com/).
 
 = In English =
 
@@ -42,9 +45,12 @@ Features:
 * Support for compressed data exchange.
 * Transactions and strict error checking: DB updates on successfull data exchange only.
 
-Please, read [installation instructions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/installation/) and [frequently asked questions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/faq/) before use.
+Please, read before use:
 
-If you have any question or proposal, please [contact the author](http://danil.iamsync.com/).
+* [installation instructions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/installation/)
+* [frequently asked questions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/faq/) before use.
+
+If you have any question or proposal, you could [contact the author](http://danil.iamsync.com/).
 
 == Installation ==
 
@@ -84,7 +90,11 @@ RewriteRule . - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 == Frequently Asked Questions ==
 
 = Предоставляете ли вы поддержку? =
-Да, с автором можно свободно связаться, используя [форму обратной связи](http://danil.iamsync.ru/).
+Данный плагин является свободной некоммерческой разработкой и не приносит автору прямой прибыли. Полноценная поддержка же пользователей стоит времени и денег. Поэтому не стоит ожидать оказания бесплатной поддержки на уровне коммерческих продуктов. Предполагается, что пользователь, как минимум, самостоятельно попробует разобраться с установкой и настройкой продуктов 1С, WooCommerce и данного плагина, используя имеющуюся документацию к плагину и информацию в интернете. С автором можно связаться через [форму обратной связи](http://danil.iamsync.com/) в случае, если:
+
+* возникли определенные непреодолимые трудности в процессе установки или настройки плагина;
+* в процессе обмена данными возникают ошибки;
+* не устраивает текущий алгоритм обмена данными плагина, и есть представление, что и как должно работать иначе.
 
 == Screenshots ==
 
