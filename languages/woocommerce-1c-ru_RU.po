@@ -4,8 +4,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce 1C:Enterprise Integration 0.1-alpha\n"
-"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/woocommerce-1c\n"
-"POT-Creation-Date: 2014-11-09 12:08:37+00:00\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/woocommerce-"
+"and-1centerprise-data-exchange\n"
+"POT-Creation-Date: 2015-02-19 14:04:13+00:00\n"
 "PO-Revision-Date: 2014-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Danil Semelenov <mail@danil.mobi>\n"
 "Language-Team: Danil Semelenov <mail@danil.mobi>\n"
@@ -14,35 +15,39 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin.php:19 admin.php:50 admin.php:67
+#: admin.php:19 admin.php:51 admin.php:68
 msgid "1C Id"
 msgstr "Ид. 1С"
 
-#: admin.php:114
+#: admin.php:115
 msgid "Request For Premium Customer Support"
 msgstr "Запросить пользовательскую премиум-поддержку"
 
-#: admin.php:114
+#: admin.php:115
 msgid "Premium Support"
 msgstr "Премиум-поддержка"
 
-#: admin.php:123
-msgid "View Settings"
-msgstr "Посмотреть настройки"
+#: admin.php:125
+msgid "Say thank you to plugin author"
+msgstr "Сказать спасибо автору плагина"
 
-#: admin.php:123 admin.php:132
-msgid "Settings"
-msgstr "Настройки"
+#: admin.php:125
+msgid "Say thank you!"
+msgstr "Сказать спасибо!"
 
-#: admin.php:131
+#: admin.php:133
 msgid "1C"
 msgstr "1С"
 
-#: admin.php:133
+#: admin.php:134
+msgid "Settings"
+msgstr "Настройки"
+
+#: admin.php:135
 msgid "TODO"
 msgstr "TODO"
 
-#: woocommerce-1c.php:27
+#: woocommerce-1c.php:29
 msgid ""
 "Plugin <strong>%s</strong> requires plugin <strong>WooCommerce</strong> to "
 "be installed and activated."
@@ -70,3 +75,6 @@ msgstr "Данил Семеленов"
 #. Author URI of the plugin/theme
 msgid "mailto:mail@danil.mobi"
 msgstr "mailto:mail@danil.mobi"
+
+#~ msgid "View Settings"
+#~ msgstr "Посмотреть настройки"
