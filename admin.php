@@ -121,12 +121,13 @@ function wc1c_plugin_row_meta($plugin_meta, $plugin_file) {
 
 function wc1c_plugin_action_links($actions) {
   $actions_before = array(
-    'settings' => sprintf('<a href="%s" title="%s">%s</a>', admin_url("admin.php?page=woocommerce-1c"), esc_attr(__("View Settings", 'woocommerce-1c')), __("Settings", 'woocommerce-1c')),
+    // 'settings' => sprintf('<a href="%s" title="%s">%s</a>', admin_url("admin.php?page=woocommerce-1c"), esc_attr(__("View Settings", 'woocommerce-1c')), __("Settings", 'woocommerce-1c')),
+    'donate' => sprintf('<a href="%s" title="%s" target="_blank">%s</a>', "https://events.webmoney.ru/woocommerce1c", esc_attr(__("Say thank you to plugin author", 'woocommerce-1c')), __("Say thank you!", 'woocommerce-1c')),
   );
 
   return array_merge($actions_before, $actions);
 }
-//add_filter('plugin_action_links_' . WC1C_PLUGIN_BASENAME, 'wc1c_plugin_action_links');
+add_filter('plugin_action_links_' . WC1C_PLUGIN_BASENAME, 'wc1c_plugin_action_links');
 
 function wc1c_admin_menu() {
   add_menu_page(__("1C", 'woocommerce-1c'), __("1C", 'woocommerce-1c'), 'manage_woocommerce', 'woocommerce-1c', 'wc1c_admin_menu_page_settings', null, 100);
