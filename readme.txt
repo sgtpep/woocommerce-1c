@@ -1,12 +1,12 @@
 === WooCommerce and 1C:Enterprise (1С:Предприятие) Data Exchange ===
 Contributors: sgtpep
-Donate link: http://
+Donate link: https://events.webmoney.ru/woocommerce1c
+License: GPLv3
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Tags: 1c, 1c-enterprise, commerceml, integration, e-commerce, ecommerce, commerce, shop, cart, woothemes, woocommerce
 Requires at least: 3.8
 Tested up to: 4.1
 Stable tag: 0.5
-License: GPLv3
-License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 Provides data exchange between WooCommerce plugin and business application "1C:Enterprise 8. Trade Management" (and compatible ones).
 
