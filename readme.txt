@@ -32,6 +32,8 @@ Provides data exchange between WooCommerce plugin and business application "1C:E
 
 По возникшим вопросам и предложениям можно [связаться с автором](http://danil.iamsync.com/).
 
+Поддержать разработку и автора можно по адресу: https://events.webmoney.ru/woocommerce1c.
+
 = In English =
 
 Provides data exchange between eCommerce plugin WooCommerce and business application "1C:Enterprise 8. Trade Management".
