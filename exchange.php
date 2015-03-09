@@ -165,8 +165,11 @@ function wc1c_check_wp_error($wp_error) {
 }
 
 function wc1c_mode_checkauth() {
-  if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
-    list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
+  foreach (array('HTTP_AUTHORIZATION', 'REDIRECT_HTTP_AUTHORIZATION') as $server_key) {
+    if (!isset($_SERVER[$server_key])) continue;
+
+    list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(':', base64_decode(substr($_SERVER[$server_key], 6)));
+    break;
   }
   
   if (!isset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) wc1c_error("No authentication credentials");

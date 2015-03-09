@@ -86,7 +86,7 @@ If you have any question or proposal, please [contact the author](http://danil.i
 Если PHP выполняется в режиме FastCGI, а 1С при проверке соединения с сервером просит проверить имя пользователя и пароль, хотя они указаны верно, то необходимо в файл .htaccess перед строкой "# BEGIN WordPress" вставить:
 `
 RewriteEngine On
-RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 `
 
 == Frequently Asked Questions ==
