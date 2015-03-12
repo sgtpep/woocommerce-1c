@@ -122,7 +122,7 @@ function wc1c_plugin_row_meta($plugin_meta, $plugin_file) {
 function wc1c_plugin_action_links($actions) {
   $actions_before = array(
     // 'settings' => sprintf('<a href="%s" title="%s">%s</a>', admin_url("admin.php?page=woocommerce-1c"), esc_attr(__("View Settings", 'woocommerce-1c')), __("Settings", 'woocommerce-1c')),
-    'donate' => sprintf('<a href="%s" title="%s" target="_blank">%s</a>', "https://events.webmoney.ru/woocommerce1c", esc_attr(__("Say thank you to plugin author", 'woocommerce-1c')), __("Say thank you!", 'woocommerce-1c')),
+    'donate' => sprintf('<a href="%s" title="%s" target="_blank">%s</a>', "https://money.yandex.ru/embed/donate.xml?account=410011766586472&quickpay=donate&payment-type-choice=on&default-sum=500&targets=%D0%9F%D0%BB%D0%B0%D0%B3%D0%B8%D0%BD+%22%D0%9E%D0%B1%D0%BC%D0%B5%D0%BD+%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%BC+%D0%BC%D0%B5%D0%B6%D0%B4%D1%83+WooCommerce+%D0%B8+1%D0%A1%3A%D0%9F%D1%80%D0%B5%D0%B4%D0%BF%D1%80%D0%B8%D1%8F%D1%82%D0%B8%D0%B5%D0%BC%22&target-visibility=on&project-name=&project-site=https%3A%2F%2Fwordpress.org%2Fplugins%2Fwoocommerce-and-1centerprise-data-exchange%2F&button-text=05&fio=on&mail=on&successURL=", esc_attr(__("Say thank you to plugin author", 'woocommerce-1c')), __("Say thank you!", 'woocommerce-1c')),
   );
 
   return array_merge($actions_before, $actions);
