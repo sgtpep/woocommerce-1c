@@ -1,5 +1,19 @@
 <?php
-if (!defined('WP_CLI')) exit;
+if (!defined('ABSPATH')) require_once("../../../wp-load.php");
+
+if (!defined('WP_CLI')) {
+  if (!current_user_can('shop_manager') && !current_user_can('administrator')) exit("No permissions\n");
+
+  if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    ?>
+    <form method="post">
+      <input type="submit" value="Clean">
+    </form>
+    <?php
+  }
+
+  if ($_SERVER['REQUEST_METHOD'] != 'POST') exit;
+}
 
 global $wpdb;
 
@@ -38,4 +52,4 @@ foreach ($post_ids as $post_id) {
   wp_delete_post($post_id, true);
 }
 
-echo "\x07";
+echo defined('WP_CLI') ? "\x07" : "Done";
