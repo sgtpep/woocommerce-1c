@@ -460,6 +460,8 @@ function wc1c_replace_post_attachments($post_id, $attachments) {
       }
     }
 
+    if (defined('WC1C_PRESERVE_PRODUCT_IMAGES') && WC1C_PRESERVE_PRODUCT_IMAGES) continue;
+
     $result = wp_delete_attachment($post_attachment->ID);
     if ($result === false) wc1c_error("Failed to delete post attachment");
   }
