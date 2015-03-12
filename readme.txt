@@ -99,7 +99,7 @@ RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 * не устраивает текущий алгоритм обмена данными плагина, и есть представление, что и как должно работать иначе.
 
 = Как удалить с сайта все данные, созданные в процессе обмена? =
-Если вы используете [WP-CLI](http://wp-cli.org/), то можно из директории плагина выполнить команду `wp eval-file ./clean.php`. Также можно, будучи авторизованным в WordPress, перейти по адресу http://example.com/wp-content/plugins/woocommerce-and-1centerprise-data-exchange/clean.php (где exchange.com – домен сайта) и нажать на отобразивушуюся кнопку.
+Если вы используете [WP-CLI](http://wp-cli.org/), то можно из директории плагина выполнить команду `wp eval-file ./clean.php`. Также можно, будучи авторизованным в WordPress, перейти по адресу http://example.com/wp-content/plugins/woocommerce-and-1centerprise-data-exchange/clean.php (где exchange.com – домен сайта) и нажать на появившуюся кнопку.
 
 == Screenshots ==
 
