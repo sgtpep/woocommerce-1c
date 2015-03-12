@@ -460,8 +460,6 @@ function wc1c_replace_post_attachments($post_id, $attachments) {
       }
     }
 
-    if (defined('WC1C_PRESERVE_PRODUCT_IMAGES') && WC1C_PRESERVE_PRODUCT_IMAGES) continue;
-
     $result = wp_delete_attachment($post_attachment->ID);
     if ($result === false) wc1c_error("Failed to delete post attachment");
   }
@@ -680,17 +678,15 @@ function wc1c_replace_product($is_full, $product) {
     }
   }
 
-  if ($attachments || $is_full) {
-    if (!in_array('gallery', $preserve_properties) || $is_added) {
-      $attachment_ids = wc1c_replace_post_attachments($post_id, $attachments);
+  if ($attachments) {
+    $attachment_ids = wc1c_replace_post_attachments($post_id, $attachments);
 
-      $new_post_meta = array(
-        '_product_image_gallery' => implode(',', array_slice($attachment_ids, 1)),
-        '_thumbnail_id' => @$attachment_ids[0],
-      );
-      foreach ($new_post_meta as $meta_key => $meta_value) {
-        if ($meta_value != @$post_meta[$meta_key]) update_post_meta($post_id, $meta_key, $meta_value);
-      }
+    $new_post_meta = array(
+      '_product_image_gallery' => implode(',', array_slice($attachment_ids, 1)),
+      '_thumbnail_id' => @$attachment_ids[0],
+    );
+    foreach ($new_post_meta as $meta_key => $meta_value) {
+      if ($meta_value != @$post_meta[$meta_key]) update_post_meta($post_id, $meta_key, $meta_value);
     }
   }
 
