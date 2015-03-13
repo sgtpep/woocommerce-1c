@@ -256,7 +256,7 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
 }
 
 function wc1c_replace_group($is_full, $group, $order) {
-  $group = apply_filters('wc1c_import_group_xml', $group);
+  $group = apply_filters('wc1c_import_group_xml', $group, $is_full);
   if (!$group) return;
 
   wc1c_replace_term($is_full, $group['Ид'], $group['ИдРодителя'], $group['Наименование'], 'product_cat', $order);
@@ -323,7 +323,7 @@ function wc1c_replace_property_option($property_option, $attribute_taxonomy, $or
 }
 
 function wc1c_replace_property($is_full, $property, $order) {
-  $property = apply_filters('wc1c_import_property_xml', $property);
+  $property = apply_filters('wc1c_import_property_xml', $property, $is_full);
   if (!$property) return;
 
   $attribute_type = (empty($property['ТипЗначений']) || $property['ТипЗначений'] == 'Справочник') ? 'select' : 'text';
@@ -494,10 +494,10 @@ function wc1c_replace_requisite_name_callback($matches) {
 }
 
 function wc1c_replace_product($is_full, $product) {
-  $product = apply_filters('wc1c_import_product_xml', $product);
+  $product = apply_filters('wc1c_import_product_xml', $product, $is_full);
   if (!$product) return;
 
-  $preserve_properties = apply_filters('wc1c_import_preserve_product_properties', array(), $product);
+  $preserve_properties = apply_filters('wc1c_import_preserve_product_properties', array(), $product, $is_full);
   $preserve_properties = array_unique($preserve_properties);
 
   $is_deleted = @$product['Статус'] == 'Удален';
