@@ -701,6 +701,9 @@ function wc1c_clean_woocommerce_categories($is_full) {
   $term_ids = $wpdb->get_col($wpdb->prepare("SELECT term_id FROM $wpdb->woocommerce_termmeta JOIN $wpdb->term_taxonomy ON woocommerce_term_id = term_id WHERE taxonomy = 'product_cat' AND meta_key = 'wc1c_timestamp' AND meta_value != %s", WC1C_TIMESTAMP));
   wc1c_check_wpdb_error();
 
+  $term_ids = apply_filters('wc1c_clean_categories', $term_ids);
+  if (!$term_ids) return;
+
   foreach ($term_ids as $term_id) {
     $result = wp_delete_term($term_id, 'product_cat');
     wc1c_check_wp_error($result);
