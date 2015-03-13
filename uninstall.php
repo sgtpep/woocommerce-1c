@@ -18,22 +18,22 @@ if (is_dir(WC1C_DATA_DIR)) {
   rmdir(WC1C_DATA_DIR);
 }
 
-$term_meta_keys = $wpdb->get_col("SELECT DISTINCT meta_key FROM {$wpdb->prefix}woocommerce_termmeta WHERE meta_key LIKE 'wc1c_%'");
-if ($term_meta_keys) {
-  foreach ($term_meta_keys as $term_meta_key) {
-    delete_woocommerce_term_meta(null, $term_meta_key, null, true);
-  }
-}
-
-$option_names = $wpdb->get_col("SELECT option_name FROM $wpdb->options WHERE option_name LIKE 'wc1c_%'");
-foreach ($option_names as $option_name) {
-  delete_option($option_name);
-}
-
-$post_meta_keys = $wpdb->get_col("SELECT DISTINCT meta_key FROM $wpdb->postmeta WHERE meta_key LIKE '_wc1c_%' OR meta_key LIKE 'wc1c_%'");
-foreach ($post_meta_keys as $post_meta_key) {
-  delete_post_meta_by_key($post_meta_key);
-}
+// $term_meta_keys = $wpdb->get_col("SELECT DISTINCT meta_key FROM {$wpdb->prefix}woocommerce_termmeta WHERE meta_key LIKE 'wc1c_%'");
+// if ($term_meta_keys) {
+//   foreach ($term_meta_keys as $term_meta_key) {
+//     delete_woocommerce_term_meta(null, $term_meta_key, null, true);
+//   }
+// }
+//
+// $option_names = $wpdb->get_col("SELECT option_name FROM $wpdb->options WHERE option_name LIKE 'wc1c_%'");
+// foreach ($option_names as $option_name) {
+//   delete_option($option_name);
+// }
+//
+// $post_meta_keys = $wpdb->get_col("SELECT DISTINCT meta_key FROM $wpdb->postmeta WHERE meta_key LIKE '_wc1c_%' OR meta_key LIKE 'wc1c_%'");
+// foreach ($post_meta_keys as $post_meta_key) {
+//   delete_post_meta_by_key($post_meta_key);
+// }
 
 $index_table_names = array(
   $wpdb->postmeta,
