@@ -6,7 +6,7 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Tags: 1c, 1c-enterprise, commerceml, integration, e-commerce, ecommerce, commerce, shop, cart, woothemes, woocommerce
 Requires at least: 3.8
 Tested up to: 4.1
-Stable tag: 0.6
+Stable tag: 0.7
 
 Provides data exchange between WooCommerce plugin and business application "1C:Enterprise 8. Trade Management" (and compatible ones).
 
@@ -112,6 +112,9 @@ RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 7. Общие свойства товаров WooCommerce, сформированные по выгруженным из 1С свойствам и значениям свойств товаров, с колонкой идентификатора.
 
 == Changelog ==
+
+= 0.7 =
+Добавлена в API возможность переопределения очистки категорий. Добавлена в API возможность определять, является ли обмен полным или частичным. Отключена очистка мета-данных при удалении плагина. 
 
 = 0.6 =
 Добавлена ссылка для сбора пожертований. Добавлено сохранение заданных пользователем из WooCommerce изображений товаров, для которых отсутствуют изображения в 1С. Добавлена возможность очистки всех данных магазина (см. FAQ). Добавлена в API возможность переопределения передаваемых в 1С заказов.
