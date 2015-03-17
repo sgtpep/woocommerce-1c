@@ -204,6 +204,7 @@ function wc1c_unique_term_slug($slug) {
 
   $sql = "SELECT * FROM $wpdb->terms WHERE slug = %s LIMIT 1";
   $term = $wpdb->get_row($wpdb->prepare($sql, $sanitized_slug));
+  wc1c_check_wpdb_error();
   if (!$term) return $slug;
 
   $number = 2;
@@ -213,9 +214,11 @@ function wc1c_unique_term_slug($slug) {
     $number++;
 
     $term = $wpdb->get_row($wpdb->prepare($sql, $new_sanitized_slug));
+    wc1c_check_wpdb_error();
     if (!$term) return $new_slug;
   }
 }
+
 function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $order) {
   global $wpdb;
 
@@ -262,6 +265,30 @@ function wc1c_replace_group($is_full, $group, $order) {
   wc1c_replace_term($is_full, $group['Ид'], $group['ИдРодителя'], $group['Наименование'], 'product_cat', $order);
 }
 
+function wc1c_unique_woocommerce_attribute_name($attribute_label) {
+  global $wpdb;
+
+  $attribute_name = wc_sanitize_taxonomy_name($attribute_label);
+  $attribute_name = "pa_$attribute_name";
+  while (strlen($attribute_name) > 32 - 4) {
+    $attribute_name = mb_substr($attribute_name, 0, mb_strlen($attribute_name) - 1);
+  }
+
+  $sql = "SELECT * FROM {$wpdb->prefix}woocommerce_attribute_taxonomies WHERE attribute_name = %s";
+  $attribute = $wpdb->get_row($wpdb->prepare($sql, $attribute_name));
+  wc1c_check_wpdb_error();
+  if (!$attribute) return $attribute_name;
+
+  $number = 2;
+  while (true) {
+    $new_attribute_name = "$attribute_name-$number";
+    $number++;
+
+    $attribute = $wpdb->get_row($wpdb->prepare($sql, $new_attribute_name));
+    if (!$attribute) return $new_attribute_name;
+  }
+}
+
 function wc1c_replace_woocommerce_attribute($is_full, $guid, $attribute_label, $attribute_type, $order) {
   global $wpdb;
 
@@ -276,9 +303,7 @@ function wc1c_replace_woocommerce_attribute($is_full, $guid, $attribute_label, $
   $data = compact('attribute_label', 'attribute_type');
 
   if (!$attribute_id) {
-    $attribute_name = wc_sanitize_taxonomy_name($attribute_label);
-    $attribute_name = substr($attribute_name, 0, 32 - strlen('pa_'));
-
+    $attribute_name = wc1c_unique_woocommerce_attribute_name($attribute_label);
     $data = array_merge($data, array(
       'attribute_name' => $attribute_name,
       'attribute_orderby' => 'menu_order',
