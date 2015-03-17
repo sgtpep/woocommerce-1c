@@ -267,7 +267,7 @@ function wc1c_replace_woocommerce_attribute($is_full, $guid, $attribute_label, $
 
   $guids = get_option('wc1c_guid_attributes', array());
   $attribute_id = @$guids[$guid];
-  
+
   if ($attribute_id) {
     $attribute_id = $wpdb->get_var($wpdb->prepare("SELECT attribute_id FROM {$wpdb->prefix}woocommerce_attribute_taxonomies WHERE attribute_id = %d", $attribute_id));
     wc1c_check_wpdb_error();
@@ -276,23 +276,18 @@ function wc1c_replace_woocommerce_attribute($is_full, $guid, $attribute_label, $
   $data = compact('attribute_label', 'attribute_type');
 
   if (!$attribute_id) {
-    $attribute_id = $wpdb->get_var($wpdb->prepare("SELECT attribute_id FROM {$wpdb->prefix}woocommerce_attribute_taxonomies WHERE attribute_label = %s", $attribute_label));
+    $attribute_name = wc_sanitize_taxonomy_name($attribute_label);
+    $attribute_name = substr($attribute_name, 0, 32 - strlen('pa_'));
+
+    $data = array_merge($data, array(
+      'attribute_name' => $attribute_name,
+      'attribute_orderby' => 'menu_order',
+    ));
+    $wpdb->insert("{$wpdb->prefix}woocommerce_attribute_taxonomies", $data);
     wc1c_check_wpdb_error();
 
-    if (!$attribute_id) {
-      $attribute_name = wc_sanitize_taxonomy_name($attribute_label);
-      $attribute_name = substr($attribute_name, 0, 32 - strlen('pa_'));
-
-      $data = array_merge($data, array(
-        'attribute_name' => $attribute_name,
-        'attribute_orderby' => 'menu_order',
-      ));
-      $wpdb->insert("{$wpdb->prefix}woocommerce_attribute_taxonomies", $data);
-      wc1c_check_wpdb_error();
-
-      $attribute_id = $wpdb->insert_id;
-      $is_added = true;
-    }
+    $attribute_id = $wpdb->insert_id;
+    $is_added = true;
 
     $guids[$guid] = $attribute_id;
     update_option('wc1c_guid_attributes', $guids);
