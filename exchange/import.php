@@ -269,8 +269,8 @@ function wc1c_unique_woocommerce_attribute_name($attribute_label) {
   global $wpdb;
 
   $attribute_name = wc_sanitize_taxonomy_name($attribute_label);
-  $attribute_name = "pa_$attribute_name";
-  while (strlen($attribute_name) > 32 - 4) {
+  $max_length = 32 - strlen('pa_') - strlen('-00');
+  while (strlen($attribute_name) > $max_length) {
     $attribute_name = mb_substr($attribute_name, 0, mb_strlen($attribute_name) - 1);
   }
 
