@@ -716,7 +716,7 @@ function wc1c_replace_product($is_full, $product) {
 function wc1c_clean_woocommerce_categories($is_full) {
   global $wpdb;
 
-  if (!$is_full) return;
+  if (!$is_full || defined('WC1C_PREVENT_CLEAN') && WC1C_PREVENT_CLEAN) return;
 
   $term_ids = $wpdb->get_col($wpdb->prepare("SELECT term_id FROM $wpdb->woocommerce_termmeta JOIN $wpdb->term_taxonomy ON woocommerce_term_id = term_id WHERE taxonomy = 'product_cat' AND meta_key = 'wc1c_timestamp' AND meta_value != %s", WC1C_TIMESTAMP));
   wc1c_check_wpdb_error();
@@ -733,7 +733,7 @@ function wc1c_clean_woocommerce_categories($is_full) {
 function wc1c_clean_woocommerce_attributes($is_full) {
   global $wpdb;
 
-  if (!$is_full) return;
+  if (!$is_full || defined('WC1C_PREVENT_CLEAN') && WC1C_PREVENT_CLEAN) return;
 
   $timestamps = get_option('wc1c_timestamp_attributes', array());
   if (!$timestamps) return;
@@ -793,7 +793,7 @@ function wc1c_clean_posts($post_type) {
 }
 
 function wc1c_clean_products($is_full) {
-  if (!$is_full) return;
+  if (!$is_full || defined('WC1C_PREVENT_CLEAN') && WC1C_PREVENT_CLEAN) return;
 
   wc1c_clean_posts('product');
 }
