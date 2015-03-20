@@ -740,11 +740,15 @@ function wc1c_clean_woocommerce_attributes($is_full) {
 
   $guids = get_option('wc1c_guid_attributes', array());
 
+  $attribute_ids = array();
   foreach ($timestamps as $guid => $timestamp) {
-    if ($timestamp == WC1C_TIMESTAMP) continue;
+    if ($timestamp != WC1C_TIMESTAMP) $attribute_ids[] = $guids[$guid];
+  }
 
-    $attribute_id = $guids[$guid];
+  $attribute_ids = apply_filters('wc1c_clean_attributes', $attribute_ids);
+  if (!$attribute_ids) return;
 
+  foreach ($attribute_ids as $attribute_id) {
     $attribute = wc1c_woocommerce_attribute_by_id($attribute_id);
     if (!$attribute) wc1c_error("Failed to get attribute");
 
