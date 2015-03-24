@@ -363,7 +363,7 @@ function wc1c_replace_property($is_full, $property, $order) {
   return $attribute['taxonomy'];
 }
 
-function wc1c_replace_post($guid, $post_type, $preserve_properties, $is_deleted, $post_title, $post_excerpt, $post_content, $post_meta, $category_taxonomy, $category_guids) {
+function wc1c_replace_post($guid, $post_type, $preserve_properties, $is_deleted, $is_draft, $post_title, $post_excerpt, $post_content, $post_meta, $category_taxonomy, $category_guids) {
   $post_id = wc1c_post_id_by_meta('_wc1c_guid', $guid);
 
   $args = compact('post_type', 'post_title', 'post_excerpt', 'post_content');
@@ -371,7 +371,7 @@ function wc1c_replace_post($guid, $post_type, $preserve_properties, $is_deleted,
   if (!$post_id) {
     $args = array_merge($args, array(
       'post_name' => sanitize_title($post_title),
-      'post_status' => 'publish',
+      'post_status' => $is_draft ? 'draft' : 'publish',
     ));
     $post_id = wp_insert_post($args, true);
     wc1c_check_wp_error($post_id);
@@ -521,6 +521,7 @@ function wc1c_replace_product($is_full, $product) {
   $preserve_properties = array_unique($preserve_properties);
 
   $is_deleted = @$product['Статус'] == 'Удален';
+  $is_draft = @$product['Статус'] == 'Черновик';
 
   $post_title = $product['Наименование'];
   $post_content = '';
@@ -540,7 +541,7 @@ function wc1c_replace_product($is_full, $product) {
     '_manage_stock' => 'yes',
   );
 
-  list($is_added, $post_id, $post_meta) = wc1c_replace_post($product['Ид'], 'product', $preserve_properties, $is_deleted, $post_title, @$product['Описание'], $post_content, $post_meta, 'product_cat', @$product['Группы']);
+  list($is_added, $post_id, $post_meta) = wc1c_replace_post($product['Ид'], 'product', $preserve_properties, $is_deleted, $is_draft, $post_title, @$product['Описание'], $post_content, $post_meta, 'product_cat', @$product['Группы']);
 
   $current_product_attributes = isset($post_meta['_product_attributes']) ? maybe_unserialize($post_meta['_product_attributes']) : array();
 
@@ -710,7 +711,7 @@ function wc1c_replace_product($is_full, $product) {
     }
   }
 
-  do_action('wc1c_post_product', $post_id, $product);
+  do_action('wc1c_post_product', $post_id, $is_added, $product);
 }
 
 function wc1c_clean_woocommerce_categories($is_full) {
