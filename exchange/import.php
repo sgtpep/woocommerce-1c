@@ -8,7 +8,7 @@ require_once ABSPATH . "wp-admin/includes/image.php";
 function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $attrs) {
   global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_requisite_properties, $wc1c_product;
 
-  if (!$depth && $name != 'КоммерческаяИнформация') wc1c_error("Unknown error of XML parser.");
+  if (!$depth && $name != 'КоммерческаяИнформация') wc1c_error("XML parser misbehavior.");
 
   if (@$names[$depth - 1] == 'Классификатор' && $name == 'Группы') {
     $wc1c_groups = array();
