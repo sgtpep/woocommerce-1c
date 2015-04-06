@@ -429,7 +429,8 @@ function wc1c_mode_import($type, $filename, $namespace = null) {
 
   wc1c_set_transaction_mode();
 
-  if (!$namespace) $namespace = pathinfo($filename, PATHINFO_FILENAME);
+  if (!$namespace) $namespace = preg_replace("/^([A-z]+).+/", '$1', $filename);
+  if (!in_array($namespace, array('import', 'offers', 'orders'))) wc1c_error(sprintf("Unknown import file type: %s", $namespace));
 
   $wc1c_namespace = $namespace;
   $wc1c_is_full = wc1c_xml_is_full($fp);
