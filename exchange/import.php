@@ -341,6 +341,8 @@ function wc1c_replace_woocommerce_attribute($is_full, $guid, $attribute_label, $
 }
 
 function wc1c_replace_property_option($property_option, $attribute_taxonomy, $order) {
+  if (!isset($property_option['ИдЗначения'], $property_option['Значение'])) return;
+
   wc1c_replace_term(true, $property_option['ИдЗначения'], null, $property_option['Значение'], $attribute_taxonomy, $order);
 }
 
