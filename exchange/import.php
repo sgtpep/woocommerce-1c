@@ -367,7 +367,7 @@ function wc1c_replace_property($is_full, $property, $order) {
   return $attribute['taxonomy'];
 }
 
-function wc1c_replace_post($guid, $post_type, $preserve_properties, $is_deleted, $is_draft, $post_title, $post_excerpt, $post_content, $post_meta, $category_taxonomy, $category_guids) {
+function wc1c_replace_post($guid, $post_type, $preserve_fields, $is_deleted, $is_draft, $post_title, $post_excerpt, $post_content, $post_meta, $category_taxonomy, $category_guids) {
   $post_id = wc1c_post_id_by_meta('_wc1c_guid', $guid);
 
   $args = compact('post_type', 'post_title', 'post_excerpt', 'post_content');
@@ -393,9 +393,9 @@ function wc1c_replace_post($guid, $post_type, $preserve_properties, $is_deleted,
   if (!$post) wc1c_error("Failed to get post");
 
   if (!$is_added) {
-    if (in_array('title', $preserve_properties)) unset($args['post_title']);
-    if (in_array('excerpt', $preserve_properties)) unset($args['post_excerpt']);
-    if (in_array('body', $preserve_properties)) unset($args['post_content']);
+    if (in_array('title', $preserve_fields)) unset($args['post_title']);
+    if (in_array('excerpt', $preserve_fields)) unset($args['post_excerpt']);
+    if (in_array('body', $preserve_fields)) unset($args['post_content']);
 
     foreach ($args as $key => $value) {
       if ($post->$key == $value) continue;
@@ -521,8 +521,8 @@ function wc1c_replace_product($is_full, $product) {
   $product = apply_filters('wc1c_import_product_xml', $product, $is_full);
   if (!$product) return;
 
-  $preserve_properties = apply_filters('wc1c_import_preserve_product_properties', array(), $product, $is_full);
-  $preserve_properties = array_unique($preserve_properties);
+  $preserve_fields = apply_filters('wc1c_import_preserve_product_fields', array(), $product, $is_full);
+  $preserve_fields = array_unique($preserve_fields);
 
   $is_deleted = @$product['Статус'] == 'Удален';
   $is_draft = @$product['Статус'] == 'Черновик';
@@ -545,7 +545,7 @@ function wc1c_replace_product($is_full, $product) {
     '_manage_stock' => 'yes',
   );
 
-  list($is_added, $post_id, $post_meta) = wc1c_replace_post($product['Ид'], 'product', $preserve_properties, $is_deleted, $is_draft, $post_title, @$product['Описание'], $post_content, $post_meta, 'product_cat', @$product['Группы']);
+  list($is_added, $post_id, $post_meta) = wc1c_replace_post($product['Ид'], 'product', $preserve_fields, $is_deleted, $is_draft, $post_title, @$product['Описание'], $post_content, $post_meta, 'product_cat', @$product['Группы']);
 
   $current_product_attributes = isset($post_meta['_product_attributes']) ? maybe_unserialize($post_meta['_product_attributes']) : array();
 
