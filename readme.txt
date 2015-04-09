@@ -88,6 +88,7 @@ If you have any question or proposal, please [contact the author](http://danil.i
 RewriteEngine On
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 `
+Необходимо учесть, что изменения в .htaccess перезатираются при пересохранении настроек постоянных ссылок в WordPress и некоторых плагинах.
 
 == Frequently Asked Questions ==
 
