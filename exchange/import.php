@@ -291,7 +291,7 @@ function wc1c_unique_woocommerce_attribute_name($attribute_label) {
   }
 }
 
-function wc1c_replace_woocommerce_attribute($is_full, $guid, $attribute_label, $attribute_type, $order) {
+function wc1c_replace_woocommerce_attribute($is_full, $guid, $attribute_label, $attribute_type, $order, $preserve_fields) {
   global $wpdb;
 
   $guids = get_option('wc1c_guid_attributes', array());
@@ -321,6 +321,9 @@ function wc1c_replace_woocommerce_attribute($is_full, $guid, $attribute_label, $
   }
 
   if (empty($is_added)) {
+    if (in_array('label', $preserve_fields)) unset($data['attribute_label']);
+    if (in_array('type', $preserve_fields)) unset($data['attribute_type']);
+
     $wpdb->update("{$wpdb->prefix}woocommerce_attribute_taxonomies", $data, compact('attribute_id'));
     wc1c_check_wpdb_error();
   }
@@ -350,8 +353,10 @@ function wc1c_replace_property($is_full, $property, $order) {
   $property = apply_filters('wc1c_import_property_xml', $property, $is_full);
   if (!$property) return;
 
+  $preserve_fields = apply_filters('wc1c_import_preserve_property_fields', array(), $property, $is_full);
+
   $attribute_type = (empty($property['ТипЗначений']) || $property['ТипЗначений'] == 'Справочник') ? 'select' : 'text';
-  $attribute_id = wc1c_replace_woocommerce_attribute($is_full, $property['Ид'], $property['Наименование'], $attribute_type, $order);
+  $attribute_id = wc1c_replace_woocommerce_attribute($is_full, $property['Ид'], $property['Наименование'], $attribute_type, $order, $preserve_fields);
 
   $attribute = wc1c_woocommerce_attribute_by_id($attribute_id);
   if (!$attribute) wc1c_error("Failed to get attribute");
@@ -367,7 +372,7 @@ function wc1c_replace_property($is_full, $property, $order) {
   return $attribute['taxonomy'];
 }
 
-function wc1c_replace_post($guid, $post_type, $preserve_fields, $is_deleted, $is_draft, $post_title, $post_excerpt, $post_content, $post_meta, $category_taxonomy, $category_guids) {
+function wc1c_replace_post($guid, $post_type, $is_deleted, $is_draft, $post_title, $post_excerpt, $post_content, $post_meta, $category_taxonomy, $category_guids, $preserve_fields) {
   $post_id = wc1c_post_id_by_meta('_wc1c_guid', $guid);
 
   $args = compact('post_type', 'post_title', 'post_excerpt', 'post_content');
@@ -522,7 +527,6 @@ function wc1c_replace_product($is_full, $product) {
   if (!$product) return;
 
   $preserve_fields = apply_filters('wc1c_import_preserve_product_fields', array(), $product, $is_full);
-  $preserve_fields = array_unique($preserve_fields);
 
   $is_deleted = @$product['Статус'] == 'Удален';
   $is_draft = @$product['Статус'] == 'Черновик';
@@ -545,7 +549,7 @@ function wc1c_replace_product($is_full, $product) {
     '_manage_stock' => 'yes',
   );
 
-  list($is_added, $post_id, $post_meta) = wc1c_replace_post($product['Ид'], 'product', $preserve_fields, $is_deleted, $is_draft, $post_title, @$product['Описание'], $post_content, $post_meta, 'product_cat', @$product['Группы']);
+  list($is_added, $post_id, $post_meta) = wc1c_replace_post($product['Ид'], 'product', $is_deleted, $is_draft, $post_title, @$product['Описание'], $post_content, $post_meta, 'product_cat', @$product['Группы'], $preserve_fields);
 
   $current_product_attributes = isset($post_meta['_product_attributes']) ? maybe_unserialize($post_meta['_product_attributes']) : array();
 
