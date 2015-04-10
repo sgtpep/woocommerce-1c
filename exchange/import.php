@@ -509,7 +509,7 @@ function wc1c_replace_post_attachments($post_id, $attachments) {
       wc1c_check_wp_error($attachment_id);
       
       $uploaded_attachment_path = get_attached_file($attachment_id);
-      copy($uploaded_attachment_path, $attachment_path);
+      if ($uploaded_attachment_path) copy($uploaded_attachment_path, $attachment_path);
     }
 
     $attachment_ids[] = $attachment_id;
