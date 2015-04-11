@@ -1,6 +1,6 @@
 <?php
 if (!defined('ABSPATH')) {
-  require_once("../../../wp-load.php");
+  require_once "../../../wp-load.php";
 
   define('WC1C_IS_STANDALONE', true);
 }
