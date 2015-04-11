@@ -51,7 +51,7 @@ foreach ($order_posts as $order_post) {
   );
   $contact_items = array(
     'email' => "Почта",
-    'phone' => "Телефон мобильный",
+    'phone' => "ТелефонРабочий",
   );
 
   $contragents = array();
@@ -192,12 +192,14 @@ echo '<?xml version="1.0" encoding="windows-1251"?>';
                 </АдресноеПоле>
               <?php endforeach ?>
             </АдресРегистрации>
-            <?php foreach ($contragent['contacts'] as $contact_item_name => $contact_item_value): ?>
-              <Контакты>
-                <КонтактВид><?php echo $contact_item_name ?></КонтактВид>
-                <Значение><?php echo $contact_item_value ?></Значение>
-              </Контакты>
-            <?php endforeach ?>
+            <Контакты>
+              <?php foreach ($contragent['contacts'] as $contact_item_name => $contact_item_value): ?>
+                <Контакты>
+                  <КонтактВид><?php echo $contact_item_name ?></КонтактВид>
+                  <Значение><?php echo $contact_item_value ?></Значение>
+                </Контакты>
+              <?php endforeach ?>
+            </Контакты>
             <Представители>
               <Представитель>
                 <Контрагент>
