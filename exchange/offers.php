@@ -95,6 +95,9 @@ function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
   elseif (@$names[$depth - 1] == 'ПакетПредложений' && $name == 'Предложения') {
     if ($wc1c_suboffers) wc1c_replace_suboffers($wc1c_suboffers);
   }
+  elseif (!$depth && $name == 'КоммерческаяИнформация') {
+    do_action('wc1c_post_offers', $is_full);
+  }
 }
 
 function wc1c_update_currency($currency) {

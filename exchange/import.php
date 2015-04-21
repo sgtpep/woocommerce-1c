@@ -8,9 +8,10 @@ require_once ABSPATH . "wp-admin/includes/image.php";
 function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $attrs) {
   global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_requisite_properties, $wc1c_product;
 
-  if (!$depth && $name != 'КоммерческаяИнформация') wc1c_error("XML parser misbehavior.");
-
-  if (@$names[$depth - 1] == 'Классификатор' && $name == 'Группы') {
+  if (!$depth && $name != 'КоммерческаяИнформация') {
+    wc1c_error("XML parser misbehavior.");
+  }
+  elseif (@$names[$depth - 1] == 'Классификатор' && $name == 'Группы') {
     $wc1c_groups = array();
     $wc1c_group_depth = -1;
     $wc1c_group_order = 1;
@@ -174,6 +175,9 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
   elseif (@$names[$depth - 1] == 'Каталог' && $name == 'Товары') {
     wc1c_clean_products($is_full);
     wc1c_clean_product_terms();
+  }
+  elseif (!$depth && $name == 'КоммерческаяИнформация') {
+    do_action('wc1c_post_import', $is_full);
   }
 }
 
@@ -727,7 +731,7 @@ function wc1c_clean_woocommerce_categories($is_full) {
 
   if (!$is_full || defined('WC1C_PREVENT_CLEAN') && WC1C_PREVENT_CLEAN) return;
 
-  $term_ids = $wpdb->get_col($wpdb->prepare("SELECT term_id FROM $wpdb->woocommerce_termmeta JOIN $wpdb->term_taxonomy ON woocommerce_term_id = term_id WHERE taxonomy = 'product_cat' AND meta_key = 'wc1c_timestamp' AND meta_value != %s", WC1C_TIMESTAMP));
+  $term_ids = $wpdb->get_col($wpdb->prepare("SELECT term_id FROM $wpdb->woocommerce_termmeta JOIN $wpdb->term_taxonomy ON woocommerce_term_id = term_id WHERE taxonomy = 'product_cat' AND meta_key = 'wc1c_timestamp' AND meta_value != %d", WC1C_TIMESTAMP));
   wc1c_check_wpdb_error();
 
   $term_ids = apply_filters('wc1c_clean_categories', $term_ids);
@@ -785,7 +789,7 @@ function wc1c_clean_woocommerce_attributes($is_full) {
 function wc1c_clean_woocommerce_attribute_options($attribute_taxonomy) {
   global $wpdb;
 
-  $term_ids = $wpdb->get_col($wpdb->prepare("SELECT term_id FROM $wpdb->woocommerce_termmeta JOIN $wpdb->term_taxonomy ON woocommerce_term_id = term_id WHERE taxonomy = %s AND meta_key = 'wc1c_timestamp' AND meta_value != %s", $attribute_taxonomy, WC1C_TIMESTAMP));
+  $term_ids = $wpdb->get_col($wpdb->prepare("SELECT term_id FROM $wpdb->woocommerce_termmeta JOIN $wpdb->term_taxonomy ON woocommerce_term_id = term_id WHERE taxonomy = %s AND meta_key = 'wc1c_timestamp' AND meta_value != %d", $attribute_taxonomy, WC1C_TIMESTAMP));
   wc1c_check_wpdb_error();
 
   foreach ($term_ids as $term_id) {
@@ -797,7 +801,7 @@ function wc1c_clean_woocommerce_attribute_options($attribute_taxonomy) {
 function wc1c_clean_posts($post_type) {
   global $wpdb;
 
-  $post_ids = $wpdb->get_col($wpdb->prepare("SELECT post_id FROM $wpdb->postmeta JOIN $wpdb->posts ON post_id = ID WHERE post_type = %s AND meta_key = '_wc1c_timestamp' AND meta_value != %s", $post_type, WC1C_TIMESTAMP));
+  $post_ids = $wpdb->get_col($wpdb->prepare("SELECT post_id FROM $wpdb->postmeta JOIN $wpdb->posts ON post_id = ID WHERE post_type = %s AND meta_key = '_wc1c_timestamp' AND meta_value != %d", $post_type, WC1C_TIMESTAMP));
   wc1c_check_wpdb_error();
 
   foreach ($post_ids as $post_id) {
