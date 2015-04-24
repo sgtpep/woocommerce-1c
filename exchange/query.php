@@ -192,6 +192,7 @@ echo '<?xml version="1.0" encoding="windows-1251"?>';
                 </АдресноеПоле>
               <?php endforeach ?>
             </АдресРегистрации>
+            <?php /*
             <Контакты>
               <?php foreach ($contragent['contacts'] as $contact_item_name => $contact_item_value): ?>
                 <Контакт>
@@ -211,6 +212,7 @@ echo '<?xml version="1.0" encoding="windows-1251"?>';
                 </Контрагент>
               </Представитель>
             </Представители>
+            */ ?>
           </Контрагент>
         <?php endforeach ?>
       </Контрагенты>
