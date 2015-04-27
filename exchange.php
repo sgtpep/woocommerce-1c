@@ -308,10 +308,15 @@ function wc1c_check_wpdb_error() {
   exit;
 }
 
+function wc1c_disable_time_limit() {
+  $disabled_functions = explode(',', ini_get('disable_functions'));
+  if (!in_array('set_time_limit', $disabled)) set_time_limit(0);
+}
+
 function wc1c_set_transaction_mode() {
   global $wpdb, $wc1c_is_transaction;
 
-  set_time_limit(0);
+  wc1c_disable_time_limit();
 
   register_shutdown_function('wc1c_transaction_shutdown_function');
 

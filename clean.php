@@ -19,7 +19,7 @@ global $wpdb;
 
 if (!isset($wpdb->woocommerce_termmeta)) exit("WooCommerce plugin is not active");
 
-set_time_limit(0);
+wc1c_disable_time_limit();
 
 $rows = $wpdb->get_results("SELECT term_id, taxonomy FROM $wpdb->woocommerce_termmeta JOIN $wpdb->term_taxonomy ON woocommerce_term_id = term_id WHERE meta_key = 'wc1c_guid'");
 foreach ($rows as $row) {

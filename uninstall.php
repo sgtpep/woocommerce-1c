@@ -8,7 +8,7 @@ if (!defined('WC1C_DATA_DIR')) {
 
 global $wpdb;
 
-set_time_limit(0);
+wc1c_disable_time_limit();
 
 if (is_dir(WC1C_DATA_DIR)) {
   $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(WC1C_DATA_DIR, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST);
