@@ -228,6 +228,8 @@ function wc1c_unique_term_slug($slug) {
 function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $order) {
   global $wpdb;
 
+  $name = htmlspecialchars($name);
+
   $term_id = wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$guid");
   if ($term_id) $term = get_term($term_id, $taxonomy);
 
