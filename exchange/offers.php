@@ -174,9 +174,7 @@ function wc1c_replace_product_meta($post_id, $price, $quantity, $coefficient, $a
 
 function wc1c_replace_offer($guid, $price, $quantity, $coefficient) {
   $post_id = wc1c_post_id_by_meta('_wc1c_guid', $guid);
-  if (!$post_id) wc1c_error("Failed to get offer post");
-
-  wc1c_replace_product_meta($post_id, $price, $quantity, $coefficient);
+  if ($post_id) wc1c_replace_product_meta($post_id, $price, $quantity, $coefficient);
 }
 
 function wc1c_replace_product_variation($guid, $parent_post_id, $order) {
