@@ -143,6 +143,11 @@ foreach ($order_posts as $order_post) {
     'comment' => $order_post->post_excerpt,
     'contragents' => $contragents,
     'products' => $products,
+    'payment_method_title' => @$order_meta['_payment_method_title'],
+    'status' => $order->status,
+    'status_name' => $order_status_name,
+    'has_shipping' => count($order_shipping_items) > 0,
+    'modified_at' => $order_post->post_modified,
   );
   list($document['date'], $document['time']) = explode(' ', $order_post->post_date, 2);
 
@@ -217,7 +222,7 @@ echo '<?xml version="1.0" encoding="windows-1251"?>';
         <?php endforeach ?>
       </Контрагенты>
       <Товары>
-        <?php foreach ($products as $product): ?>
+        <?php foreach ($document['products'] as $product): ?>
           <Товар>
             <?php if (!empty($product['guid'])): ?>
               <Ид><?php echo $product['guid'] ?></Ид>
@@ -236,35 +241,35 @@ echo '<?xml version="1.0" encoding="windows-1251"?>';
         <?php endforeach ?>
       </Товары>
       <ЗначенияРеквизитов>
-        <?php if (!empty($order_meta['_payment_method_title'])): ?>
+        <?php if ($document['payment_method_title']): ?>
           <ЗначениеРеквизита>
             <Наименование>Метод оплаты</Наименование>
-            <Значение><?php echo $order_meta['_payment_method_title'] ?></Значение>
+            <Значение><?php echo $document['payment_method_title'] ?></Значение>
           </ЗначениеРеквизита>
         <?php endif ?>
         <ЗначениеРеквизита>
           <Наименование>Заказ оплачен</Наименование>
-          <Значение><?php echo !in_array($order_post->post_status, array('wc-on-hold', 'wc-pending')) ? 'true' : 'false' ?></Значение>
+          <Значение><?php echo !in_array($document['status'], array('on-hold', 'pending')) ? 'true' : 'false' ?></Значение>
         </ЗначениеРеквизита>
         <ЗначениеРеквизита>
           <Наименование>Доставка разрешена</Наименование>
-          <Значение><?php echo count($order_shipping_items) ? 'true' : 'false' ?></Значение>
+          <Значение><?php echo $document['has_shipping'] ? 'true' : 'false' ?></Значение>
         </ЗначениеРеквизита>
         <ЗначениеРеквизита>
           <Наименование>Отменен</Наименование>
-          <Значение><?php echo $order_post->post_status == 'wc-cancelled' ? 'true' : 'false' ?></Значение>
+          <Значение><?php echo $document['status'] == 'cancelled' ? 'true' : 'false' ?></Значение>
         </ЗначениеРеквизита>
         <ЗначениеРеквизита>
           <Наименование>Финальный статус</Наименование>
-          <Значение><?php echo !in_array($order_post->post_status, array('trash', 'wc-on-hold', 'wc-pending', 'wc-processing')) ? 'true' : 'false' ?></Значение>
+          <Значение><?php echo !in_array($document['status'], array('trash', 'on-hold', 'pending', 'processing')) ? 'true' : 'false' ?></Значение>
         </ЗначениеРеквизита>
         <ЗначениеРеквизита>
           <Наименование>Статус заказа</Наименование>
-          <Значение><?php echo $order_status_name ?></Значение>
+          <Значение><?php echo $document['status_name'] ?></Значение>
         </ЗначениеРеквизита>
         <ЗначениеРеквизита>
           <Наименование>Дата изменения статуса</Наименование>
-          <Значение><?php echo $order_post->post_modified ?></Значение>
+          <Значение><?php echo $document['modified_at'] ?></Значение>
         </ЗначениеРеквизита>
       </ЗначенияРеквизитов>
     </Документ>
