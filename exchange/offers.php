@@ -227,7 +227,7 @@ function wc1c_replace_suboffers($suboffers) {
 
   $offer_guid = $suboffers[0]['offer_guid'];
   $post_id = wc1c_post_id_by_meta('_wc1c_guid', $offer_guid);
-  if (!$post_id) wc1c_error("Failed to get parent post ID");
+  if (!$post_id) return;
 
   $result = wp_set_post_terms($post_id, 'variable', 'product_type');
   wc1c_check_wp_error($result);
