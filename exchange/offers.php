@@ -13,10 +13,9 @@ function wc1c_offers_start_element_handler($is_full, $names, $depth, $name, $att
     $wc1c_price_types[] = array();
   }
   elseif (@$names[$depth - 1] == 'Предложения' && $name == 'Предложение') {
-    $wc1c_offer = array();
-  }
-  elseif (@$names[$depth - 1] == 'Предложение' && $name == 'ХарактеристикиТовара') {
-    $wc1c_offer['ХарактеристикиТовара'] = array();
+    $wc1c_offer = array(
+      'ХарактеристикиТовара' => array(),
+    );
   }
   elseif (@$names[$depth - 1] == 'ХарактеристикиТовара' && $name == 'ХарактеристикаТовара') {
     $wc1c_offer['ХарактеристикиТовара'][] = array();
@@ -77,16 +76,16 @@ function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
     }
     else {
       $guid = $wc1c_offer['Ид'];
-      list($offer_guid, ) = explode('#', $guid, 2);
+      list($product_guid, ) = explode('#', $guid, 2);
 
-      if (empty($wc1c_suboffers) || $wc1c_suboffers[0]['offer_guid'] != $offer_guid) {
+      if (empty($wc1c_suboffers) || $wc1c_suboffers[0]['product_guid'] != $product_guid) {
         if ($wc1c_suboffers) wc1c_replace_suboffers($wc1c_suboffers);
         $wc1c_suboffers = array();
       }
 
       $wc1c_suboffers[] = array(
         'guid' => $wc1c_offer['Ид'],
-        'offer_guid' => $offer_guid,
+        'product_guid' => $product_guid,
         'price' => @$wc1c_offer['Цена']['ЦенаЗаЕдиницу'],
         'quantity' => @$wc1c_offer['Количество'],
         'coefficient' => @$wc1c_offer['Цена']['Коэффициент'],
@@ -117,46 +116,52 @@ function wc1c_update_currency($currency) {
 function wc1c_replace_product_meta($post_id, $price, $quantity, $coefficient, $attributes = array()) {
   if (isset($price)) $price = (float) $price;
 
-  $post_meta = array(
-    '_regular_price' => $price,
-    '_manage_stock' => 'yes',
-  );
+  $post_meta = array();
 
-  foreach ($attributes as $attribute_name => $attribute_value) {
-    $meta_key = 'attribute_' . sanitize_title($attribute_name);
-    $post_meta[$meta_key] = $attribute_value;
+  if (!is_null($price)) {
+    $post_meta['_regular_price'] = $price;
+    $post_meta['_manage_stock'] = 'yes';
   }
 
-  $current_post_meta = get_post_meta($post_id);
-  foreach ($current_post_meta as $meta_key => $meta_value) {
-    $current_post_meta[$meta_key] = $meta_value[0];
+  if ($attributes) {
+    foreach ($attributes as $attribute_name => $attribute_value) {
+      $meta_key = 'attribute_' . sanitize_title($attribute_name);
+      $post_meta[$meta_key] = $attribute_value;
+    }
+
+    $current_post_meta = get_post_meta($post_id);
+    foreach ($current_post_meta as $meta_key => $meta_value) {
+      $current_post_meta[$meta_key] = $meta_value[0];
+    }
+
+    foreach ($current_post_meta as $meta_key => $meta_value) {
+      if (strpos($meta_key, 'attribute_') !== 0 || array_key_exists($meta_key, $post_meta)) continue;
+
+      delete_post_meta($post_id, $meta_key);
+    }
   }
 
-  foreach ($current_post_meta as $meta_key => $meta_value) {
-    if (strpos($meta_key, 'attribute_') !== 0 || array_key_exists($meta_key, $post_meta)) continue;
-
-    delete_post_meta($post_id, $meta_key);
-  }
-
-  $sale_price = @$current_post_meta['_sale_price'];
-  $sale_price_from = @$current_post_meta['_sale_price_dates_from'];
-  $sale_price_to = @$current_post_meta['_sale_price_dates_to'];
-  if (empty($current_post_meta['_sale_price'])) {
-    $post_meta['_price'] = $price;
-  }
-  else {
-    if (empty($sale_price_from) && empty($sale_price_to)) {
-      $post_meta['_price'] = $current_post_meta['_sale_price'];
+  if (!is_null($price)) {
+    $sale_price = @$current_post_meta['_sale_price'];
+    $sale_price_from = @$current_post_meta['_sale_price_dates_from'];
+    $sale_price_to = @$current_post_meta['_sale_price_dates_to'];
+    if (empty($current_post_meta['_sale_price'])) {
+      $post_meta['_price'] = $price;
     }
     else {
-      $now = strtotime('now', current_time('timestamp'));
-      if (!empty($sale_price_from) && strtotime($sale_price_from) < $now) {
+      if (empty($sale_price_from) && empty($sale_price_to)) {
         $post_meta['_price'] = $current_post_meta['_sale_price'];
       }
-      if (!empty($sale_price_to) && strtotime($sale_price_to) < $now) {
-        $post_meta['_price'] = $price;
-        $post_meta['_sale_price_dates_from'] = '';
-        $post_meta['_sale_price_dates_to'] = '';
+      else {
+        $now = strtotime('now', current_time('timestamp'));
+        if (!empty($sale_price_from) && strtotime($sale_price_from) < $now) {
+          $post_meta['_price'] = $current_post_meta['_sale_price'];
+        }
+        if (!empty($sale_price_to) && strtotime($sale_price_to) < $now) {
+          $post_meta['_price'] = $price;
+          $post_meta['_sale_price_dates_from'] = '';
+          $post_meta['_sale_price_dates_to'] = '';
+        }
       }
     }
   }
@@ -169,9 +174,11 @@ function wc1c_replace_product_meta($post_id, $price, $quantity, $coefficient, $a
     update_post_meta($post_id, $meta_key, $meta_value);
   }
 
-  $quantity = isset($quantity) ? (float) $quantity : 0;
-  if (isset($coefficient)) $quantity *= (float) $coefficient;
-  wc_update_product_stock($post_id, $quantity);
+  if (!is_null($quantity) && !is_null($coefficient)) {
+    $quantity = isset($quantity) ? (float) $quantity : 0;
+    if (isset($coefficient)) $quantity *= (float) $coefficient;
+    wc_update_product_stock($post_id, $quantity);
+  }
 }
 
 function wc1c_replace_offer($guid, $price, $quantity, $coefficient) {
@@ -224,12 +231,18 @@ function wc1c_replace_product_variation($guid, $parent_post_id, $order) {
   return $post_id;
 }
 
-function wc1c_replace_suboffers($suboffers) {
+function wc1c_replace_suboffers($suboffers, $are_products = false) {
   if (!$suboffers) return;
 
-  $offer_guid = $suboffers[0]['offer_guid'];
-  $post_id = wc1c_post_id_by_meta('_wc1c_guid', $offer_guid);
-  if (!$post_id) return;
+  $product_guid = $suboffers[0]['product_guid'];
+  $post_id = wc1c_post_id_by_meta('_wc1c_guid', $product_guid);
+  if (!$post_id && !$are_products) return;
+
+  if ($are_products) {
+    $product = $suboffers[0]['product'];
+    $product['Ид'] = $product_guid;
+    $post_id = wc1c_replace_product($suboffers[0]['is_full'], $product);
+  }
 
   $result = wp_set_post_terms($post_id, 'variable', 'product_type');
   wc1c_check_wp_error($result);
@@ -245,37 +258,39 @@ function wc1c_replace_suboffers($suboffers) {
     }
   }
 
-  ksort($offer_characteristics);
-  foreach ($offer_characteristics as $characteristic_name => &$characteristic_values) {
-    sort($characteristic_values);
-  }
+  if ($offer_characteristics) {
+    ksort($offer_characteristics);
+    foreach ($offer_characteristics as $characteristic_name => &$characteristic_values) {
+      sort($characteristic_values);
+    }
 
-  $current_product_attributes = get_post_meta($post_id, '_product_attributes', true);
-  if (!$current_product_attributes) $current_product_attributes = array();
+    $current_product_attributes = get_post_meta($post_id, '_product_attributes', true);
+    if (!$current_product_attributes) $current_product_attributes = array();
 
-  $product_attributes = array();
-  foreach ($current_product_attributes as $current_product_attribute_key => $current_product_attribute) {
-    if (!$current_product_attribute['is_variation']) $product_attributes[$current_product_attribute_key] = $current_product_attribute;
-  }
+    $product_attributes = array();
+    foreach ($current_product_attributes as $current_product_attribute_key => $current_product_attribute) {
+      if (!$current_product_attribute['is_variation']) $product_attributes[$current_product_attribute_key] = $current_product_attribute;
+    }
 
-  foreach ($offer_characteristics as $offer_characteristic_name => $offer_characteristic_values) {
-    $product_attribute_key = sanitize_title($offer_characteristic_name);
-    $product_attribute_position = count($product_attributes);
-    $product_attributes[$product_attribute_key] = array(
-      'name' => wc_clean($offer_characteristic_name),
-      'value' => implode(" | ", $offer_characteristic_values),
-      'position' => $product_attribute_position,
-      'is_visible' => 1,
-      'is_variation' => 1,
-      'is_taxonomy' => 0,
-    );
-  }
+    foreach ($offer_characteristics as $offer_characteristic_name => $offer_characteristic_values) {
+      $product_attribute_key = sanitize_title($offer_characteristic_name);
+      $product_attribute_position = count($product_attributes);
+      $product_attributes[$product_attribute_key] = array(
+        'name' => wc_clean($offer_characteristic_name),
+        'value' => implode(" | ", $offer_characteristic_values),
+        'position' => $product_attribute_position,
+        'is_visible' => 1,
+        'is_variation' => 1,
+        'is_taxonomy' => 0,
+      );
+    }
 
-  ksort($current_product_attributes);
-  $product_attributes_copy = $product_attributes;
-  ksort($product_attributes_copy);
-  if ($current_product_attributes != $product_attributes_copy) {
-    update_post_meta($post_id, '_product_attributes', $product_attributes);
+    ksort($current_product_attributes);
+    $product_attributes_copy = $product_attributes;
+    ksort($product_attributes_copy);
+    if ($current_product_attributes != $product_attributes_copy) {
+      update_post_meta($post_id, '_product_attributes', $product_attributes);
+    }
   }
 
   $current_product_variation_ids = array();
@@ -294,7 +309,12 @@ function wc1c_replace_suboffers($suboffers) {
       $attributes[$suboffer_characteristic['Наименование']] = $suboffer_characteristic['Значение'];
     }
 
-    wc1c_replace_product_meta($product_variation_id, $suboffer['price'], $suboffer['quantity'], $suboffer['coefficient'], $attributes);
+    if ($are_products) {
+      wc1c_replace_product_meta($product_variation_id, null, null, null, $attributes);
+    }
+    else {
+      wc1c_replace_product_meta($product_variation_id, $suboffer['price'], $suboffer['quantity'], $suboffer['coefficient'], $attributes);
+    }
   }
 
   $deleted_product_variation_ids = array_diff($current_product_variation_ids, $product_variation_ids);

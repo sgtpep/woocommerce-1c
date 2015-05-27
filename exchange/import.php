@@ -44,6 +44,7 @@ function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $att
   }
   elseif (@$names[$depth - 1] == 'Товары' && $name == 'Товар') {
     $wc1c_product = array(
+      'ХарактеристикиТовара' => array(),
       'ЗначенияСвойств' => array(),
       'ЗначенияРеквизитов' => array(),
     );
@@ -60,6 +61,9 @@ function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $att
   }
   elseif (@$names[$depth - 1] == 'Товар' && $name == 'Изготовитель') {
     $wc1c_product['Изготовитель'] = array();
+  }
+  elseif (@$names[$depth - 1] == 'ХарактеристикиТовара' && $name == 'ХарактеристикаТовара') {
+    $wc1c_product['ХарактеристикиТовара'][] = array();
   }
   elseif (@$names[$depth - 1] == 'ЗначенияСвойств' && $name == 'ЗначенияСвойства') {
     $wc1c_product['ЗначенияСвойств'][] = array();
@@ -88,11 +92,15 @@ function wc1c_import_character_data_handler($is_full, $names, $depth, $name, $da
   elseif (@$names[$depth - 2] == 'Свойства' && @$names[$depth - 1] == 'Свойство' && $name != 'ВариантыЗначений') {
     @$wc1c_property[$name] .= $data;
   }
+  elseif (@$names[$depth - 2] == 'ХарактеристикиТовара' && @$names[$depth - 1] == 'ХарактеристикаТовара') {
+    $i = count($wc1c_product['ХарактеристикиТовара']) - 1;
+    @$wc1c_product['ХарактеристикиТовара'][$i][$name] .= $data;
+  }
   elseif (@$names[$depth - 2] == 'ВариантыЗначений' && @$names[$depth - 1] == 'Справочник') {
     $i = count($wc1c_property['ВариантыЗначений']) - 1;
     @$wc1c_property['ВариантыЗначений'][$i][$name] .= $data;
   }
-  elseif (@$names[$depth - 2] == 'Товары' && @$names[$depth - 1] == 'Товар' && !in_array($name, array('Группы', 'Картинка', 'Изготовитель', 'ЗначенияСвойств', 'СтавкиНалогов', 'ЗначенияРеквизитов'))) {
+  elseif (@$names[$depth - 2] == 'Товары' && @$names[$depth - 1] == 'Товар' && !in_array($name, array('Группы', 'Картинка', 'Изготовитель', 'ХарактеристикиТовара', 'ЗначенияСвойств', 'СтавкиНалогов', 'ЗначенияРеквизитов'))) {
     @$wc1c_product[$name] .= $data;
   }
   elseif (@$names[$depth - 2] == 'Товар' && @$names[$depth - 1] == 'Группы' && $name == 'Ид') {
@@ -186,9 +194,11 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
       }
 
       $wc1c_subproducts[] = array(
-        'is_full' => $is_full,
-        'subproduct' => $wc1c_product,
+        'guid' => $wc1c_product['Ид'],
         'product_guid' => $product_guid,
+        'characteristics' => $wc1c_product['ХарактеристикиТовара'],
+        'is_full' => $is_full,
+        'product' => $wc1c_product,
       );
     }
   }
@@ -750,15 +760,14 @@ function wc1c_replace_product($is_full, $product) {
   }
 
   do_action('wc1c_post_product', $post_id, $is_added, $product);
+
+  return $post_id;
 }
 
 function wc1c_replace_subproducts($subproducts) {
-  if (!$subproducts) return;
+  require_once sprintf(WC1C_PLUGIN_DIR . "exchange/offers.php");
 
-  $product_guid = $subproducts[0]['product_guid'];
-  $post_id = wc1c_post_id_by_meta('_wc1c_guid', $product_guid);
-
-  // TODO create variations
+  wc1c_replace_suboffers($subproducts, true);
 }
 
 function wc1c_clean_woocommerce_categories($is_full) {
