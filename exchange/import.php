@@ -5,6 +5,8 @@ require_once ABSPATH . "wp-admin/includes/media.php";
 require_once ABSPATH . "wp-admin/includes/file.php";
 require_once ABSPATH . "wp-admin/includes/image.php";
 
+if (!defined('WC1C_VALUE_DELIMETER')) define('WC1C_VALUE_DELIMETER', ';');
+
 function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $attrs) {
   global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_requisite_properties, $wc1c_product;
 
@@ -126,7 +128,7 @@ function wc1c_import_character_data_handler($is_full, $names, $depth, $name, $da
 }
 
 function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
-  global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_requisite_properties, $wc1c_product;
+  global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_requisite_properties, $wc1c_product, $wc1c_subproducts;
 
   if (@$names[$depth - 1] == 'Группы' && $name == 'Группа') {
     if (empty($wc1c_groups[$wc1c_group_depth]['Группы'])) {
@@ -170,9 +172,28 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
       }
     }
 
-    wc1c_replace_product($is_full, $wc1c_product);
+    if (strpos($wc1c_product['Ид'], '#') === false) {
+      wc1c_replace_product($is_full, $wc1c_product);
+    }
+    else {
+      $guid = $wc1c_product['Ид'];
+      list($product_guid, ) = explode('#', $guid, 2);
+
+      if (empty($wc1c_subproducts) || $wc1c_subproducts[0]['product_guid'] != $product_guid) {
+        if ($wc1c_subproducts) wc1c_replace_subproducts($wc1c_subproducts);
+        $wc1c_subproducts = array();
+      }
+
+      $wc1c_subproducts[] = array(
+        'is_full' => $is_full,
+        'subproduct' => $wc1c_product,
+        'product_guid' => $product_guid,
+      );
+    }
   }
   elseif (@$names[$depth - 1] == 'Каталог' && $name == 'Товары') {
+    if ($wc1c_subproducts) wc1c_replace_subproducts($wc1c_subproducts);
+
     wc1c_clean_products($is_full);
     wc1c_clean_product_terms();
   }
@@ -608,7 +629,9 @@ function wc1c_replace_product($is_full, $product) {
             if ($term_id) $terms[] = (int) $term_id;
           }
           else {
-            $attribute_values[] = $property_value;
+            $property_value_values = explode(WC1C_VALUE_DELIMETER, $property_value);
+            $property_value_values = array_map('trim', $property_value_values);
+            $attribute_values = array_merge($attribute_values, $property_value_values);
           }
         }
       }
@@ -726,6 +749,15 @@ function wc1c_replace_product($is_full, $product) {
   }
 
   do_action('wc1c_post_product', $post_id, $is_added, $product);
+}
+
+function wc1c_replace_subproducts($subproducts) {
+  if (!$subproducts) return;
+
+  $product_guid = $subproducts[0]['product_guid'];
+  $post_id = wc1c_post_id_by_meta('_wc1c_guid', $product_guid);
+
+  // TODO create variations
 }
 
 function wc1c_clean_woocommerce_categories($is_full) {
