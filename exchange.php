@@ -5,6 +5,9 @@ if (!defined('ABSPATH')) {
   define('WC1C_IS_STANDALONE', true);
 }
 
+if (!defined('WC1C_ZIP')) define('WC1C_ZIP', null);
+if (!defined('WC1C_FILE_LIMIT')) define('WC1C_FILE_LIMIT', null);
+
 define('WC1C_TIMESTAMP', time());
 
 function wc1c_query_vars($query_vars) {
@@ -21,7 +24,7 @@ function wc1c_exchange_init() {
 add_action('init', 'wc1c_exchange_init', 1000);
 
 function wc1c_is_debug() {
-  return defined('WP_DEBUG') && WP_DEBUG || defined('WC1C_DEBUG');
+  return defined('WP_DEBUG') && WP_DEBUG || defined('WC1C_DEBUG') && WC1C_DEBUG;
 }
 
 function wc1c_wpdb_end($is_commit = false, $no_check = false) {
@@ -235,7 +238,7 @@ function wc1c_filesize_to_bytes($filesize) {
 function wc1c_mode_init($type) {
   wc1c_clean_data_dir($type);
 
-  if (!defined('WC1C_ZIP')) {
+  if (is_null(WC1C_ZIP)) {
     @exec("which unzip", $_, $status);
     $is_zip = @$status === 0 || class_exists('ZipArchive');
   }
@@ -253,7 +256,7 @@ function wc1c_mode_init($type) {
     $output = preg_split("/\s+/", $output[0]);
     $file_limits[] = intval($output[1] * 1000 * 0.7);
   }
-  if (defined('WC1C_FILE_LIMIT')) $file_limits[] = wc1c_filesize_to_bytes(WC1C_FILE_LIMIT);
+  if (WC1C_FILE_LIMIT) $file_limits[] = wc1c_filesize_to_bytes(WC1C_FILE_LIMIT);
   $file_limit = min($file_limits);
 
   exit("zip=$zip\nfile_limit=$file_limit");

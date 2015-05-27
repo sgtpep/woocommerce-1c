@@ -1,6 +1,8 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
+if (!defined('WC1C_PRICE_TYPE')) define('WC1C_PRICE_TYPE', null);
+
 function wc1c_offers_start_element_handler($is_full, $names, $depth, $name, $attrs) {
   global $wc1c_price_types, $wc1c_offer, $wc1c_price;
 
@@ -47,7 +49,7 @@ function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
   global $wc1c_price_types, $wc1c_price_type, $wc1c_price_type, $wc1c_offer, $wc1c_suboffers, $wc1c_price;
 
   if (@$names[$depth - 1] == 'ПакетПредложений' && $name == 'ТипыЦен') {
-    if (!defined('WC1C_PRICE_TYPE')) {
+    if (!WC1C_PRICE_TYPE) {
       $wc1c_price_type = $wc1c_price_types[0];
     }
     else {
