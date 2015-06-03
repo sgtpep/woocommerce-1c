@@ -106,6 +106,8 @@ If you have any question or proposal, please [contact the author](http://danil.i
 * `<адрес обмена>?type=catalog&mode=import&filename=import.xml`
 * `<адрес обмена>?type=catalog&mode=import&filename=offers.xml`
 
+Имена XML-файлов, возможно, придется заменить на актуальные из директории `wp-content/uploads/woocommerce-1c/catalog`.
+
 = Как осуществляется обмен заказами? =
 
 1. 1С запрашивает с сайта заказы, которые еще не запрашивались им ранее, и создает по ним несогласованные и непроведенные заказы у себя.
