@@ -24,16 +24,16 @@ foreach ($order_posts as $order_post) {
   $order_line_items = $order->get_items();
 
   // $has_missing_item = false;
-  // foreach ($order_line_items as $key => $order_line_item) {
-  //   $product_id = $order_line_item['variation_id'] ? $order_line_item['variation_id'] : $order_line_item['product_id'];
-  //   $guid = get_post_meta($product_id, '_wc1c_guid', true);
-  //   if (!$guid) {
-  //     $has_missing_item = true;
-  //     break;
-  //   }
-  //
-  //   $order_line_items[$key]['wc1c_guid'] = $guid;
-  // }
+  foreach ($order_line_items as $key => $order_line_item) {
+    $product_id = $order_line_item['variation_id'] ? $order_line_item['variation_id'] : $order_line_item['product_id'];
+    $guid = get_post_meta($product_id, '_wc1c_guid', true);
+    // if (!$guid) {
+    //   $has_missing_item = true;
+    //   break;
+    // }
+
+    $order_line_items[$key]['wc1c_guid'] = $guid;
+  }
   // if ($has_missing_item) continue;
 
   $order_shipping_items = $order->get_shipping_methods();
@@ -104,7 +104,7 @@ foreach ($order_posts as $order_post) {
   $products = array();
   foreach ($order_line_items as $order_line_item) {
     $products[] = array(
-      // 'guid' => $order_line_item['wc1c_guid'],
+      'guid' => $order_line_item['wc1c_guid'],
       'name' => $order_line_item['name'],
       'price_per_item' => $order_line_item['line_total'] / $order_line_item['qty'],
       'quantity' => $order_line_item['qty'],
