@@ -298,10 +298,9 @@ function wc1c_replace_document($document) {
     wp_untrash_post($order->id);
   }
 
-  $post_meta = array(
-    '_order_currency' => $document['Валюта'],
-    '_order_total' => $document['Сумма'],
-  );
+  $post_meta = array();
+  if (isset($document['Валюта'])) $post_meta['_order_currency'] = $document['Валюта'];
+  if (isset($document['Сумма'])) $post_meta['_order_total'] = $document['Сумма'];
 
   $current_post_meta = get_post_meta($order->id);
   foreach ($current_post_meta as $meta_key => $meta_value) {
