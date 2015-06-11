@@ -228,6 +228,7 @@ echo '<?xml version="1.0" encoding="windows-1251"?>';
               <Ид><?php echo $product['guid'] ?></Ид>
             <?php endif ?>
             <Наименование><?php echo $product['name'] ?></Наименование>
+            <БазоваяЕдиница Код="796" НаименованиеПолное="Штука" МеждународноеСокращение="PCE">шт</БазоваяЕдиница>
             <ЦенаЗаЕдиницу><?php echo $product['price_per_item'] ?></ЦенаЗаЕдиницу>
             <Количество><?php echo $product['quantity'] ?></Количество>
             <Сумма><?php echo $product['total'] ?></Сумма>
