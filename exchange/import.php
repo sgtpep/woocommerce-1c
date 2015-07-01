@@ -273,7 +273,7 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
       'parent' => $parent,
     );
 
-    $result = get_term_by('name', $name, $taxonomy);
+    $result = get_term_by('name', $name, $taxonomy, ARRAY_A);
     if (!$result) {
       $result = wp_insert_term($name, $taxonomy, $args);
       wc1c_check_wp_error($result);
