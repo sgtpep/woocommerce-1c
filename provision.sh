@@ -15,6 +15,8 @@ sudo sed -i "s/\( APACHE_RUN_GROUP\)=.*/\1=vagrant/" /etc/apache2/envvars
 
 sudo sed -i "s|^\(\s*DocumentRoot\) .*|\1 /var/www|" /etc/apache2/sites-available/000-default.conf
 
+sudo a2enmod -q rewrite
+
 sudo apachectl restart
 
 sudo rm -fr /var/www/html
@@ -49,6 +51,13 @@ if ! wp plugin is-installed woocommerce-and-1centerprise-data-exchange; then
   ln -s /vagrant/ /var/www/wp-content/plugins/woocommerce-and-1centerprise-data-exchange
   wp plugin activate woocommerce-and-1centerprise-data-exchange
 fi
+
+cat > /var/www/wp-cli.yml <<EOF
+apache_modules:
+  - mod_rewrite
+EOF
+
+[[ -f /var/www/.htaccess ]] || wp rewrite structure "/%year%/%monthnum%/%postname%/"
 
 mkdir -p /vagrant/uploads
 rm -fr /var/www/wp-content/uploads/woocommerce-1c
