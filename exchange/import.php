@@ -481,7 +481,7 @@ function wc1c_replace_post($guid, $post_type, $is_deleted, $is_draft, $post_titl
     update_post_meta($post_id, $meta_key, $meta_value);
   }
 
-  if ($category_guids !== false) {
+  if (!in_array('categories', $preserve_fields)) {
     $current_category_ids = wp_get_post_terms($post_id, $category_taxonomy, "fields=ids");
     wc1c_check_wp_error($current_category_ids);
 
@@ -700,21 +700,23 @@ function wc1c_replace_product($is_full, $product) {
     );
   }
 
-  $old_product_attributes = array_diff_key($current_product_attributes, $product_attributes);
-  $old_taxonomies = array();
-  foreach ($old_product_attributes as $old_product_attribute) {
-    if ($old_product_attribute['is_taxonomy']) {
-      $old_taxonomies[] = $old_product_attribute['name'];
+  if (!in_array('attributes', $preserve_fields)) {
+    $old_product_attributes = array_diff_key($current_product_attributes, $product_attributes);
+    $old_taxonomies = array();
+    foreach ($old_product_attributes as $old_product_attribute) {
+      if ($old_product_attribute['is_taxonomy']) {
+        $old_taxonomies[] = $old_product_attribute['name'];
+      }
+      else {
+        $key = array_search($old_product_attribute, $product_attributes);
+        if ($key !== false) unset($product_attributes[$key]);
+      }
     }
-    else {
-      $key = array_search($old_product_attribute, $product_attributes);
-      if ($key !== false) unset($product_attributes[$key]);
+    foreach ($old_taxonomies as $old_taxonomy) {
+      register_taxonomy($old_taxonomy, null);
     }
+    wp_delete_object_term_relationships($post_id, $old_taxonomies);
   }
-  foreach ($old_taxonomies as $old_taxonomy) {
-    register_taxonomy($old_taxonomy, null);
-  }
-  wp_delete_object_term_relationships($post_id, $old_taxonomies);
 
   ksort($current_product_attributes);
   $product_attributes_copy = $product_attributes;
