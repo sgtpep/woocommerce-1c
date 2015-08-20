@@ -716,14 +716,14 @@ function wc1c_replace_product($is_full, $product) {
       register_taxonomy($old_taxonomy, null);
     }
     wp_delete_object_term_relationships($post_id, $old_taxonomies);
-  }
 
-  ksort($current_product_attributes);
-  $product_attributes_copy = $product_attributes;
-  ksort($product_attributes_copy);
-  if ($current_product_attributes != $product_attributes_copy) {
-    $product_attributes = array_merge($product_attributes, $current_product_attribute_variations);
-    update_post_meta($post_id, '_product_attributes', $product_attributes);
+    ksort($current_product_attributes);
+    $product_attributes_copy = $product_attributes;
+    ksort($product_attributes_copy);
+    if ($current_product_attributes != $product_attributes_copy) {
+      $product_attributes = array_merge($product_attributes, $current_product_attribute_variations);
+      update_post_meta($post_id, '_product_attributes', $product_attributes);
+    }
   }
 
   $attachments = array();
