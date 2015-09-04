@@ -395,8 +395,9 @@ function wc1c_replace_property($is_full, $property, $order) {
 
   $preserve_fields = apply_filters('wc1c_import_preserve_property_fields', array(), $property, $is_full);
 
+  $attribute_name = !empty($property['Наименование']) ? $property['Наименование'] : $property['Ид'];
   $attribute_type = (empty($property['ТипЗначений']) || $property['ТипЗначений'] == 'Справочник') ? 'select' : 'text';
-  $attribute_id = wc1c_replace_woocommerce_attribute($is_full, $property['Ид'], $property['Наименование'], $attribute_type, $order, $preserve_fields);
+  $attribute_id = wc1c_replace_woocommerce_attribute($is_full, $property['Ид'], $attribute_name, $attribute_type, $order, $preserve_fields);
 
   $attribute = wc1c_woocommerce_attribute_by_id($attribute_id);
   if (!$attribute) wc1c_error("Failed to get attribute");
