@@ -54,6 +54,21 @@ Please, read the following before using this plugin:
 
 If you have any question or proposal, please [contact the author](http://danil.iamsync.com/).
 
+= License =
+
+"WooCommerce and 1C:Enterprise Data Exchange" is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+any later version.
+ 
+"WooCommerce and 1C:Enterprise Data Exchange" is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+ 
+You should have received a copy of the GNU General Public License
+along with "WooCommerce and 1C:Enterprise Data Exchange". If not, see http://www.gnu.org/licenses/gpl-3.0.html.
+
 == Installation ==
 
 Необходимо учесть, что для обмена большими объемами данных может понадобиться произвести дополнительную настройку веб-сервера. На недорогих shared-хостингах часто такой возможности нет, а настроены они под крайне консервативный режим работы. Поэтому рекомендуется использовать VPS/VDS-хостинги. Например, от [DigitalOcean](https://www.digitalocean.com/?refcode=4f1711dd3d2c) (реферальная ссылка, регистрирующийся получает $10 на счет).
