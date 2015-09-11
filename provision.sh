@@ -12,7 +12,7 @@ fi
 
 sudo sed -i "s/\( APACHE_RUN_USER\)=.*/\1=vagrant/" /etc/apache2/envvars
 sudo sed -i "s/\( APACHE_RUN_GROUP\)=.*/\1=vagrant/" /etc/apache2/envvars
-
+sudo sed -i "/<Directory \/var\/www\/>/{ N; N; s/\(AllowOverride\).*/\1 All/ }" /etc/apache2/apache2.conf
 sudo sed -i "s|^\(\s*DocumentRoot\) .*|\1 /var/www|" /etc/apache2/sites-available/000-default.conf
 
 sudo a2enmod -q rewrite

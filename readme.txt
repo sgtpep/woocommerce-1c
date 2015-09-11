@@ -16,6 +16,8 @@ Provides data exchange between WooCommerce plugin and business application "1C:E
 
 Предоставляет обмен данными между плагином для электронной коммерции WooCommerce и приложением для бизнеса "1C:Предприятие 8. Управление торговлей" (и совместимыми).
 
+Внимание! В текущей версии изменился рекомендуемый адрес обмена. Необходимо сменить адрес обмена на один из адресов вида: http://example.com/?wc1c=exchange или http://example.com/wc1c/exchange.
+
 Особенности:
 
 * Выгрузка товаров: группы (категории), свойства и значения, список товаров и вариантов, изображения, свойства, реквизиты, цены, остатки товаров.
@@ -81,7 +83,7 @@ along with "WooCommerce and 1C:Enterprise Data Exchange". If not, see http://www
 
 В 1С в качестве адреса в настройках обмена с сайтом необходимо один из адресов вида:
 
-* http://example.com/wp-content/plugins/woocommerce-and-1centerprise-data-exchange/exchange.php
+* http://example.com/?wc1c=exchange
 * или http://example.com/wc1c/exchange/, если на сайте включены постоянные ссылки ("Настройки" → "Постоянные ссылки")
 
 где example.com – доменное имя сайта интернет-магазина.
@@ -118,7 +120,7 @@ along with "WooCommerce and 1C:Enterprise Data Exchange". If not, see http://www
 
 = Как удалить с сайта все данные, созданные в процессе обмена? =
 
-Если вы используете [WP-CLI](http://wp-cli.org/), то можно из директории плагина выполнить команду `wp eval-file ./clean.php`. Также можно, будучи авторизованным в WordPress, перейти по адресу http://example.com/wp-content/plugins/woocommerce-and-1centerprise-data-exchange/clean.php (где exchange.com – домен сайта) и нажать на появившуюся кнопку.
+Если вы используете [WP-CLI](http://wp-cli.org/), то можно из директории плагина выполнить команду `wp eval-file ./clean.php`. Также можно, будучи авторизованным в WordPress, перейти по адресу http://example.com/?wc1c=clean или http://example.com/wc1c/clean (где exchange.com – домен сайта) и нажать на появившуюся кнопку.
 
 = Как вручную воспроизвести импорт товаров? =
 

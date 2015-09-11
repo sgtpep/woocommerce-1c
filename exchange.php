@@ -1,9 +1,5 @@
 <?php
-if (!defined('ABSPATH')) {
-  require_once "../../../wp-load.php";
-
-  define('WC1C_IS_STANDALONE', true);
-}
+if (!defined('ABSPATH')) exit(__("The exchange using direct URL is not supported anymore. Please change your exchange URL to http://example.com/?wc1c=exchange.", 'woocommerce-1c'));
 
 if (!defined('WC1C_ZIP')) define('WC1C_ZIP', null);
 if (!defined('WC1C_FILE_LIMIT')) define('WC1C_FILE_LIMIT', null);
@@ -19,6 +15,7 @@ add_filter('query_vars', 'wc1c_query_vars');
 
 function wc1c_exchange_init() {
   add_rewrite_rule("wc1c/exchange", "index.php?wc1c=exchange", 'top');
+  add_rewrite_rule("wc1c/clean", "index.php?wc1c=clean");
   flush_rewrite_rules();
 }
 add_action('init', 'wc1c_exchange_init', 1000);
@@ -524,8 +521,20 @@ function wc1c_exchange() {
 }
 
 function wc1c_template_redirect() {
-  if (get_query_var('wc1c') == 'exchange') wc1c_exchange();
+  $value = get_query_var('wc1c');
+  if (empty($value)) return;
+    
+  list($value, $query) = explode('?', $value, 2);
+  $_GET['wc1c'] = $value;
+  parse_str($query, $query);
+  $_GET = array_merge($_GET, $query);
+
+  if ($value == 'exchange') {
+    wc1c_exchange();
+  }
+  elseif ($value == 'clean') {
+    require_once WC1C_PLUGIN_DIR . "clean.php";
+    exit;
+  }
 }
 add_action('template_redirect', 'wc1c_template_redirect', -10);
-
-if (defined('WC1C_IS_STANDALONE')) wc1c_exchange();

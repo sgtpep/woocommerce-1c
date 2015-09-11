@@ -1,6 +1,4 @@
 <?php
-if (!defined('ABSPATH')) require_once "../../../wp-load.php";
-
 if (!defined('WP_CLI')) {
   if (!current_user_can('shop_manager') && !current_user_can('administrator')) exit("No permissions\n");
 
