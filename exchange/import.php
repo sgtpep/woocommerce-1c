@@ -625,6 +625,7 @@ function wc1c_replace_product($is_full, $product) {
 
   if ($product['ЗначенияСвойств']) {
     $attribute_guids = get_option('wc1c_guid_attributes', array());
+    $terms = array();
     foreach ($product['ЗначенияСвойств'] as $property) {
       $attribute_guid = $property['Ид'];
       $attribute_id = @$attribute_guids[$attribute_guid];
@@ -633,7 +634,7 @@ function wc1c_replace_product($is_full, $product) {
       $attribute = wc1c_woocommerce_attribute_by_id($attribute_id);
       if (!$attribute) wc1c_error("Failed to get attribute");
 
-      $terms = array();
+      $attribute_terms = array();
       $attribute_values = array();
       $property_values = @$property['Значение'];
       if ($property_values) {
@@ -642,7 +643,7 @@ function wc1c_replace_product($is_full, $product) {
 
           if ($attribute['attribute_type'] == 'select' && preg_match("/^\w+-\w+-\w+-\w+-\w+$/", $property_value)) {
             $term_id = wc1c_term_id_by_meta('wc1c_guid', "{$attribute['taxonomy']}::$property_value");
-            if ($term_id) $terms[] = (int) $term_id;
+            if ($term_id) $attribute_terms[] = (int) $term_id;
           }
           else {
             $attribute_values[] = $property_value;
@@ -650,11 +651,7 @@ function wc1c_replace_product($is_full, $product) {
         }
       }
 
-      register_taxonomy($attribute['taxonomy'], null);
-      $result = wp_set_post_terms($post_id, $terms, $attribute['taxonomy']);
-      wc1c_check_wp_error($result);
-
-      if ($terms || $attribute_values) {
+      if ($attribute_terms || $attribute_values) {
         $product_attribute = array(
           'name' => null,
           'value' => '',
@@ -664,7 +661,7 @@ function wc1c_replace_product($is_full, $product) {
           'is_taxonomy' => 0,
         );
 
-        if ($terms) {
+        if ($attribute_terms) {
           $product_attribute['name'] = $attribute['taxonomy'];
           $product_attribute['is_taxonomy'] = 1;
         }
@@ -676,6 +673,17 @@ function wc1c_replace_product($is_full, $product) {
         $product_attribute_key = sanitize_title($attribute['taxonomy']);
         $product_attributes[$product_attribute_key] = $product_attribute;
       }
+
+      if ($attribute_terms) {
+        if (!isset($terms[$attribute['taxonomy']])) $terms[$attribute['taxonomy']] = array();
+        $terms[$attribute['taxonomy']] = array_merge($terms[$attribute['taxonomy']], $attribute_terms);
+      }
+    }
+
+    foreach ($terms as $attribute_taxonomy => $attribute_terms) {
+      register_taxonomy($attribute_taxonomy, null);
+      $result = wp_set_post_terms($post_id, $attribute_terms, $attribute_taxonomy);
+      wc1c_check_wp_error($result);
     }
   }
 
