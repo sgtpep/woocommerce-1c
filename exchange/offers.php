@@ -56,7 +56,7 @@ function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
     }
     else {
       foreach ($wc1c_price_types as $price_type) {
-        if ($price_type['Ид'] != WC1C_PRICE_TYPE && $price_type['Наименование'] != WC1C_PRICE_TYPE) continue;
+        if (@$price_type['Ид'] != WC1C_PRICE_TYPE && @$price_type['Наименование'] != WC1C_PRICE_TYPE) continue;
 
         $wc1c_price_type = $price_type;
         break;
@@ -64,7 +64,7 @@ function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
       if (!isset($wc1c_price_type)) wc1c_error("Failed to match price type");
     }
 
-    wc1c_update_currency($wc1c_price_type['Валюта']);
+    if (!empty($wc1c_price_type['Валюта'])) wc1c_update_currency($wc1c_price_type['Валюта']);
   }
   elseif (@$names[$depth - 1] == 'Цены' && $name == 'Цена') {
     if (!isset($wc1c_offer['Цена']) && (!isset($wc1c_price['ИдТипаЦены']) || $wc1c_price['ИдТипаЦены'] == $wc1c_price_type['Ид'])) $wc1c_offer['Цена'] = $wc1c_price;
