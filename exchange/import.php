@@ -102,6 +102,9 @@ function wc1c_import_character_data_handler($is_full, $names, $depth, $name, $da
   elseif (@$names[$depth - 2] == 'Товары' && @$names[$depth - 1] == 'Товар' && !in_array($name, array('Группы', 'Картинка', 'Изготовитель', 'ХарактеристикиТовара', 'ЗначенияСвойств', 'СтавкиНалогов', 'ЗначенияРеквизитов'))) {
     @$wc1c_product[$name] .= $data;
   }
+  elseif (@$names[$depth - 2] == 'БазоваяЕдиница' && @$names[$depth - 1] == 'Пересчет') {
+    @$wc1c_product['Пересчет'][$name] .= $data;
+  }
   elseif (@$names[$depth - 2] == 'Товар' && @$names[$depth - 1] == 'Группы' && $name == 'Ид') {
     $i = count($wc1c_product['Группы']) - 1;
     $wc1c_product['Группы'][$i] .= $data;
@@ -594,6 +597,12 @@ function wc1c_replace_product($is_full, $product) {
 
   list($is_added, $post_id, $post_meta) = wc1c_replace_post($product['Ид'], 'product', $is_deleted, $is_draft, $post_title, @$product['Описание'], $post_content, $post_meta, 'product_cat', @$product['Группы'], $preserve_fields);
 
+  if (isset($product['Пересчет']['Единица'])) {
+    $quantity = (float) $product['Пересчет']['Единица'];
+    if (isset($product['Пересчет']['Коэффициент'])) $quantity *= (float) $product['Пересчет']['Коэффициент'];
+    wc_update_product_stock($post_id, (float) $quantity);
+  }
+
   $current_product_attributes = isset($post_meta['_product_attributes']) ? maybe_unserialize($post_meta['_product_attributes']) : array();
 
   $current_product_attribute_variations = array(); 
@@ -606,10 +615,10 @@ function wc1c_replace_product($is_full, $product) {
 
   $product_attributes = array();
 
-  $product_attribute_values = array(
-    "Базовая единица" => @$product['БазоваяЕдиница'],
-    "Наименование изготовителя" => @$product['Изготовитель']['Наименование'],
-  );
+  $product_attribute_values = array();
+  if (!empty($product['Изготовитель']['Наименование'])) $product_attribute_values["Наименование изготовителя"] = $product['Изготовитель']['Наименование'];
+  if (!empty($product['БазоваяЕдиница']) && trim($product['БазоваяЕдиница'])) $product_attribute_values["Базовая единица"] = trim($product['БазоваяЕдиница']);
+
   foreach ($product_attribute_values as $product_attribute_name => $product_attribute_value) {
     $product_attribute_key = sanitize_title($product_attribute_name);
     $product_attribute_position = count($product_attributes);
