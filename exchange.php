@@ -189,6 +189,8 @@ function wc1c_mode_checkauth() {
 }
 
 function wc1c_check_auth() {
+  if (preg_match("/ Development Server$/", $_SERVER['SERVER_SOFTWARE'])) return;
+
   if (!empty($_COOKIE['wc1c-auth'])) {
     $user = wp_validate_auth_cookie($_COOKIE['wc1c-auth'], 'auth');
     if (!$user) wc1c_error("Invalid cookie");
