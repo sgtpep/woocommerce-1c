@@ -275,11 +275,8 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
       'parent' => $parent,
     );
 
-    $result = get_term_by('name', $name, $taxonomy, ARRAY_A);
-    if (!$result) {
-      $result = wp_insert_term($name, $taxonomy, $args);
-      wc1c_check_wp_error($result);
-    }
+    $result = wp_insert_term($name, $taxonomy, $args);
+    wc1c_check_wp_error($result);
 
     $term_id = $result['term_id'];
     update_woocommerce_term_meta($term_id, 'wc1c_guid', "$taxonomy::$guid");
