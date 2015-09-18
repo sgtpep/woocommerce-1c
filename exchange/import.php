@@ -274,7 +274,6 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
       'slug' => $slug,
       'parent' => $parent,
     );
-
     $result = wp_insert_term($name, $taxonomy, $args);
     wc1c_check_wp_error($result);
 
@@ -396,7 +395,7 @@ function wc1c_replace_property($is_full, $property, $order) {
   $preserve_fields = apply_filters('wc1c_import_preserve_property_fields', array(), $property, $is_full);
 
   $attribute_name = !empty($property['Наименование']) ? $property['Наименование'] : $property['Ид'];
-  $attribute_type = (empty($property['ТипЗначений']) || $property['ТипЗначений'] == 'Справочник') ? 'select' : 'text';
+  $attribute_type = (empty($property['ТипЗначений']) || $property['ТипЗначений'] == 'Справочник' || defined('WC1C_MULTIPLE_VALUES_DELIMETER')) ? 'select' : 'text';
   $attribute_id = wc1c_replace_woocommerce_attribute($is_full, $property['Ид'], $attribute_name, $attribute_type, $order, $preserve_fields);
 
   $attribute = wc1c_woocommerce_attribute_by_id($attribute_id);
@@ -652,7 +651,25 @@ function wc1c_replace_product($is_full, $product) {
             if ($term_id) $attribute_terms[] = (int) $term_id;
           }
           else {
-            $attribute_values[] = $property_value;
+            if (!defined('WC1C_MULTIPLE_VALUES_DELIMETER')) {
+              $attribute_values[] = $property_value;
+            }
+            else {
+              $term_names = explode(WC1C_MULTIPLE_VALUES_DELIMETER, $property_value);
+              $term_names = array_map('trim', $term_names);
+              foreach ($term_names as $term_name) {
+                $result = get_term_by('name', $term_name, $attribute['taxonomy'], ARRAY_A);
+                if (!$result) {
+                  $slug = wc1c_unique_term_slug($term_name);
+                  $args = array(
+                    'slug' => $slug,
+                  );
+                  $result = wp_insert_term($term_name, $attribute['taxonomy'], $args);
+                  wc1c_check_wp_error($result);
+                }
+                $attribute_terms[] = $result['term_id'];
+              }
+            }
           }
         }
       }
@@ -883,6 +900,8 @@ function wc1c_clean_product_terms() {
 
   $wpdb->query("UPDATE $wpdb->term_taxonomy tt SET count = (SELECT COUNT(*) FROM $wpdb->term_relationships WHERE term_taxonomy_id = tt.term_taxonomy_id) WHERE taxonomy LIKE 'pa_%'");
   wc1c_check_wpdb_error();
+
+  if (defined('WC1C_MULTIPLE_VALUES_DELIMETER')) return;
 
   $rows = $wpdb->get_results("SELECT term_id, taxonomy FROM $wpdb->term_taxonomy LEFT JOIN $wpdb->woocommerce_termmeta ON term_id = woocommerce_term_id AND meta_key = 'wc1c_guid' WHERE meta_value IS NULL AND taxonomy LIKE 'pa_%' AND count = 0");
   wc1c_check_wpdb_error();
