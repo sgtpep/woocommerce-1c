@@ -414,9 +414,9 @@ function wc1c_xml_parse($fp) {
 function wc1c_xml_is_full($fp) {
   $is_full = null;
   while (($buffer = fgets($fp)) !== false) {
-    if (strpos($buffer, " СодержитТолькоИзменения=") === false) continue;
+    if (strpos($buffer, " СодержитТолькоИзменения=") === false && strpos($buffer, "<СодержитТолькоИзменения>") === false) continue;
 
-    $is_full = strpos($buffer, " СодержитТолькоИзменения=\"false\"") !== false;
+    $is_full = strpos($buffer, " СодержитТолькоИзменения=\"false\"") !== false || strpos($buffer, "<СодержитТолькоИзменения>false<") !== false;
     break;
   }
 
