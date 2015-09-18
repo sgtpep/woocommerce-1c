@@ -901,8 +901,6 @@ function wc1c_clean_product_terms() {
   $wpdb->query("UPDATE $wpdb->term_taxonomy tt SET count = (SELECT COUNT(*) FROM $wpdb->term_relationships WHERE term_taxonomy_id = tt.term_taxonomy_id) WHERE taxonomy LIKE 'pa_%'");
   wc1c_check_wpdb_error();
 
-  if (defined('WC1C_MULTIPLE_VALUES_DELIMETER')) return;
-
   $rows = $wpdb->get_results("SELECT term_id, taxonomy FROM $wpdb->term_taxonomy LEFT JOIN $wpdb->woocommerce_termmeta ON term_id = woocommerce_term_id AND meta_key = 'wc1c_guid' WHERE meta_value IS NULL AND taxonomy LIKE 'pa_%' AND count = 0");
   wc1c_check_wpdb_error();
 
