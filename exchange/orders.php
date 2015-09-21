@@ -124,7 +124,8 @@ function wc1c_replace_document_products($order, $document_products) {
     else {
       $count = isset($document_product['Количество']) ? $document_product['Количество'] : 1;
       $coefficient = isset($document_product['Коэффициент']) ? $document_product['Коэффициент'] : 1;
-      $total = $document_product['ЦенаЗаЕдиницу'] * $count * $coefficient;
+      $price = str_replace(',', '.', $document_product['ЦенаЗаЕдиницу']);
+      $total = $price * $count * $coefficient;
     }
 
     $args = array(

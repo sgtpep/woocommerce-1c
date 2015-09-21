@@ -75,8 +75,9 @@ function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
   }
   elseif (@$names[$depth - 1] == 'Предложения' && $name == 'Предложение') {
     $quantity = isset($wc1c_offer['Количество']) ? $wc1c_offer['Количество'] : @$wc1c_offer['КоличествоНаСкладе'];
+    $price = isset($wc1c_offer['Цена']['ЦенаЗаЕдиницу']) ? str_replace(',', '.', $wc1c_offer['Цена']['ЦенаЗаЕдиницу']) : null;
     if (strpos($wc1c_offer['Ид'], '#') === false) {
-      wc1c_replace_offer($wc1c_offer['Ид'], @$wc1c_offer['Цена']['ЦенаЗаЕдиницу'], $quantity, @$wc1c_offer['Цена']['Коэффициент']);
+      wc1c_replace_offer($wc1c_offer['Ид'], $price, $quantity, @$wc1c_offer['Цена']['Коэффициент']);
     }
     else {
       $guid = $wc1c_offer['Ид'];
@@ -90,7 +91,7 @@ function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
       $wc1c_suboffers[] = array(
         'guid' => $wc1c_offer['Ид'],
         'product_guid' => $product_guid,
-        'price' => @$wc1c_offer['Цена']['ЦенаЗаЕдиницу'],
+        'price' => $price,
         'quantity' => $quantity,
         'coefficient' => @$wc1c_offer['Цена']['Коэффициент'],
         'characteristics' => isset($wc1c_offer['ХарактеристикиТовара']) ? $wc1c_offer['ХарактеристикиТовара'] : array(),
