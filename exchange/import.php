@@ -573,7 +573,7 @@ function wc1c_replace_product($is_full, $product) {
   $is_deleted = @$product['Статус'] == 'Удален';
   $is_draft = @$product['Статус'] == 'Черновик';
 
-  $post_title = $product['Наименование'];
+  $post_title = @$product['Наименование'];
   $post_content = '';
   foreach ($product['ЗначенияРеквизитов'] as $i => $requisite) {
     if ($requisite['Наименование'] == "Полное наименование" && @$requisite['Значение']) {
