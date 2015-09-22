@@ -118,7 +118,7 @@ function wc1c_plugin_row_meta($plugin_meta, $plugin_file) {
 
   return array_merge($plugin_meta, $plugin_meta_after);
 }
-add_filter('plugin_row_meta', 'wc1c_plugin_row_meta', 10, 2);
+//add_filter('plugin_row_meta', 'wc1c_plugin_row_meta', 10, 2);
 
 function wc1c_plugin_action_links($actions) {
   $actions_before = array(
@@ -128,7 +128,7 @@ function wc1c_plugin_action_links($actions) {
 
   return array_merge($actions_before, $actions);
 }
-add_filter('plugin_action_links_' . WC1C_PLUGIN_BASENAME, 'wc1c_plugin_action_links');
+//add_filter('plugin_action_links_' . WC1C_PLUGIN_BASENAME, 'wc1c_plugin_action_links');
 
 function wc1c_admin_menu() {
   add_menu_page(__("1C", 'woocommerce-1c'), __("1C", 'woocommerce-1c'), 'manage_woocommerce', 'woocommerce-1c', 'wc1c_admin_menu_page_settings', null, 100);
