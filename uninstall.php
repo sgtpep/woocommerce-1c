@@ -1,14 +1,16 @@
 <?php
 if (!defined('WP_UNINSTALL_PLUGIN') && !defined('WP_CLI')) exit;
 
+if (!defined('WC1C_PLUGIN_DIR')) define('WC1C_PLUGIN_DIR', __DIR__ . '/');
 if (!defined('WC1C_DATA_DIR')) {
   $upload_dir = wp_upload_dir();
   define('WC1C_DATA_DIR', "{$upload_dir['basedir']}/woocommerce-1c/");
 }
 
-global $wpdb;
-
+require WC1C_PLUGIN_DIR . "exchange.php";
 wc1c_disable_time_limit();
+
+global $wpdb;
 
 if (is_dir(WC1C_DATA_DIR)) {
   $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(WC1C_DATA_DIR, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST);
