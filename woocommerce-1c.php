@@ -113,5 +113,11 @@ function wc1c_delete_woocommerce_attribute($attribute_id) {
   if (function_exists('wc1c_check_wpdb_error')) wc1c_check_wpdb_error();
 }
 
+function wc1c_parse_decimal($number) {
+  $number = str_replace(array(',', ' '), array('.', ''), $number);
+
+  return (float) $number;
+}
+
 require_once WC1C_PLUGIN_DIR . "admin.php";
 require_once WC1C_PLUGIN_DIR . "exchange.php";

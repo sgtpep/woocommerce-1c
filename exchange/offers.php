@@ -75,9 +75,11 @@ function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
   }
   elseif (@$names[$depth - 1] == 'Предложения' && $name == 'Предложение') {
     $quantity = isset($wc1c_offer['Количество']) ? $wc1c_offer['Количество'] : @$wc1c_offer['КоличествоНаСкладе'];
-    $price = isset($wc1c_offer['Цена']['ЦенаЗаЕдиницу']) ? str_replace(',', '.', $wc1c_offer['Цена']['ЦенаЗаЕдиницу']) : null;
+    if ($quantity) $quantity = wc1c_parse_decimal($quantity);
+    $price = isset($wc1c_offer['Цена']['ЦенаЗаЕдиницу']) ? wc1c_parse_decimal($wc1c_offer['Цена']['ЦенаЗаЕдиницу']) : null;
+    $coefficient = isset($wc1c_offer['Цена']['Коэффициент']) ? wc1c_parse_decimal($wc1c_offer['Цена']['Коэффициент']) : null;
     if (strpos($wc1c_offer['Ид'], '#') === false) {
-      wc1c_replace_offer($wc1c_offer['Ид'], $price, $quantity, @$wc1c_offer['Цена']['Коэффициент']);
+      wc1c_replace_offer($wc1c_offer['Ид'], $price, $quantity, $coefficient);
     }
     else {
       $guid = $wc1c_offer['Ид'];
@@ -93,7 +95,7 @@ function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
         'product_guid' => $product_guid,
         'price' => $price,
         'quantity' => $quantity,
-        'coefficient' => @$wc1c_offer['Цена']['Коэффициент'],
+        'coefficient' => $coefficient,
         'characteristics' => isset($wc1c_offer['ХарактеристикиТовара']) ? $wc1c_offer['ХарактеристикиТовара'] : array(),
       );
     }
@@ -179,7 +181,7 @@ function wc1c_replace_product_meta($post_id, $price, $quantity, $coefficient, $a
     update_post_meta($post_id, $meta_key, $meta_value);
   }
 
-  if (!is_null($quantity)) wc_update_product_stock($post_id, (float) $quantity);
+  if (!is_null($quantity)) wc_update_product_stock($post_id, $quantity);
 }
 
 function wc1c_replace_offer($guid, $price, $quantity, $coefficient) {

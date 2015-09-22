@@ -115,17 +115,16 @@ function wc1c_replace_document_products($order, $document_products) {
   }
 
   foreach ($document_products as $document_product) {
-    $quantity = !empty($document_product['Количество']) ? $document_product['Количество'] : 1;
-    if (!empty($document_product['Коэффициент'])) $quantity *= $document_product['Коэффициент'];
+    $quantity = isset($document_product['Количество']) ? wc1c_parse_decimal($document_product['Количество']) : 1;
+    $coefficient = isset($document_product['Коэффициент']) ? wc1c_parse_decimal($document_product['Коэффициент']) : 1;
+    $quantity *= $coefficient;
 
     if (!empty($document_product['Сумма'])) {
-      $total = $document_product['Сумма'];
+      $total = wc1c_parse_decimal($document_product['Сумма']);
     }
     else {
-      $count = isset($document_product['Количество']) ? $document_product['Количество'] : 1;
-      $coefficient = isset($document_product['Коэффициент']) ? $document_product['Коэффициент'] : 1;
-      $price = str_replace(',', '.', $document_product['ЦенаЗаЕдиницу']);
-      $total = $price * $count * $coefficient;
+      $price = wc1c_parse_decimal($document_product['ЦенаЗаЕдиницу']);
+      $total = $price * $quantity;
     }
 
     $args = array(
@@ -183,10 +182,11 @@ function wc1c_replace_document_services($order, $document_services) {
       if ($document_service['Наименование'] != $shipping_method->title) continue;
 
       $method_title = isset($shipping_method->method_title) ? $shipping_method->method_title : '';
+      $shipping_cost = wc1c_parse_decimal($document_service['Сумма']);
       $args = array(
         'method_id' => $shipping_method->id,
         'method_title' => $method_title,
-        'cost' => $document_service['Сумма'],
+        'cost' => $shipping_cost,
       );
 
       if (!$shipping_items) {
@@ -301,7 +301,7 @@ function wc1c_replace_document($document) {
 
   $post_meta = array();
   if (isset($document['Валюта'])) $post_meta['_order_currency'] = $document['Валюта'];
-  if (isset($document['Сумма'])) $post_meta['_order_total'] = $document['Сумма'];
+  if (isset($document['Сумма'])) $post_meta['_order_total'] = wc1c_parse_decimal($document['Сумма']);
 
   $current_post_meta = get_post_meta($order->id);
   foreach ($current_post_meta as $meta_key => $meta_value) {

@@ -229,7 +229,7 @@ echo '<?xml version="1.0" encoding="windows-1251"?>';
             <?php endif ?>
             <Наименование><?php echo $product['name'] ?></Наименование>
             <БазоваяЕдиница Код="796" НаименованиеПолное="Штука" МеждународноеСокращение="PCE">шт</БазоваяЕдиница>
-            <ЦенаЗаЕдиницу><?php echo number_format($product['price_per_item'], 2, ',', '') ?></ЦенаЗаЕдиницу>
+            <ЦенаЗаЕдиницу><?php echo $product['price_per_item'] ?></ЦенаЗаЕдиницу>
             <Количество><?php echo $product['quantity'] ?></Количество>
             <Сумма><?php echo $product['total'] ?></Сумма>
             <ЗначенияРеквизитов>
