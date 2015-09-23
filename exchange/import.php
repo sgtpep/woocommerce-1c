@@ -843,7 +843,7 @@ function wc1c_clean_woocommerce_attributes($is_full) {
 
   foreach ($attribute_ids as $attribute_id) {
     $attribute = wc1c_woocommerce_attribute_by_id($attribute_id);
-    if (!$attribute) wc1c_error("Failed to get attribute");
+    if (!$attribute) continue;
 
     wc1c_delete_woocommerce_attribute($attribute_id);
     
