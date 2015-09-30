@@ -186,17 +186,19 @@ echo '<?xml version="1.0" encoding="windows-1251"?>';
             <?php if (!empty($contragent['last_name'])): ?>
               <Фамилия><?php echo $contragent['last_name'] ?></Фамилия>
             <?php endif ?>
-            <АдресРегистрации>
-              <?php if (!empty($contragent['full_address'])): ?>
-                <Представление><?php echo $contragent['full_address'] ?></Представление>  
-              <?php endif ?>
-              <?php foreach ($contragent['address'] as $address_item_name => $address_item_value): ?>
-                <АдресноеПоле>
-                  <Тип><?php echo $address_item_name ?></Тип>
-                  <Значение><?php echo $address_item_value ?></Значение>
-                </АдресноеПоле>
-              <?php endforeach ?>
-            </АдресРегистрации>
+            <?php if (!empty($contragent['full_address']) || $contragent['address']): ?>
+              <АдресРегистрации>
+                <?php if (!empty($contragent['full_address'])): ?>
+                  <Представление><?php echo $contragent['full_address'] ?></Представление>  
+                <?php endif ?>
+                <?php foreach ($contragent['address'] as $address_item_name => $address_item_value): ?>
+                  <АдресноеПоле>
+                    <Тип><?php echo $address_item_name ?></Тип>
+                    <Значение><?php echo $address_item_value ?></Значение>
+                  </АдресноеПоле>
+                <?php endforeach ?>
+              </АдресРегистрации>
+            <?php endif ?>
             <?php /*
             <Контакты>
               <?php foreach ($contragent['contacts'] as $contact_item_name => $contact_item_value): ?>
