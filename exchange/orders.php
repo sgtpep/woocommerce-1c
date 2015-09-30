@@ -243,6 +243,8 @@ function wc1c_replace_document($document) {
     $order = wc_create_order($args);
     wc1c_check_wp_error($order);
 
+    if (!isset($user_id)) update_post_meta($order->id, 'wc1c_contragent', $contragent_name);
+
     $args = array(
       'ID' => $order->id,
     );

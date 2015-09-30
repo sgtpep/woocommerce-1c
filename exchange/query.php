@@ -54,23 +54,29 @@ foreach ($order_posts as $order_post) {
     'phone' => "ТелефонРабочий",
   );
 
+  $contragent_meta = get_post_meta($order_post->ID, 'wc1c_contragent', true);
   $contragents = array();
   foreach (array('billing', 'shipping') as $type) {
     $contragent = array();
 
-    $full_name = array();
+    $name = array();
     foreach (array('first_name', 'last_name') as $name_key) {
       $meta_key = "_{$type}_$name_key";
       if (empty($order_meta[$meta_key])) continue;
 
-      $full_name[] = $order_meta[$meta_key];
+      $name[] = $order_meta[$meta_key];
       $contragent[$name_key] = $order_meta[$meta_key];
     }
 
-    $full_name = implode(' ', $full_name);
-    if (!$full_name) $full_name = "Гость";
-    $contragent['full_name'] = $full_name;
-    $contragent['user_id'] = $full_name ? $order_post->post_author : 0;
+    $name = implode(' ', $name);
+    if (!$name) {
+      $contragent['name'] = $contragent_meta ? $contragent_meta : "Гость";
+      $contragent['user_id'] = 0;
+    }
+    else {
+      $contragent['name'] = $name;
+      $contragent['user_id'] = $order_post->post_author;
+    }
 
     if (!empty($order_meta["_{$type}_country"])) {
       $country_code = $order_meta["_{$type}_country"];
@@ -176,9 +182,8 @@ echo '<?xml version="1.0" encoding="windows-1251"?>';
           <Контрагент>
             <Ид>wc1c#user#<?php echo $contragent['user_id'] ?></Ид>
             <Роль><?php echo $type == 'billing' ? "Плательщик" : "Получатель" ?></Роль>
-            <?php if (!empty($contragent['full_name'])): ?>
-              <Наименование><?php echo $contragent['full_name'] ?></Наименование>
-              <ПолноеНаименование><?php echo $contragent['full_name'] ?></ПолноеНаименование>
+            <?php if (!empty($contragent['name'])): ?>
+              <Наименование><?php echo $contragent['name'] ?></Наименование>
             <?php endif ?>
             <?php if (!empty($contragent['first_name'])): ?>
               <Имя><?php echo $contragent['first_name'] ?></Имя>
