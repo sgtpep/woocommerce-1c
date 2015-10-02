@@ -23,7 +23,7 @@ function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $att
     $wc1c_groups[] = array('ИдРодителя' => @$wc1c_groups[$wc1c_group_depth - 1]['Ид']);
   }
   elseif (@$names[$depth - 1] == 'Группа' && $name == 'Группы') {
-    $result = wc1c_replace_group($is_full, $wc1c_groups[$wc1c_group_depth], $wc1c_group_order);
+    $result = wc1c_replace_group($is_full, $wc1c_groups[$wc1c_group_depth], $wc1c_group_order, $wc1c_groups);
     if ($result) $wc1c_group_order++;
 
     $wc1c_groups[$wc1c_group_depth]['Группы'] = true;
@@ -143,7 +143,7 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
 
   if (@$names[$depth - 1] == 'Группы' && $name == 'Группа') {
     if (empty($wc1c_groups[$wc1c_group_depth]['Группы'])) {
-      $result = wc1c_replace_group($is_full, $wc1c_groups[$wc1c_group_depth], $wc1c_group_order);
+      $result = wc1c_replace_group($is_full, $wc1c_groups[$wc1c_group_depth], $wc1c_group_order, $wc1c_groups);
       if ($result) $wc1c_group_order++;
     }
 
@@ -299,8 +299,9 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
   update_woocommerce_term_meta($term_id, 'wc1c_timestamp', WC1C_TIMESTAMP);
 }
 
-function wc1c_replace_group($is_full, $group, $order) {
-  $group = apply_filters('wc1c_import_group_xml', $group, $is_full);
+function wc1c_replace_group($is_full, $group, $order, $groups) {
+  $parent_groups = array_slice($groups, 0, -1);
+  $group = apply_filters('wc1c_import_group_xml', $group, $parent_groups, $is_full);
   if (!$group) return;
 
   wc1c_replace_term($is_full, $group['Ид'], $group['ИдРодителя'], $group['Наименование'], 'product_cat', $order);
