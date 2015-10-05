@@ -181,7 +181,12 @@ function wc1c_replace_product_meta($post_id, $price, $quantity, $coefficient, $a
     update_post_meta($post_id, $meta_key, $meta_value);
   }
 
-  if (!is_null($quantity)) wc_update_product_stock($post_id, $quantity);
+  if (!is_null($quantity)) {
+    wc_update_product_stock($post_id, $quantity);
+
+    $stock_status = $quantity > 0 ? 'instock' : 'outofstock';
+    wc_update_product_stock_status($post_id, $stock_status);
+  }
 }
 
 function wc1c_replace_offer($guid, $price, $quantity, $coefficient) {

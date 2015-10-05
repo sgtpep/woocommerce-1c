@@ -598,6 +598,9 @@ function wc1c_replace_product($is_full, $product) {
     $quantity = wc1c_parse_decimal($product['Пересчет']['Единица']);
     if (isset($product['Пересчет']['Коэффициент'])) $quantity *= wc1c_parse_decimal($product['Пересчет']['Коэффициент']);
     wc_update_product_stock($post_id, $quantity);
+
+    $stock_status = $quantity > 0 ? 'instock' : 'outofstock';
+    wc_update_product_stock_status($post_id, $stock_status);
   }
 
   $current_product_attributes = isset($post_meta['_product_attributes']) ? maybe_unserialize($post_meta['_product_attributes']) : array();
