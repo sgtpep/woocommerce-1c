@@ -82,6 +82,25 @@ function wc1c_manage_product_posts_custom_column($column) {
 }
 add_action('manage_product_posts_custom_column', 'wc1c_manage_product_posts_custom_column');
 
+function wc1c_manage_edit_shop_order_columns($columns) {
+  $columns_after = array(
+    'wc1c_guid' => __("1C Id", 'woocommerce-1c'),
+  );
+
+  return array_merge($columns, $columns_after);
+}
+add_filter('manage_edit-shop_order_columns', 'wc1c_manage_edit_shop_order_columns');
+
+function wc1c_manage_shop_order_posts_custom_column($column) {
+  global $post;
+
+  if ($column == 'wc1c_guid') {
+    $guid = get_post_meta($post->ID, '_wc1c_guid', true);
+    echo $guid ? "<small>$guid</small>" : '<span class="na">–</span>';
+  }
+}
+add_action('manage_shop_order_posts_custom_column', 'wc1c_manage_shop_order_posts_custom_column');
+
 function wc1c_woocommerce_attribute_deleted($attribute_id, $attribute_name, $taxonomy) {
   $guids = get_option('wc1c_guid_attributes', array());
   $guid = array_search($attribute_id, $guids);
