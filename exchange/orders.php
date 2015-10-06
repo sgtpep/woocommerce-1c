@@ -177,12 +177,15 @@ function wc1c_replace_document_services($order, $document_services) {
     $shipping_methods = $shipping->get_shipping_methods();
   }
 
+  $shipping_cost_sum = 0;
   foreach ($document_services as $document_service) {
     foreach ($shipping_methods as $shipping_method_id => $shipping_method) {
       if ($document_service['Наименование'] != $shipping_method->title) continue;
 
-      $method_title = isset($shipping_method->method_title) ? $shipping_method->method_title : '';
       $shipping_cost = wc1c_parse_decimal($document_service['Сумма']);
+      $shipping_cost_sum += $shipping_cost;
+
+      $method_title = isset($shipping_method->method_title) ? $shipping_method->method_title : '';
       $args = array(
         'method_id' => $shipping_method->id,
         'method_title' => $method_title,
@@ -204,6 +207,8 @@ function wc1c_replace_document_services($order, $document_services) {
       break;
     }
   }
+
+  return $shipping_cost_sum;
 }
 
 function wc1c_woocommerce_new_order_data($order_data) {
@@ -307,18 +312,6 @@ function wc1c_replace_document($document) {
   if (isset($document['Валюта'])) $post_meta['_order_currency'] = $document['Валюта'];
   if (isset($document['Сумма'])) $post_meta['_order_total'] = wc1c_parse_decimal($document['Сумма']);
 
-  $current_post_meta = get_post_meta($order->id);
-  foreach ($current_post_meta as $meta_key => $meta_value) {
-    $current_post_meta[$meta_key] = $meta_value[0];
-  }
- 
-  foreach ($post_meta as $meta_key => $meta_value) {
-    $current_meta_value = @$current_post_meta[$meta_key];
-    if ($current_meta_value == $meta_value) continue;
-
-    update_post_meta($order->id, $meta_key, $meta_value);
-  }
-
   $document_products = array();
   $document_services = array();
   foreach ($document['Товары'] as $i => $document_product) {
@@ -337,5 +330,17 @@ function wc1c_replace_document($document) {
   }
 
   wc1c_replace_document_products($order, $document_products);
-  wc1c_replace_document_services($order, $document_services);
+  $post_meta['_order_shipping'] = wc1c_replace_document_services($order, $document_services);
+
+  $current_post_meta = get_post_meta($order->id);
+  foreach ($current_post_meta as $meta_key => $meta_value) {
+    $current_post_meta[$meta_key] = $meta_value[0];
+  }
+ 
+  foreach ($post_meta as $meta_key => $meta_value) {
+    $current_meta_value = @$current_post_meta[$meta_key];
+    if ($current_meta_value == $meta_value) continue;
+
+    update_post_meta($order->id, $meta_key, $meta_value);
+  }
 }
