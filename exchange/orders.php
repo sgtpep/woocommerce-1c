@@ -257,6 +257,8 @@ function wc1c_replace_document($document) {
     $result = wp_update_post($args);
     wc1c_check_wp_error($result);
     if (!$result) wc1c_error("Failed to update order post");
+
+    update_post_meta($order->id, '_wc1c_guid', $document['Ид']);
   }
   else {
     $args = array(
