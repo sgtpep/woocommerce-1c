@@ -172,7 +172,7 @@ function wc1c_replace_document_services($order, $document_services) {
   }
 
   if (!$shipping_methods) {
-    $shipping = WC()->shipping;
+    $shipping = @WC()->shipping;
     $shipping->load_shipping_methods();
     $shipping_methods = $shipping->get_shipping_methods();
   }
