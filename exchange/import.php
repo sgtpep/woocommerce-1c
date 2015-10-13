@@ -759,43 +759,45 @@ function wc1c_replace_product($is_full, $product) {
     }
   }
 
-  $attachments = array();
-  if (!empty($product['Картинка'])) {
-    $attachments = array_filter($product['Картинка']);
-    $attachments = array_fill_keys($attachments, array());
-  }
-
-  if ($product['ЗначенияРеквизитов']) {
-    $attachment_keys = array(
-      'ОписаниеФайла' => 'description',
-    );
-    foreach ($product['ЗначенияРеквизитов'] as $requisite) {
-      $attribute_name = $requisite['Наименование'];
-      if (!isset($attachment_keys[$attribute_name])) continue;
-
-      $attribute_values = @$requisite['Значение'];
-      if (!$attribute_values) continue;
-
-      $attribute_value = $attribute_values[0];
-      if (strpos($attribute_value, "import_files/") !== 0) continue;
-        
-      list($picture_path, $attribute_value) = explode('#', $attribute_value, 2);
-      if (!isset($attachments[$picture_path])) continue;
-
-      $attachment_key = $attachment_keys[$attribute_name];
-      $attachments[$picture_path][$attachment_key] = $attribute_value;
+  if (!in_array('attachments', $preserve_fields)) {
+    $attachments = array();
+    if (!empty($product['Картинка'])) {
+      $attachments = array_filter($product['Картинка']);
+      $attachments = array_fill_keys($attachments, array());
     }
-  }
 
-  if ($attachments) {
-    $attachment_ids = wc1c_replace_post_attachments($post_id, $attachments);
+    if ($product['ЗначенияРеквизитов']) {
+      $attachment_keys = array(
+        'ОписаниеФайла' => 'description',
+      );
+      foreach ($product['ЗначенияРеквизитов'] as $requisite) {
+        $attribute_name = $requisite['Наименование'];
+        if (!isset($attachment_keys[$attribute_name])) continue;
 
-    $new_post_meta = array(
-      '_product_image_gallery' => implode(',', array_slice($attachment_ids, 1)),
-      '_thumbnail_id' => @$attachment_ids[0],
-    );
-    foreach ($new_post_meta as $meta_key => $meta_value) {
-      if ($meta_value != @$post_meta[$meta_key]) update_post_meta($post_id, $meta_key, $meta_value);
+        $attribute_values = @$requisite['Значение'];
+        if (!$attribute_values) continue;
+
+        $attribute_value = $attribute_values[0];
+        if (strpos($attribute_value, "import_files/") !== 0) continue;
+          
+        list($picture_path, $attribute_value) = explode('#', $attribute_value, 2);
+        if (!isset($attachments[$picture_path])) continue;
+
+        $attachment_key = $attachment_keys[$attribute_name];
+        $attachments[$picture_path][$attachment_key] = $attribute_value;
+      }
+    }
+
+    if ($attachments) {
+      $attachment_ids = wc1c_replace_post_attachments($post_id, $attachments);
+
+      $new_post_meta = array(
+        '_product_image_gallery' => implode(',', array_slice($attachment_ids, 1)),
+        '_thumbnail_id' => @$attachment_ids[0],
+      );
+      foreach ($new_post_meta as $meta_key => $meta_value) {
+        if ($meta_value != @$post_meta[$meta_key]) update_post_meta($post_id, $meta_key, $meta_value);
+      }
     }
   }
 
