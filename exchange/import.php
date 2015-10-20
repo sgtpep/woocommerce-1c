@@ -107,11 +107,11 @@ function wc1c_import_character_data_handler($is_full, $names, $depth, $name, $da
   }
   elseif (@$names[$depth - 2] == 'Товар' && @$names[$depth - 1] == 'Группы' && $name == 'Ид') {
     $i = count($wc1c_product['Группы']) - 1;
-    $wc1c_product['Группы'][$i] .= $data;
+    @$wc1c_product['Группы'][$i] .= $data;
   }
   elseif (@$names[$depth - 2] == 'Товары' && @$names[$depth - 1] == 'Товар' && $name == 'Картинка') {
     $i = count($wc1c_product['Картинка']) - 1;
-    $wc1c_product['Картинка'][$i] .= $data;
+    @$wc1c_product['Картинка'][$i] .= $data;
   }
   elseif (@$names[$depth - 2] == 'Товар' && @$names[$depth - 1] == 'Изготовитель') {
     @$wc1c_product['Изготовитель'][$name] .= $data;
@@ -123,7 +123,7 @@ function wc1c_import_character_data_handler($is_full, $names, $depth, $name, $da
     }
     else {
       $j = count($wc1c_product['ЗначенияСвойств'][$i]['Значение']) - 1;
-      $wc1c_product['ЗначенияСвойств'][$i]['Значение'][$j] .= $data;
+      @$wc1c_product['ЗначенияСвойств'][$i]['Значение'][$j] .= $data;
     }
   }
   elseif (@$names[$depth - 2] == 'ЗначенияРеквизитов' && @$names[$depth - 1] == 'ЗначениеРеквизита') {
@@ -133,7 +133,7 @@ function wc1c_import_character_data_handler($is_full, $names, $depth, $name, $da
     }
     else {
       $j = count($wc1c_product['ЗначенияРеквизитов'][$i]['Значение']) - 1;
-      $wc1c_product['ЗначенияРеквизитов'][$i]['Значение'][$j] .= $data;
+      @$wc1c_product['ЗначенияРеквизитов'][$i]['Значение'][$j] .= $data;
     }
   }
 }
