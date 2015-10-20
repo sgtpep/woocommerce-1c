@@ -10,20 +10,6 @@ Text Domain: woocommerce-1c
 Domain Path: /languages
 */
 
-add_filter('wc1c_import_group_xml', function($group, $parent_groups) {
-  $top_group_names = array("ТОВАРИ", "ІНТЕРНЕТ МАГАЗИН (товари)");
-  if (in_array($group['Наименование'], $top_group_names)) return;
-
-  foreach ($parent_groups as $parent_group) {
-    if (in_array($parent_group['Наименование'], $top_group_names)) continue;
-
-    $group['ИдРодителя'] = $parent_group['Ид'];
-    break;
-  }
-
-  return $group;
-}, 10, 2);
-
 if (!defined('ABSPATH')) exit;
 
 require_once ABSPATH . "wp-admin/includes/plugin.php";
