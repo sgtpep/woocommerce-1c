@@ -526,7 +526,7 @@ function wc1c_template_redirect() {
   $value = get_query_var('wc1c');
   if (empty($value)) return;
     
-  list($value, $query) = explode('?', $value, 2);
+  @list($value, $query) = explode('?', $value, 2);
   $_GET['wc1c'] = $value;
   parse_str($query, $query);
   $_GET = array_merge($_GET, $query);
