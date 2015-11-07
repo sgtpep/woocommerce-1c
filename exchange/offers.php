@@ -186,12 +186,14 @@ function wc1c_replace_offer_post_meta($is_full, $post_id, $offer, $attributes = 
     wc_update_product_stock_status($post_id, $stock_status);
   }
 
-  do_action('wc1c_post_offer_post_meta', $post_id, $offer, $is_full);
+  do_action('wc1c_post_offer_meta', $post_id, $offer, $is_full);
 }
 
 function wc1c_replace_offer($is_full, $guid, $offer) {
   $post_id = wc1c_post_id_by_meta('_wc1c_guid', $guid);
   if ($post_id) wc1c_replace_offer_post_meta($is_full, $post_id, $offer);
+
+  do_action('wc1c_post_offer', $post_id, $offer, $is_full);
 }
 
 function wc1c_replace_product_variation($guid, $parent_post_id, $order) {
