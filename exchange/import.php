@@ -191,7 +191,7 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
       list($product_guid, ) = explode('#', $guid, 2);
 
       if (empty($wc1c_subproducts) || $wc1c_subproducts[0]['product_guid'] != $product_guid) {
-        if ($wc1c_subproducts) wc1c_replace_subproducts($wc1c_subproducts);
+        if ($wc1c_subproducts) wc1c_replace_subproducts($is_full, $wc1c_subproducts);
         $wc1c_subproducts = array();
       }
 
@@ -205,7 +205,7 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
     }
   }
   elseif (@$names[$depth - 1] == 'Каталог' && $name == 'Товары') {
-    if ($wc1c_subproducts) wc1c_replace_subproducts($wc1c_subproducts);
+    if ($wc1c_subproducts) wc1c_replace_subproducts($is_full, $wc1c_subproducts);
 
     wc1c_clean_products($is_full);
     wc1c_clean_product_terms();
@@ -822,15 +822,15 @@ function wc1c_replace_product($is_full, $product) {
     }
   }
 
-  do_action('wc1c_post_product', $post_id, $is_added, $product);
+  do_action('wc1c_post_product', $post_id, $is_added, $product, $is_full);
 
   return $post_id;
 }
 
-function wc1c_replace_subproducts($subproducts) {
+function wc1c_replace_subproducts($is_full, $subproducts) {
   require_once sprintf(WC1C_PLUGIN_DIR . "exchange/offers.php");
 
-  wc1c_replace_suboffers($subproducts, true);
+  wc1c_replace_suboffers($is_full, $subproducts, true);
 }
 
 function wc1c_clean_woocommerce_categories($is_full) {

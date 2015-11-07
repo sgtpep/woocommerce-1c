@@ -75,14 +75,14 @@ function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
   }
   elseif (@$names[$depth - 1] == 'Предложения' && $name == 'Предложение') {
     if (strpos($wc1c_offer['Ид'], '#') === false) {
-      wc1c_replace_offer($wc1c_offer['Ид'], $wc1c_offer);
+      wc1c_replace_offer($is_full, $wc1c_offer['Ид'], $wc1c_offer);
     }
     else {
       $guid = $wc1c_offer['Ид'];
       list($product_guid, ) = explode('#', $guid, 2);
 
       if (empty($wc1c_suboffers) || $wc1c_suboffers[0]['product_guid'] != $product_guid) {
-        if ($wc1c_suboffers) wc1c_replace_suboffers($wc1c_suboffers);
+        if ($wc1c_suboffers) wc1c_replace_suboffers($is_full, $wc1c_suboffers);
         $wc1c_suboffers = array();
       }
 
@@ -94,7 +94,7 @@ function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
     }
   }
   elseif (@$names[$depth - 1] == 'ПакетПредложений' && $name == 'Предложения') {
-    if ($wc1c_suboffers) wc1c_replace_suboffers($wc1c_suboffers);
+    if ($wc1c_suboffers) wc1c_replace_suboffers($is_full, $wc1c_suboffers);
   }
   elseif (!$depth && $name == 'КоммерческаяИнформация') {
     do_action('wc1c_post_offers', $is_full);
@@ -113,7 +113,7 @@ function wc1c_update_currency($currency) {
   if (isset($currency_position[$currency])) update_option('woocommerce_currency_pos', $currency_position[$currency]);
 }
 
-function wc1c_replace_product_offer_meta($post_id, $offer, $attributes = array()) {
+function wc1c_replace_offer_post_meta($is_full, $post_id, $offer, $attributes = array()) {
   $price = isset($offer['Цена']['ЦенаЗаЕдиницу']) ? wc1c_parse_decimal($offer['Цена']['ЦенаЗаЕдиницу']) : null;
   if (!is_null($price)) {
     $coefficient = isset($offer['Цена']['Коэффициент']) ? wc1c_parse_decimal($offer['Цена']['Коэффициент']) : null;
@@ -187,12 +187,12 @@ function wc1c_replace_product_offer_meta($post_id, $offer, $attributes = array()
   }
 }
 
-function wc1c_replace_offer($guid, $offer) {
+function wc1c_replace_offer($is_full, $guid, $offer) {
   $post_id = wc1c_post_id_by_meta('_wc1c_guid', $guid);
-  if ($post_id) wc1c_replace_product_offer_meta($post_id, $offer);
+  if ($post_id) wc1c_replace_offer_post_meta($is_full, $post_id, $offer);
 }
 
-function wc1c_replace_product_variation($guid, $parent_post_id, $order) {
+function wc1c_replace_product_variation($is_full, $guid, $parent_post_id, $order) {
   $post_id = wc1c_post_id_by_meta('_wc1c_guid', $guid);
 
   $args = array(
@@ -237,7 +237,7 @@ function wc1c_replace_product_variation($guid, $parent_post_id, $order) {
   return $post_id;
 }
 
-function wc1c_replace_suboffers($suboffers, $are_products = false) {
+function wc1c_replace_suboffers($is_full, $suboffers, $are_products = false) {
   if (!$suboffers) return;
 
   $product_guid = $suboffers[0]['product_guid'];
@@ -320,10 +320,10 @@ function wc1c_replace_suboffers($suboffers, $are_products = false) {
     }
 
     if ($are_products) {
-      wc1c_replace_product_offer_meta($product_variation_id, array(), $attributes);
+      wc1c_replace_offer_post_meta($is_full, $product_variation_id, array(), $attributes);
     }
     else {
-      wc1c_replace_product_offer_meta($product_variation_id, $suboffer['offer'], $attributes);
+      wc1c_replace_offer_post_meta($is_full, $product_variation_id, $suboffer['offer'], $attributes);
     }
   }
 
