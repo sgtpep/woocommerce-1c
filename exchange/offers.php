@@ -185,6 +185,8 @@ function wc1c_replace_offer_post_meta($is_full, $post_id, $offer, $attributes = 
     $stock_status = $quantity > 0 ? 'instock' : 'outofstock';
     wc_update_product_stock_status($post_id, $stock_status);
   }
+
+  do_action('wc1c_post_offer_post_meta', $post_id, $offer, $is_full);
 }
 
 function wc1c_replace_offer($is_full, $guid, $offer) {
