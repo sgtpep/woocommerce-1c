@@ -192,7 +192,7 @@ function wc1c_replace_offer($is_full, $guid, $offer) {
   if ($post_id) wc1c_replace_offer_post_meta($is_full, $post_id, $offer);
 }
 
-function wc1c_replace_product_variation($is_full, $guid, $parent_post_id, $order) {
+function wc1c_replace_product_variation($guid, $parent_post_id, $order) {
   $post_id = wc1c_post_id_by_meta('_wc1c_guid', $guid);
 
   $args = array(
