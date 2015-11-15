@@ -64,7 +64,10 @@ function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
       if (!isset($wc1c_price_type)) wc1c_error("Failed to match price type");
     }
 
-    if (!empty($wc1c_price_type['Валюта'])) wc1c_update_currency($wc1c_price_type['Валюта']);
+    if (!empty($wc1c_price_type['Валюта'])) {
+      wc1c_update_currency($wc1c_price_type['Валюта']);
+      update_option('wc1c_currency', $wc1c_price_type['Валюта']);
+    }
   }
   elseif (@$names[$depth - 1] == 'Цены' && $name == 'Цена') {
     if (!isset($wc1c_offer['Цена']) && (!isset($wc1c_price['ИдТипаЦены']) || $wc1c_price['ИдТипаЦены'] == $wc1c_price_type['Ид'])) $wc1c_offer['Цена'] = $wc1c_price;
