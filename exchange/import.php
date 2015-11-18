@@ -159,7 +159,7 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
       $attribute_taxonomy = $result;
       $wc1c_property_order++;
 
-      wc1c_clean_woocommerce_attribute_options($attribute_taxonomy);
+      wc1c_clean_woocommerce_attribute_options($is_full, $attribute_taxonomy);
     }
     else {
       $wc1c_requisite_properties[$wc1c_property['Ид']] = $wc1c_property;
@@ -893,8 +893,10 @@ function wc1c_clean_woocommerce_attributes($is_full) {
   }
 }
 
-function wc1c_clean_woocommerce_attribute_options($attribute_taxonomy) {
+function wc1c_clean_woocommerce_attribute_options($is_full, $attribute_taxonomy) {
   global $wpdb;
+
+  if (!$is_full || WC1C_PREVENT_CLEAN) return;
 
   $term_ids = $wpdb->get_col($wpdb->prepare("SELECT term_id FROM $wpdb->woocommerce_termmeta JOIN $wpdb->term_taxonomy ON woocommerce_term_id = term_id WHERE taxonomy = %s AND meta_key = 'wc1c_timestamp' AND meta_value != %d", $attribute_taxonomy, WC1C_TIMESTAMP));
   wc1c_check_wpdb_error();
