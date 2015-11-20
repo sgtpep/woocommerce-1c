@@ -239,7 +239,7 @@ function wc1c_filesize_to_bytes($filesize) {
 }
 
 function wc1c_mode_init($type) {
-  wc1c_clean_data_dir($type);
+  // wc1c_clean_data_dir($type);
 
   if (is_null(WC1C_ZIP)) {
     @exec("which unzip", $_, $status);
