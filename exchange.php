@@ -209,24 +209,6 @@ function wc1c_check_auth() {
   wc1c_check_permissions($user);
 }
 
-function wc1c_clean_data_dir($type) {
-  $data_dir = WC1C_DATA_DIR . $type;
-  if (is_dir($data_dir)) {
-    $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($data_dir, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST);
-    foreach ($iterator as $path => $item) {
-      if ($item->isDir()) {
-        rmdir($path) or wc1c_error(sprintf("Failed to remove directory %s", $path));
-      }
-      else {
-        unlink($path) or wc1c_error(sprintf("Failed to unlink file %s", $path));
-      }
-    }
-  }
-  else {
-    mkdir($data_dir) or wc1c_error(sprintf("Failed to make directory %s", $data_dir));
-  }
-}
-
 function wc1c_filesize_to_bytes($filesize) {
   switch (substr($filesize, -1)) {
     case 'G':

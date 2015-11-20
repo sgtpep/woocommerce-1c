@@ -19,6 +19,21 @@ if (!isset($wpdb->woocommerce_termmeta)) exit("WooCommerce plugin is not active"
 
 wc1c_disable_time_limit();
 
+if (is_dir(WC1C_DATA_DIR)) {
+  $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(WC1C_DATA_DIR, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST);
+  foreach ($iterator as $path => $item) {
+    if ($item->isDir()) {
+      rmdir($path) or wc1c_error(sprintf("Failed to remove directory %s", $path));
+    }
+    else {
+      unlink($path) or wc1c_error(sprintf("Failed to unlink file %s", $path));
+    }
+  }
+}
+else {
+  mkdir(WC1C_DATA_DIR) or wc1c_error(sprintf("Failed to make directory %s", WC1C_DATA_DIR));
+}
+
 $rows = $wpdb->get_results("SELECT term_id, taxonomy FROM $wpdb->woocommerce_termmeta JOIN $wpdb->term_taxonomy ON woocommerce_term_id = term_id WHERE meta_key = 'wc1c_guid'");
 foreach ($rows as $row) {
   wp_delete_term($row->term_id, $row->taxonomy);
