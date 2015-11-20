@@ -527,10 +527,12 @@ function wc1c_template_redirect() {
   $value = get_query_var('wc1c');
   if (empty($value)) return;
     
-  @list($value, $query) = explode('?', $value, 2);
+  if (strpos($value, '?') !== false) {
+    list($value, $query) = explode('?', $value, 2);
+    parse_str($query, $query);
+    $_GET = array_merge($_GET, $query);
+  }
   $_GET['wc1c'] = $value;
-  parse_str($query, $query);
-  $_GET = array_merge($_GET, $query);
 
   if ($value == 'exchange') {
     wc1c_exchange();
