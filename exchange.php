@@ -254,6 +254,7 @@ function wc1c_mode_init($type) {
   $zip = $is_zip ? 'yes' : 'no';
 
   $file_limits = array(
+    wc1c_filesize_to_bytes('10M'),
     wc1c_filesize_to_bytes(ini_get('post_max_size')),
     wc1c_filesize_to_bytes(ini_get('memory_limit')),
   );
