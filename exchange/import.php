@@ -5,6 +5,7 @@ require_once ABSPATH . "wp-admin/includes/media.php";
 require_once ABSPATH . "wp-admin/includes/file.php";
 require_once ABSPATH . "wp-admin/includes/image.php";
 
+if (!defined('WC1C_PRODUCT_DESCRIPTION_TO_CONTENT')) define('WC1C_PRODUCT_DESCRIPTION_TO_CONTENT', false);
 if (!defined('WC1C_PREVENT_CLEAN')) define('WC1C_PREVENT_CLEAN', false);
 
 function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $attrs) {
@@ -436,6 +437,11 @@ function wc1c_replace_property($is_full, $property, $order) {
 
 function wc1c_replace_post($guid, $post_type, $is_deleted, $is_draft, $post_title, $post_excerpt, $post_content, $post_meta, $category_taxonomy, $category_guids, $preserve_fields) {
   $post_id = wc1c_post_id_by_meta('_wc1c_guid', $guid);
+
+  if (WC1C_PRODUCT_DESCRIPTION_TO_CONTENT) {
+    $post_content = $post_excerpt;
+    $post_excerpt = null;
+  }
 
   $args = compact('post_type', 'post_title', 'post_excerpt', 'post_content');
 
