@@ -316,15 +316,14 @@ function wc1c_replace_document($document) {
   $document_services = array();
   foreach ($document['Товары'] as $i => $document_product) {
     foreach ($document_product['ЗначенияРеквизитов'] as $document_product_requisite) {
-      if ($document_product_requisite['Наименование'] != 'ВидНоменклатуры') continue;
+      if ($document_product_requisite['Наименование'] != 'ТипНоменклатуры') continue;
 
-      if ($document_product_requisite['Значение'] == 'Товар') {
-        $document_products[] = $document_product;
-      }
-      elseif ($document_product_requisite['Значение'] == 'Услуга') {
+      if ($document_product_requisite['Значение'] == 'Услуга') {
         $document_services[] = $document_product;
       }
-
+      else {
+        $document_products[] = $document_product;
+      }
       break;
     }
   }
