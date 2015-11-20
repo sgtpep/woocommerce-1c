@@ -88,8 +88,8 @@ function wc1c_error($message, $type = "Error", $no_exit = false) {
 }
 
 function wc1c_set_strict_mode() {
-  $error_reporting_level = !WC1C_SUPPRESS_NOTICES ? -1 : E_ALL & ~E_NOTICE;
-  error_reporting($error_reporting_level);
+  // $error_reporting_level = !WC1C_SUPPRESS_NOTICES ? -1 : E_ALL & ~E_NOTICE;
+  // error_reporting($error_reporting_level);
   set_error_handler('wc1c_strict_error_handler');
   set_exception_handler('wc1c_strict_exception_handler');
 }
@@ -114,23 +114,25 @@ function wc1c_set_output_callback() {
 
 function wc1c_strict_error_handler($errno, $errstr, $errfile, $errline, $errcontext) {
   if (error_reporting() === 0) return false;
+  if ($errno != E_ERROR) return false;
 
-  switch ($errno) {
-    case E_NOTICE:
-    case E_USER_NOTICE:
-      $type = "Notice";
-      break;
-    case E_WARNING:
-    case E_USER_WARNING:
-      $type = "Warning";
-      break;
-    case E_ERROR:
-    case E_USER_ERROR:
-      $type = "Fatal Error";
-      break;
-    default:
-      $type = "Unknown Error";
-  }
+  // switch ($errno) {
+  //   case E_NOTICE:
+  //   case E_USER_NOTICE:
+  //     $type = "Notice";
+  //     break;
+  //   case E_WARNING:
+  //   case E_USER_WARNING:
+  //     $type = "Warning";
+  //     break;
+  //   case E_ERROR:
+  //   case E_USER_ERROR:
+  //     $type = "Fatal Error";
+  //     break;
+  //   default:
+  //     $type = "Unknown Error";
+  // }
+  $type = "Fatal Error";
 
   $message = sprintf("%s in %s on line %d", $errstr, $errfile, $errline);
   wc1c_error($message, "PHP $type");
