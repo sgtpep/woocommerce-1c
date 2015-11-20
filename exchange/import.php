@@ -287,7 +287,7 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
   if ($term_id) $term = get_term($term_id, $taxonomy);
 
   if (!$term_id || !$term) {
-    $name = wc1c_unique_term_name($name);
+    // $name = wc1c_unique_term_name($name);
     $parent = $parent_guid ? wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$parent_guid") : null;
     $slug = wc1c_unique_term_slug($name);
     $args = array(
@@ -304,7 +304,7 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
   }
 
   if (empty($is_added)) {
-    if ($name != $term->name) $name = wc1c_unique_term_name($name);
+    // if ($name != $term->name) $name = wc1c_unique_term_name($name);
     $parent = $parent_guid ? wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$parent_guid") : null;
     $args = array(
       'name' => $name,
