@@ -163,7 +163,7 @@ foreach ($order_posts as $order_post) {
 
 $documents = apply_filters('wc1c_query_documents', $documents);
 
-echo '<?xml version="1.0" encoding="windows-1251"?>';
+echo '<?xml version="1.0" encoding="' . WC1C_XML_CHARSET . '"?>';
 ?>
 
 <КоммерческаяИнформация ВерсияСхемы="2.08" ДатаФормирования="<?php echo date("Y-m-dTH:i:s", WC1C_TIMESTAMP) ?>">

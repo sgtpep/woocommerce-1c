@@ -4,6 +4,7 @@ if (!defined('ABSPATH')) exit(__("The exchange using direct URL is not supported
 if (!defined('WC1C_SUPPRESS_NOTICES')) define('WC1C_SUPPRESS_NOTICES', false);
 if (!defined('WC1C_ZIP')) define('WC1C_ZIP', null);
 if (!defined('WC1C_FILE_LIMIT')) define('WC1C_FILE_LIMIT', null);
+if (!defined('WC1C_XML_CHARSET')) define('WC1C_XML_CHARSET', 'UTF-8');
 define('WC1C_TIMESTAMP', time());
 
 function wc1c_query_vars($query_vars) {
@@ -99,10 +100,12 @@ function wc1c_output_callback($buffer) {
   if (!headers_sent()) {
     $is_xml = @$_GET['mode'] == 'query';
     $content_type = !$is_xml || $wc1c_is_error ? 'text/plain' : 'text/xml';
-    header("Content-Type: $content_type; charset=windows-1251");
+    header("Content-Type: $content_type; charset=" . WC1C_XML_CHARSET);
   }
 
-  return mb_convert_encoding($buffer, "Windows-1251", "UTF-8");
+  if (WC1C_XML_CHARSET != 'UTF-8') $buffer = mb_convert_encoding($buffer, WC1C_XML_CHARSET, 'UTF-8');
+
+  return $buffer;
 }
 
 function wc1c_set_output_callback() {
