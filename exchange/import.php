@@ -327,6 +327,8 @@ function wc1c_replace_group($is_full, $group, $order, $groups) {
   if (!$group) return;
 
   wc1c_replace_term($is_full, $group['Ид'], $group['ИдРодителя'], $group['Наименование'], 'product_cat', $order);
+
+  return true;
 }
 
 function wc1c_unique_woocommerce_attribute_name($attribute_label) {
