@@ -7,6 +7,7 @@ require_once ABSPATH . "wp-admin/includes/image.php";
 
 if (!defined('WC1C_PRODUCT_DESCRIPTION_TO_CONTENT')) define('WC1C_PRODUCT_DESCRIPTION_TO_CONTENT', false);
 if (!defined('WC1C_PREVENT_CLEAN')) define('WC1C_PREVENT_CLEAN', false);
+if (!defined('WC1C_DISABLE_VARIATIONS')) define('WC1C_DISABLE_VARIATIONS', false);
 
 function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $attrs) {
   global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_requisite_properties, $wc1c_product;
@@ -184,8 +185,9 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
       }
     }
 
-    if (strpos($wc1c_product['Ид'], '#') === false) {
-      wc1c_replace_product($is_full, $wc1c_product);
+    if (strpos($wc1c_product['Ид'], '#') === false || WC1C_DISABLE_VARIATIONS) {
+      $guid = $wc1c_product['Ид'];
+      wc1c_replace_product($is_full, $guid, $wc1c_product);
     }
     else {
       $guid = $wc1c_product['Ид'];
@@ -594,7 +596,7 @@ function wc1c_replace_requisite_name_callback($matches) {
   return ' ' . mb_convert_case($matches[0], MB_CASE_LOWER, "UTF-8");
 }
 
-function wc1c_replace_product($is_full, $product) {
+function wc1c_replace_product($is_full, $guid, $product) {
   $product = apply_filters('wc1c_import_product_xml', $product, $is_full);
   if (!$product) return;
 
@@ -621,7 +623,7 @@ function wc1c_replace_product($is_full, $product) {
     '_manage_stock' => 'yes',
   );
 
-  list($is_added, $post_id, $post_meta) = wc1c_replace_post($product['Ид'], 'product', $is_deleted, $is_draft, $post_title, @$product['Описание'], $post_content, $post_meta, 'product_cat', @$product['Группы'], $preserve_fields);
+  list($is_added, $post_id, $post_meta) = wc1c_replace_post($guid, 'product', $is_deleted, $is_draft, $post_title, @$product['Описание'], $post_content, $post_meta, 'product_cat', @$product['Группы'], $preserve_fields);
 
   // if (isset($product['Пересчет']['Единица'])) {
   //   $quantity = wc1c_parse_decimal($product['Пересчет']['Единица']);

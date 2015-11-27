@@ -77,8 +77,9 @@ function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
     $wc1c_offer['ХарактеристикиТовара'][$i]['Наименование'] = preg_replace("/\s+\(.*\)$/", '', $wc1c_offer['ХарактеристикиТовара'][$i]['Наименование']);
   }
   elseif (@$names[$depth - 1] == 'Предложения' && $name == 'Предложение') {
-    if (strpos($wc1c_offer['Ид'], '#') === false) {
-      wc1c_replace_offer($is_full, $wc1c_offer['Ид'], $wc1c_offer);
+    if (strpos($wc1c_offer['Ид'], '#') === false || WC1C_DISABLE_VARIATIONS) {
+      $guid = $wc1c_offer['Ид'];
+      wc1c_replace_offer($is_full, $guid, $wc1c_offer);
     }
     else {
       $guid = $wc1c_offer['Ид'];
@@ -254,7 +255,7 @@ function wc1c_replace_suboffers($is_full, $suboffers, $are_products = false) {
   if ($are_products) {
     $product = $suboffers[0]['product'];
     $product['Ид'] = $product_guid;
-    $post_id = wc1c_replace_product($suboffers[0]['is_full'], $product);
+    $post_id = wc1c_replace_product($suboffers[0]['is_full'], $product_guid, $product);
   }
 
   $result = wp_set_post_terms($post_id, 'variable', 'product_type');
