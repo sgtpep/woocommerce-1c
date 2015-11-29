@@ -5,6 +5,7 @@ if (!defined('WC1C_SUPPRESS_NOTICES')) define('WC1C_SUPPRESS_NOTICES', false);
 if (!defined('WC1C_ZIP')) define('WC1C_ZIP', null);
 if (!defined('WC1C_FILE_LIMIT')) define('WC1C_FILE_LIMIT', null);
 if (!defined('WC1C_XML_CHARSET')) define('WC1C_XML_CHARSET', 'UTF-8');
+if (!defined('WC1C_DISABLE_VARIATIONS')) define('WC1C_DISABLE_VARIATIONS', false);
 define('WC1C_TIMESTAMP', time());
 
 function wc1c_query_vars($query_vars) {
