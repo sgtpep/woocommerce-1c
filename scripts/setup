@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -eu -o pipefail
+
+. ~/Scripts/development/woocommerce wc1c
+
+if [[ ! -d ~/Projects/wc1c ]]; then
+  svn co http://plugins.svn.wordpress.org/woocommerce-and-1centerprise-data-exchange/trunk/ ~/Projects/wc1c
+  ln -fsT ~/Projects/wc1c ./wp-content/plugins/woocommerce-and-1centerprise-data-exchange
+  wp plugin activate woocommerce-and-1centerprise-data-exchange
+fi
+
+mkdir -p ~/Projects/wc1c/uploads/catalog
+ln -fsT ~/Projects/wc1c/uploads ./wp-content/uploads/woocommerce-1c
