@@ -3,8 +3,9 @@ set -eu -o pipefail
 
 . ~/Scripts/development/woocommerce wc1c
 
-if [[ ! -d ~/Projects/wc1c ]]; then
-  svn co http://plugins.svn.wordpress.org/woocommerce-and-1centerprise-data-exchange/trunk/ ~/Projects/wc1c
+[[ -d ~/Projects/wc1c ]] || svn co http://plugins.svn.wordpress.org/woocommerce-and-1centerprise-data-exchange/trunk/ ~/Projects/wc1c
+
+if [[ ! -L ./wp-content/plugins/woocommerce-and-1centerprise-data-exchange ]]; then
   ln -fsT ~/Projects/wc1c ./wp-content/plugins/woocommerce-and-1centerprise-data-exchange
   wp plugin activate woocommerce-and-1centerprise-data-exchange
 fi
