@@ -166,7 +166,7 @@ $documents = apply_filters('wc1c_query_documents', $documents);
 echo '<?xml version="1.0" encoding="' . WC1C_XML_CHARSET . '"?>';
 ?>
 
-<КоммерческаяИнформация ВерсияСхемы="2.08" ДатаФормирования="<?php echo date("Y-m-dTH:i:s", WC1C_TIMESTAMP) ?>">
+<КоммерческаяИнформация ВерсияСхемы="2.05" ДатаФормирования="<?php echo date("Y-m-dTH:i:s", WC1C_TIMESTAMP) ?>">
   <?php foreach ($documents as $document): ?>
     <Документ>
       <Ид>wc1c#order#<?php echo $document['order_id'] ?></Ид>
@@ -185,6 +185,7 @@ echo '<?xml version="1.0" encoding="' . WC1C_XML_CHARSET . '"?>';
             <Роль><?php echo $type == 'billing' ? "Плательщик" : "Получатель" ?></Роль>
             <?php if (!empty($contragent['name'])): ?>
               <Наименование><?php echo $contragent['name'] ?></Наименование>
+              <ПолноеНаименование><?php echo $contragent['name'] ?></ПолноеНаименование>
             <?php endif ?>
             <?php if (!empty($contragent['first_name'])): ?>
               <Имя><?php echo $contragent['first_name'] ?></Имя>
