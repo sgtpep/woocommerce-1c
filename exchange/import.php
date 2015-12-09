@@ -234,13 +234,14 @@ function wc1c_term_id_by_meta($key, $value) {
   return $term_id;
 }
 
-function wc1c_unique_term_name($name) {
+function wc1c_unique_term_name($name, $taxonomy, $parent = null) {
   global $wpdb;
 
   $name = htmlspecialchars($name);
 
-  $sql = "SELECT * FROM $wpdb->terms WHERE name = %s LIMIT 1";
-  $term = $wpdb->get_row($wpdb->prepare($sql, $name));
+  $sql = "SELECT * FROM $wpdb->terms NATURAL JOIN $wpdb->term_taxonomy WHERE name = %s AND taxonomy = %s AND parent = %d LIMIT 1";
+  if (!$parent) $parent = 0;
+  $term = $wpdb->get_row($wpdb->prepare($sql, $name, $taxonomy, $parent));
   wc1c_check_wpdb_error();
   if (!$term) return $name;
 
@@ -249,13 +250,13 @@ function wc1c_unique_term_name($name) {
     $new_name = "$name ($number)";
     $number++;
 
-    $term = $wpdb->get_row($wpdb->prepare($sql, $new_name));
+    $term = $wpdb->get_row($wpdb->prepare($sql, $new_name, $taxonomy, $parent));
     wc1c_check_wpdb_error();
     if (!$term) return $new_name;
   }
 }
 
-function wc1c_unique_term_slug($slug) {
+function wc1c_unique_term_slug($slug, $taxonomy, $parent = null) {
   global $wpdb;
 
   while (true) {
@@ -265,8 +266,9 @@ function wc1c_unique_term_slug($slug) {
     $slug = mb_substr($slug, 0, mb_strlen($slug) - 3);
   }
 
-  $sql = "SELECT * FROM $wpdb->terms WHERE slug = %s LIMIT 1";
-  $term = $wpdb->get_row($wpdb->prepare($sql, $sanitized_slug));
+  $sql = "SELECT * FROM $wpdb->terms NATURAL JOIN $wpdb->term_taxonomy WHERE slug = %s AND taxonomy = %s AND parent = %d LIMIT 1";
+  if (!$parent) $parent = 0;
+  $term = $wpdb->get_row($wpdb->prepare($sql, $sanitized_slug, $taxonomy, $parent));
   wc1c_check_wpdb_error();
   if (!$term) return $slug;
 
@@ -276,7 +278,7 @@ function wc1c_unique_term_slug($slug) {
     $new_sanitized_slug = "$sanitized_slug-$number";
     $number++;
 
-    $term = $wpdb->get_row($wpdb->prepare($sql, $new_sanitized_slug));
+    $term = $wpdb->get_row($wpdb->prepare($sql, $new_sanitized_slug, $taxonomy, $parent));
     wc1c_check_wpdb_error();
     if (!$term) return $new_slug;
   }
@@ -288,10 +290,11 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
   $term_id = wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$guid");
   if ($term_id) $term = get_term($term_id, $taxonomy);
 
+  $parent = $parent_guid ? wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$parent_guid") : null;
+
   if (!$term_id || !$term) {
-    // $name = wc1c_unique_term_name($name);
-    $parent = $parent_guid ? wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$parent_guid") : null;
-    $slug = wc1c_unique_term_slug($name);
+    $name = wc1c_unique_term_name($name, $taxonomy, $parent);
+    $slug = wc1c_unique_term_slug($name, $taxonomy, $parent);
     $args = array(
       'slug' => $slug,
       'parent' => $parent,
@@ -306,7 +309,7 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
   }
 
   if (empty($is_added)) {
-    // if ($name != $term->name) $name = wc1c_unique_term_name($name);
+    if ($name != $term->name) $name = wc1c_unique_term_name($name, $taxonomy, $parent);
     $parent = $parent_guid ? wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$parent_guid") : null;
     $args = array(
       'name' => $name,
@@ -694,7 +697,7 @@ function wc1c_replace_product($is_full, $guid, $product) {
               foreach ($term_names as $term_name) {
                 $result = get_term_by('name', $term_name, $attribute['taxonomy'], ARRAY_A);
                 if (!$result) {
-                  $slug = wc1c_unique_term_slug($term_name);
+                  $slug = wc1c_unique_term_slug($term_name, $attribute['taxonomy']);
                   $args = array(
                     'slug' => $slug,
                   );
