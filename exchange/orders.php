@@ -74,10 +74,16 @@ function wc1c_orders_character_data_handler($is_full, $names, $depth, $name, $da
 }
 
 function wc1c_orders_end_element_handler($is_full, $names, $depth, $name) {
-  global $wc1c_document;
+  global $wpdb, $wc1c_document;
 
   if (@$names[$depth - 1] == 'КоммерческаяИнформация' && $name == 'Документ') {
     wc1c_replace_document($wc1c_document);
+  }
+  elseif (!$depth && $name == 'КоммерческаяИнформация') {
+    $wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_%'");
+    wc1c_check_wpdb_error();
+
+    do_action('wc1c_post_orders', $is_full);
   }
 }
 

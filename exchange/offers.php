@@ -48,7 +48,7 @@ function wc1c_offers_character_data_handler($is_full, $names, $depth, $name, $da
 }
 
 function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
-  global $wc1c_price_types, $wc1c_price_type, $wc1c_price_type, $wc1c_offer, $wc1c_suboffers, $wc1c_price;
+  global $wpdb, $wc1c_price_types, $wc1c_price_type, $wc1c_price_type, $wc1c_offer, $wc1c_suboffers, $wc1c_price;
 
   if (@$names[$depth - 1] == 'ПакетПредложений' && $name == 'ТипыЦен') {
     if (!WC1C_PRICE_TYPE) {
@@ -101,6 +101,9 @@ function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
     if ($wc1c_suboffers) wc1c_replace_suboffers($is_full, $wc1c_suboffers);
   }
   elseif (!$depth && $name == 'КоммерческаяИнформация') {
+    $wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_%'");
+    wc1c_check_wpdb_error();
+
     do_action('wc1c_post_offers', $is_full);
   }
 }

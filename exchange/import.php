@@ -140,7 +140,7 @@ function wc1c_import_character_data_handler($is_full, $names, $depth, $name, $da
 }
 
 function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
-  global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_requisite_properties, $wc1c_product, $wc1c_subproducts;
+  global $wpdb, $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_requisite_properties, $wc1c_product, $wc1c_subproducts;
 
   if (@$names[$depth - 1] == 'Группы' && $name == 'Группа') {
     if (empty($wc1c_groups[$wc1c_group_depth]['Группы'])) {
@@ -213,6 +213,9 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
     wc1c_clean_product_terms();
   }
   elseif (!$depth && $name == 'КоммерческаяИнформация') {
+    $wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_%'");
+    wc1c_check_wpdb_error();
+
     do_action('wc1c_post_import', $is_full);
   }
 }
