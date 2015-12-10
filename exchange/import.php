@@ -447,9 +447,10 @@ function wc1c_replace_property($is_full, $property, $order) {
 function wc1c_replace_post($guid, $post_type, $is_deleted, $is_draft, $post_title, $post_excerpt, $post_content, $post_meta, $category_taxonomy, $category_guids, $preserve_fields) {
   $post_id = wc1c_post_id_by_meta('_wc1c_guid', $guid);
 
+  if (!$post_excerpt) $post_excerpt = '';
   if (WC1C_PRODUCT_DESCRIPTION_TO_CONTENT) {
     $post_content = $post_excerpt;
-    $post_excerpt = null;
+    $post_excerpt = '';
   }
 
   $args = compact('post_type', 'post_title', 'post_excerpt', 'post_content');
