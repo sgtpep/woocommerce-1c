@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 set -eu -o pipefail
 
-project_dir=`readlink -f .`
-. ~/Scripts/development/woocommerce ${project_dir##*/}
+. ~/Scripts/development/woocommerce wc1c
 
 if [[ ! -L ./wp-content/plugins/woocommerce-and-1centerprise-data-exchange ]]; then
   ln -s ~/Projects/wc1c ./wp-content/plugins/woocommerce-and-1centerprise-data-exchange
