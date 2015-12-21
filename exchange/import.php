@@ -334,7 +334,8 @@ function wc1c_replace_group($is_full, $group, $order, $groups) {
   $group = apply_filters('wc1c_import_group_xml', $group, $parent_groups, $is_full);
   if (!$group) return;
 
-  wc1c_replace_term($is_full, $group['Ид'], $group['ИдРодителя'], $group['Наименование'], 'product_cat', $order);
+  $group_name = isset($group['Наименование']) ? $group['Наименование'] : $group['Ид'];
+  wc1c_replace_term($is_full, $group['Ид'], $group['ИдРодителя'], $group_name, 'product_cat', $order);
 
   return true;
 }
