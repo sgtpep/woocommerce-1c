@@ -218,6 +218,7 @@ function wc1c_replace_product_variation($guid, $parent_post_id, $order) {
       'post_status' => 'publish',
     ));
     $post_id = wp_insert_post($args, true);
+    wc1c_check_wpdb_error();
     wc1c_check_wp_error($post_id);
 
     update_post_meta($post_id, '_wc1c_guid', $guid);

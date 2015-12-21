@@ -303,6 +303,7 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
       'parent' => $parent,
     );
     $result = wp_insert_term($name, $taxonomy, $args);
+    wc1c_check_wpdb_error();
     wc1c_check_wp_error($result);
 
     $term_id = $result['term_id'];
@@ -461,6 +462,7 @@ function wc1c_replace_post($guid, $post_type, $is_deleted, $is_draft, $post_titl
       'post_status' => $is_draft ? 'draft' : 'publish',
     ));
     $post_id = wp_insert_post($args, true);
+    wc1c_check_wpdb_error();
     wc1c_check_wp_error($post_id);
 
     update_post_meta($post_id, '_visibility', 'visible');
@@ -706,6 +708,7 @@ function wc1c_replace_product($is_full, $guid, $product) {
                     'slug' => $slug,
                   );
                   $result = wp_insert_term($term_name, $attribute['taxonomy'], $args);
+                  wc1c_check_wpdb_error();
                   wc1c_check_wp_error($result);
                 }
                 $attribute_terms[] = $result['term_id'];
