@@ -259,33 +259,33 @@ function wc1c_unique_term_name($name, $taxonomy, $parent = null) {
   }
 }
 
-function wc1c_unique_term_slug($slug, $taxonomy, $parent = null) {
-  global $wpdb;
-
-  while (true) {
-    $sanitized_slug = sanitize_title($slug);
-    if (strlen($sanitized_slug) <= 195) break;
-
-    $slug = mb_substr($slug, 0, mb_strlen($slug) - 3);
-  }
-
-  $sql = "SELECT * FROM $wpdb->terms NATURAL JOIN $wpdb->term_taxonomy WHERE slug = %s AND taxonomy = %s AND parent = %d LIMIT 1";
-  if (!$parent) $parent = 0;
-  $term = $wpdb->get_row($wpdb->prepare($sql, $sanitized_slug, $taxonomy, $parent));
-  wc1c_check_wpdb_error();
-  if (!$term) return $slug;
-
-  $number = 2;
-  while (true) {
-    $new_slug = "$slug-$number";
-    $new_sanitized_slug = "$sanitized_slug-$number";
-    $number++;
-
-    $term = $wpdb->get_row($wpdb->prepare($sql, $new_sanitized_slug, $taxonomy, $parent));
-    wc1c_check_wpdb_error();
-    if (!$term) return $new_slug;
-  }
-}
+// function wc1c_unique_term_slug($slug, $taxonomy, $parent = null) {
+//   global $wpdb;
+//
+//   while (true) {
+//     $sanitized_slug = sanitize_title($slug);
+//     if (strlen($sanitized_slug) <= 195) break;
+//
+//     $slug = mb_substr($slug, 0, mb_strlen($slug) - 3);
+//   }
+//
+//   $sql = "SELECT * FROM $wpdb->terms NATURAL JOIN $wpdb->term_taxonomy WHERE slug = %s AND taxonomy = %s AND parent = %d LIMIT 1";
+//   if (!$parent) $parent = 0;
+//   $term = $wpdb->get_row($wpdb->prepare($sql, $sanitized_slug, $taxonomy, $parent));
+//   wc1c_check_wpdb_error();
+//   if (!$term) return $slug;
+//
+//   $number = 2;
+//   while (true) {
+//     $new_slug = "$slug-$number";
+//     $new_sanitized_slug = "$sanitized_slug-$number";
+//     $number++;
+//
+//     $term = $wpdb->get_row($wpdb->prepare($sql, $new_sanitized_slug, $taxonomy, $parent));
+//     wc1c_check_wpdb_error();
+//     if (!$term) return $new_slug;
+//   }
+// }
 
 function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $order) {
   global $wpdb;
@@ -297,9 +297,9 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
 
   if (!$term_id || !$term) {
     $name = wc1c_unique_term_name($name, $taxonomy, $parent);
-    $slug = wc1c_unique_term_slug($name, $taxonomy, $parent);
+    // $slug = wc1c_unique_term_slug($name, $taxonomy, $parent);
     $args = array(
-      'slug' => $slug,
+      // 'slug' => $slug,
       'parent' => $parent,
     );
     $result = wp_insert_term($name, $taxonomy, $args);
@@ -703,11 +703,12 @@ function wc1c_replace_product($is_full, $guid, $product) {
               foreach ($term_names as $term_name) {
                 $result = get_term_by('name', $term_name, $attribute['taxonomy'], ARRAY_A);
                 if (!$result) {
-                  $slug = wc1c_unique_term_slug($term_name, $attribute['taxonomy']);
-                  $args = array(
-                    'slug' => $slug,
-                  );
-                  $result = wp_insert_term($term_name, $attribute['taxonomy'], $args);
+                  // $slug = wc1c_unique_term_slug($term_name, $attribute['taxonomy']);
+                  // $args = array(
+                  //   'slug' => $slug,
+                  // );
+                  // $result = wp_insert_term($term_name, $attribute['taxonomy'], $args);
+                  $result = wp_insert_term($term_name, $attribute['taxonomy']);
                   wc1c_check_wpdb_error();
                   wc1c_check_wp_error($result);
                 }
