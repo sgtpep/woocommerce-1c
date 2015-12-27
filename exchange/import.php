@@ -287,6 +287,21 @@ function wc1c_unique_term_name($name, $taxonomy, $parent = null) {
 //   }
 // }
 
+function wc1c_wp_unique_term_slug($slug, $term, $original_slug) {
+  if (mb_strlen($slug) <= 200) return $slug;
+
+  do {
+    $slug = urldecode($slug);
+    $slug = mb_substr($slug, 0, mb_strlen($slug) - 1);
+    $slug = urlencode($slug);
+    $slug = wp_unique_term_slug($slug, $term);
+  }
+  while (mb_strlen($slug) > 200);
+
+  return $slug;
+}
+add_filter('wp_unique_term_slug', 'wc1c_wp_unique_term_slug', 10, 3);
+
 function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $order) {
   global $wpdb;
 
