@@ -2,7 +2,6 @@
 if (!defined('ABSPATH')) exit(__("The exchange using direct URL is not supported anymore. Please change your exchange URL to http://example.com/?wc1c=exchange.", 'woocommerce-1c'));
 
 if (!defined('WC1C_SUPPRESS_NOTICES')) define('WC1C_SUPPRESS_NOTICES', false);
-if (!defined('WC1C_ZIP')) define('WC1C_ZIP', null);
 if (!defined('WC1C_FILE_LIMIT')) define('WC1C_FILE_LIMIT', null);
 if (!defined('WC1C_XML_CHARSET')) define('WC1C_XML_CHARSET', 'UTF-8');
 if (!defined('WC1C_DISABLE_VARIATIONS')) define('WC1C_DISABLE_VARIATIONS', false);
@@ -231,16 +230,9 @@ function wc1c_filesize_to_bytes($filesize) {
 }
 
 function wc1c_mode_init($type) {
-  // wc1c_clean_data_dir($type);
-
-  if (is_null(WC1C_ZIP)) {
-    @exec("which unzip", $_, $status);
-    $is_zip = @$status === 0 || class_exists('ZipArchive');
-  }
-  else {
-    $is_zip = WC1C_ZIP;
-  }
-  $zip = $is_zip ? 'yes' : 'no';
+  @exec("which unzip", $_, $status);
+  $is_zip = @$status === 0 || class_exists('ZipArchive');
+  if (!$is_zip) wc1c_error("The PHP extension zip is required.");
 
   $file_limits = array(
     wc1c_filesize_to_bytes('10M'),
@@ -255,7 +247,7 @@ function wc1c_mode_init($type) {
   if (WC1C_FILE_LIMIT) $file_limits[] = wc1c_filesize_to_bytes(WC1C_FILE_LIMIT);
   $file_limit = min($file_limits);
 
-  exit("zip=$zip\nfile_limit=$file_limit");
+  exit("zip=yes\nfile_limit=$file_limit");
 }
 
 function wc1c_mode_file($type, $filename) {
