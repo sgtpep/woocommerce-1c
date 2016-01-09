@@ -632,11 +632,11 @@ function wc1c_replace_product($is_full, $guid, $product) {
   $post_title = @$product['Наименование'];
   $post_content = '';
   foreach ($product['ЗначенияРеквизитов'] as $i => $requisite) {
-    if ($requisite['Наименование'] == "Полное наименование" && @$requisite['Значение']) {
+    if ($requisite['Наименование'] == "Полное наименование" && @$requisite['Значение'][0]) {
       $post_title = $requisite['Значение'][0];
       unset($product['ЗначенияРеквизитов'][$i]);
     }
-    elseif ($requisite['Наименование'] == "ОписаниеВФорматеHTML" && @$requisite['Значение']) {
+    elseif ($requisite['Наименование'] == "ОписаниеВФорматеHTML" && @$requisite['Значение'][0]) {
       $post_content = $requisite['Значение'][0];
       unset($product['ЗначенияРеквизитов'][$i]);
     }
