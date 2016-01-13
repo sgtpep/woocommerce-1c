@@ -301,7 +301,7 @@ function wc1c_check_wpdb_error() {
 
 function wc1c_disable_time_limit() {
   $disabled_functions = explode(',', ini_get('disable_functions'));
-  if (!in_array('set_time_limit', $disabled_functions)) set_time_limit(0);
+  if (!in_array('set_time_limit', $disabled_functions)) @set_time_limit(0);
 }
 
 function wc1c_set_transaction_mode() {
