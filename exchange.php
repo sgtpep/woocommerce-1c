@@ -397,9 +397,12 @@ function wc1c_xml_parse($fp) {
   xml_parser_free($parser);
 }
 
-function wc1c_xml_is_full($fp) {
+function wc1c_xml_parse_head($fp) {
   $is_full = null;
+  $is_moysklad = null;
   while (($buffer = fgets($fp)) !== false) {
+    if (strpos($buffer, " СинхронизацияТоваров=") !== false) $is_moysklad = true;
+
     if (strpos($buffer, " СодержитТолькоИзменения=") === false && strpos($buffer, "<СодержитТолькоИзменения>") === false) continue;
 
     $is_full = strpos($buffer, " СодержитТолькоИзменения=\"false\"") !== false || strpos($buffer, "<СодержитТолькоИзменения>false<") !== false;
@@ -411,11 +414,11 @@ function wc1c_xml_is_full($fp) {
 
   rewind($fp) or wc1c_error(sprintf("Failed to rewind on file %s", $filename));
 
-  return $is_full;
+  return array($is_full, $is_moysklad);
 }
 
 function wc1c_mode_import($type, $filename, $namespace = null) {
-  global $wc1c_namespace, $wc1c_is_full, $wc1c_names, $wc1c_depth;
+  global $wc1c_namespace, $wc1c_is_full, $wc1c_is_moysklad, $wc1c_names, $wc1c_depth;
 
   if ($type == 'catalog') wc1c_unpack_files($type);
 
@@ -429,7 +432,7 @@ function wc1c_mode_import($type, $filename, $namespace = null) {
   if (!in_array($namespace, array('import', 'offers', 'orders'))) wc1c_error(sprintf("Unknown import file type: %s", $namespace));
 
   $wc1c_namespace = $namespace;
-  $wc1c_is_full = wc1c_xml_is_full($fp);
+  list($wc1c_is_full, $wc1c_is_moysklad) = wc1c_xml_parse_head($fp);
   $wc1c_names = array();
   $wc1c_depth = -1;
 

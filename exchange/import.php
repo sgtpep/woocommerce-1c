@@ -621,6 +621,8 @@ function wc1c_replace_requisite_name_callback($matches) {
 }
 
 function wc1c_replace_product($is_full, $guid, $product) {
+  global $wc1c_is_moysklad;
+
   $product = apply_filters('wc1c_import_product_xml', $product, $is_full);
   if (!$product) return;
 
@@ -633,7 +635,9 @@ function wc1c_replace_product($is_full, $guid, $product) {
   $post_content = '';
   foreach ($product['ЗначенияРеквизитов'] as $i => $requisite) {
     if ($requisite['Наименование'] == "Полное наименование" && @$requisite['Значение'][0]) {
-      $post_title = $requisite['Значение'][0];
+      $value = $requisite['Значение'][0];
+      if ($wc1c_is_moysklad) $post_content = $value;
+      else $post_title = $value;
       unset($product['ЗначенияРеквизитов'][$i]);
     }
     elseif ($requisite['Наименование'] == "ОписаниеВФорматеHTML" && @$requisite['Значение'][0]) {
