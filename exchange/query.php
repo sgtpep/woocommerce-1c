@@ -1,6 +1,8 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
+if (!defined('WC1C_CURRENCY')) define('WC1C_CURRENCY', null);
+
 $order_statuses = array_keys(wc_get_order_statuses());
 $order_posts = get_posts(array(
   'post_type' => 'shop_order',
@@ -142,7 +144,9 @@ foreach ($order_posts as $order_post) {
     $order_status_name = wc_get_order_status_name($order->status);
   }
 
-  $document_currency = get_option('wc1c_currency', @$order_meta['_order_currency']);
+  if (WC1C_CURRENCY) $document_currency = WC1C_CURRENCY;
+  else $document_currency = get_option('wc1c_currency', @$order_meta['_order_currency']);
+
   $document = array(
     'order_id' => $order_post->ID,
     'currency' => $document_currency,
