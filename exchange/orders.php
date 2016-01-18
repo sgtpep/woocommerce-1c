@@ -129,7 +129,7 @@ function wc1c_replace_document_products($order, $document_products) {
       $total = wc1c_parse_decimal($document_product['Сумма']);
     }
     else {
-      $price = wc1c_parse_decimal($document_product['ЦенаЗаЕдиницу']);
+      $price = wc1c_parse_decimal(@$document_product['ЦенаЗаЕдиницу']);
       $total = $price * $quantity;
     }
 
