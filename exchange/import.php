@@ -302,7 +302,7 @@ function wc1c_wp_unique_term_slug($slug, $term, $original_slug) {
 }
 add_filter('wp_unique_term_slug', 'wc1c_wp_unique_term_slug', 10, 3);
 
-function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $order) {
+function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $order, $use_guid_as_slug = false) {
   global $wpdb;
 
   $term_id = wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$guid");
@@ -317,6 +317,7 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
       // 'slug' => $slug,
       'parent' => $parent,
     );
+    if ($use_guid_as_slug) $args['slug'] = $guid;
     $result = wp_insert_term($name, $taxonomy, $args);
     wc1c_check_wpdb_error();
     wc1c_check_wp_error($result);
@@ -434,7 +435,7 @@ function wc1c_replace_woocommerce_attribute($is_full, $guid, $attribute_label, $
 function wc1c_replace_property_option($property_option, $attribute_taxonomy, $order) {
   if (!isset($property_option['ИдЗначения'], $property_option['Значение'])) return;
 
-  wc1c_replace_term(true, $property_option['ИдЗначения'], null, $property_option['Значение'], $attribute_taxonomy, $order);
+  wc1c_replace_term(true, $property_option['ИдЗначения'], null, $property_option['Значение'], $attribute_taxonomy, $order, true);
 }
 
 function wc1c_replace_property($is_full, $property, $order) {
