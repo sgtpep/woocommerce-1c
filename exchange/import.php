@@ -652,7 +652,8 @@ function wc1c_replace_product($is_full, $guid, $product) {
     '_manage_stock' => 'yes',
   );
 
-  list($is_added, $post_id, $post_meta) = wc1c_replace_post($guid, 'product', $is_deleted, $is_draft, $post_title, @$product['Описание'], $post_content, $post_meta, 'product_cat', @$product['Группы'], $preserve_fields);
+  $description = isset($product['Описание']) ? $product['Описание'] : '';
+  list($is_added, $post_id, $post_meta) = wc1c_replace_post($guid, 'product', $is_deleted, $is_draft, $post_title, $description, $post_content, $post_meta, 'product_cat', @$product['Группы'], $preserve_fields);
 
   // if (isset($product['Пересчет']['Единица'])) {
   //   $quantity = wc1c_parse_decimal($product['Пересчет']['Единица']);
