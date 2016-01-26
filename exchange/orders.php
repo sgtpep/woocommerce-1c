@@ -239,7 +239,7 @@ function wc1c_replace_document($document) {
       'customer_note' => @$document['Комментарий'],
     );
 
-    $contragent_name = $document['Контрагенты'][0]['Наименование'];
+    $contragent_name = @$document['Контрагенты'][0]['Наименование'];
     if ($contragent_name == "Гость") {
       $user_id = 0;
     }
