@@ -258,16 +258,18 @@ function wc1c_mode_file($type, $filename) {
 
     $source_fp = fopen("php://input", 'r') or wc1c_error("Failed to open input file");
 
+    $dest_fp = fopen($path, 'a') or wc1c_error(sprintf("Failed to open file %s", $filename));
+    flock($dest_fp, LOCK_EX) or wc1c_error(sprintf("Failed to lock file %s", $filename));
+
     if (preg_match("/\.xml$/", $filename) && is_file($path)) {
       $data = fread($source_fp, 10);
       if (strpos($data, "<?xml ") !== false) {
-        rewind($source_fp) or wc1c_error(sprintf("Failed to rewind on file %s", $path));
         unlink($path) or wc1c_error("Failed to delete a file");
       }
+      else {
+        if (fwrite($dest_fp, $data) === false) wc1c_error(sprintf("Failed to write to file %s", $filename));
+      }
     }
-
-    $dest_fp = fopen($path, 'a') or wc1c_error(sprintf("Failed to open file %s", $filename));
-    flock($dest_fp, LOCK_EX) or wc1c_error(sprintf("Failed to lock file %s", $filename));
 
     while (!feof($source_fp)) {
       if (($data = fread($source_fp, 8192)) === false) wc1c_error("Failed to read from input file");
