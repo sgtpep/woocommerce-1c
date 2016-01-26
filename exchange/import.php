@@ -633,6 +633,8 @@ function wc1c_replace_product($is_full, $guid, $product) {
   $is_draft = @$product['Статус'] == 'Черновик';
 
   $post_title = @$product['Наименование'];
+  if (!$post_title) return;
+
   $post_content = '';
   foreach ($product['ЗначенияРеквизитов'] as $i => $requisite) {
     if ($requisite['Наименование'] == "Полное наименование" && @$requisite['Значение'][0]) {
