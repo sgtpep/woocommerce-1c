@@ -3,6 +3,7 @@ if (!defined('ABSPATH')) exit;
 
 if (!defined('WC1C_CURRENCY')) define('WC1C_CURRENCY', null);
 
+WC();
 $order_statuses = array_keys(wc_get_order_statuses());
 $order_posts = get_posts(array(
   'post_type' => 'shop_order',
