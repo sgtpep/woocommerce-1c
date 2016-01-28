@@ -2,6 +2,7 @@
 if (!defined('ABSPATH')) exit;
 
 if (!defined('WC1C_PRICE_TYPE')) define('WC1C_PRICE_TYPE', null);
+if (!defined('WC1C_PRESERVE_PRODUCT_VARIATIONS')) define('WC1C_PRESERVE_PRODUCT_VARIATIONS', false);
 
 function wc1c_offers_start_element_handler($is_full, $names, $depth, $name, $attrs) {
   global $wc1c_price_types, $wc1c_offer, $wc1c_price;
@@ -340,8 +341,10 @@ function wc1c_replace_suboffers($is_full, $suboffers, $are_products = false) {
     }
   }
 
-  $deleted_product_variation_ids = array_diff($current_product_variation_ids, $product_variation_ids);
-  foreach ($deleted_product_variation_ids as $deleted_product_variation_id) {
-    wp_delete_post($deleted_product_variation_id, true);
+  if (!WC1C_PRESERVE_PRODUCT_VARIATIONS) {
+    $deleted_product_variation_ids = array_diff($current_product_variation_ids, $product_variation_ids);
+    foreach ($deleted_product_variation_ids as $deleted_product_variation_id) {
+      wp_delete_post($deleted_product_variation_id, true);
+    }
   }
 }
