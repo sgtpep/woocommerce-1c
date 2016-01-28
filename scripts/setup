@@ -3,10 +3,12 @@ set -eu -o pipefail
 
 . ~/Scripts/development/woocommerce wc1c
 
+project_dir=${BASH_SOURCE[0]%/*/*}
+
 if [[ ! -L ./wp-content/plugins/woocommerce-and-1centerprise-data-exchange ]]; then
-  ln -s ~/Projects/wc1c ./wp-content/plugins/woocommerce-and-1centerprise-data-exchange
+  ln -s $project_dir ./wp-content/plugins/woocommerce-and-1centerprise-data-exchange
   wp plugin activate woocommerce-and-1centerprise-data-exchange
 fi
 
-mkdir -p ~/Projects/wc1c/uploads/catalog
-ln -fsT ~/Projects/wc1c/uploads ./wp-content/uploads/woocommerce-1c
+mkdir -p $project_dir/uploads/catalog
+ln -fsT $project_dir/uploads ./wp-content/uploads/woocommerce-1c
