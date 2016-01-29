@@ -256,31 +256,20 @@ function wc1c_mode_file($type, $filename) {
     $path_dir = dirname($path);
     if (!is_dir($path_dir)) mkdir($path_dir, 0777, true) or wc1c_error(sprintf("Failed to create directories for file %s", $filename));
 
-    $source_fp = fopen("php://input", 'r') or wc1c_error("Failed to open input file");
+    $input_file = fopen("php://input", 'r');
+    $temp_path = "$path~";
+    $temp_file = fopen($temp_path, 'w');
+    stream_copy_to_stream($input_file, $temp_file);
 
-    $dest_fp = fopen($path, 'a') or wc1c_error(sprintf("Failed to open file %s", $filename));
-    flock($dest_fp, LOCK_EX) or wc1c_error(sprintf("Failed to lock file %s", $filename));
-
-    if (preg_match("/\.xml$/", $filename) && is_file($path)) {
-      $data = fread($source_fp, 10);
-      if (strpos($data, "<?xml ") !== false) {
-        unlink($path) or wc1c_error("Failed to delete a file");
-      }
-      else {
-        if (fwrite($dest_fp, $data) === false) wc1c_error(sprintf("Failed to write to file %s", $filename));
-      }
+    if (is_file($path)) {
+      $temp_header = file_get_contents($temp_path, false, null, 0, 32);
+      if (strpos($temp_header, "<?xml ") !== false) unlink($path);
     }
 
-    while (!feof($source_fp)) {
-      if (($data = fread($source_fp, 8192)) === false) wc1c_error("Failed to read from input file");
-      if (fwrite($dest_fp, $data) === false) wc1c_error(sprintf("Failed to write to file %s", $filename));
-    }
-
-    fflush($dest_fp) or wc1c_error(sprintf("Failed to flush file %s", $filename));
-    flock($dest_fp, LOCK_UN) or wc1c_error(sprintf("Failed to unlock file %s", $filename));
-
-    fclose($source_fp) or wc1c_error("Failed to close input file");
-    fclose($dest_fp) or wc1c_error(sprintf("Failed to close file %s", $filename));
+    $temp_file = fopen($temp_path, 'r');
+    $file = fopen($path, 'a');
+    stream_copy_to_stream($temp_file, $file);
+    unlink($temp_path);
   }
 
   if ($type == 'catalog') {
