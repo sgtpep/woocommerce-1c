@@ -357,6 +357,13 @@ function wc1c_xml_start_element_handler($parser, $name, $attrs) {
   $wc1c_depth++;
 
   call_user_func("wc1c_{$wc1c_namespace}_start_element_handler", $wc1c_is_full, $wc1c_names, $wc1c_depth, $name, $attrs);
+
+  static $element_number = 0;
+  $element_number++;
+  if ($element_number > 1000) {
+    $element_number = 0;
+    wp_cache_flush();
+  }
 }
 
 function wc1c_xml_character_data_handler($parser, $data) {
