@@ -29,8 +29,8 @@ Provides data exchange between WooCommerce plugin and business application "1C:E
 
 Пожалуйста, перед использованием плагина прочитайте следующее:
 
-* [инструкцию по установке](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/installation/)
-* [часто задаваемые вопросы](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/faq/)
+* [инструкцию по установке](./installation/)
+* [часто задаваемые вопросы](./faq/)
 
 По возникшим вопросам и предложениям можно [связаться с автором](http://danil.iamsync.com/).
 
@@ -51,8 +51,8 @@ Features:
 
 Please, read the following before using this plugin:
 
-* [installation instructions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/installation/)
-* [frequently asked questions](https://wordpress.org/plugins/woocommerce-and-1centerprise-data-exchange/faq/)
+* [installation instructions](./installation/)
+* [frequently asked questions](./faq/)
 
 If you have any question or proposal, please [contact the author](http://danil.iamsync.com/).
 
@@ -142,7 +142,7 @@ along with "WooCommerce and 1C:Enterprise Data Exchange". If not, see http://www
   * Если заказ в 1С проведен, то у заказа на сайте выставляется статус "Выполнен".
   * Иначе – оставляет у заказа на сайте статус по умолчанию "На удержании".
 
-= Где можно найти исходники плагина?
+= Где можно найти исходники плагина? =
 
 Исходники размещаются в предоставляемом WordPress.org [svn-репозитории](../developers/).
 
