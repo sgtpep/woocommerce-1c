@@ -144,7 +144,7 @@ along with "WooCommerce and 1C:Enterprise Data Exchange". If not, see http://www
 
 = Где можно найти исходники плагина? =
 
-Исходники размещаются в предоставляемом WordPress.org [svn-репозитории](../developers/).
+Исходники размещаются в предоставляемом WordPress.org [svn-репозитории](../developers/). Также имеется [git-зеркало](https://github.com/sgtpep/woocommerce-1c).
 
 == Screenshots ==
 
