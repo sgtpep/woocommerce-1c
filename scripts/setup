@@ -11,4 +11,6 @@ if [[ ! -L ./wp-content/plugins/woocommerce-and-1centerprise-data-exchange ]]; t
 fi
 
 mkdir -p $project_dir/uploads/catalog
+
+rm -fr ./wp-content/uploads/woocommerce-1c
 ln -fsT $project_dir/uploads ./wp-content/uploads/woocommerce-1c
