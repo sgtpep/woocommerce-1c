@@ -3,7 +3,7 @@ set -eu -o pipefail
 
 project_dir=$PWD
 
-. ~/Scripts/development/woocommerce wc1c
+. ~/Scripts/development/woocommerce woocommerce-1c
 
 if [[ ! -L ./wp-content/plugins/woocommerce-and-1centerprise-data-exchange ]]; then
   ln -s $project_dir ./wp-content/plugins/woocommerce-and-1centerprise-data-exchange
