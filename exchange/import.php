@@ -462,7 +462,7 @@ function wc1c_replace_property($is_full, $property, $order) {
   return $attribute['taxonomy'];
 }
 
-function wc1c_replace_post($guid, $post_type, $is_deleted, $is_draft, $post_title, $post_excerpt, $post_content, $post_meta, $category_taxonomy, $category_guids, $preserve_fields) {
+function wc1c_replace_post($guid, $post_type, $is_deleted, $is_draft, $post_title, $post_name, $post_excerpt, $post_content, $post_meta, $category_taxonomy, $category_guids, $preserve_fields) {
   $post_id = wc1c_post_id_by_meta('_wc1c_guid', $guid);
 
   if (!$post_excerpt) $post_excerpt = '';
@@ -475,7 +475,7 @@ function wc1c_replace_post($guid, $post_type, $is_deleted, $is_draft, $post_titl
 
   if (!$post_id) {
     $args = array_merge($args, array(
-      'post_name' => sanitize_title($post_title),
+      'post_name' => $post_name,
       'post_status' => $is_draft ? 'draft' : 'publish',
     ));
     $post_id = wp_insert_post($args, true);
@@ -654,8 +654,11 @@ function wc1c_replace_product($is_full, $guid, $product) {
     '_manage_stock' => 'yes',
   );
 
+  $post_name = sanitize_title($post_title);
+  $post_name = apply_filters('wc1c_import_product_slug', $post_name, $product, $is_full);
+
   $description = isset($product['Описание']) ? $product['Описание'] : '';
-  list($is_added, $post_id, $post_meta) = wc1c_replace_post($guid, 'product', $is_deleted, $is_draft, $post_title, $description, $post_content, $post_meta, 'product_cat', @$product['Группы'], $preserve_fields);
+  list($is_added, $post_id, $post_meta) = wc1c_replace_post($guid, 'product', $is_deleted, $is_draft, $post_title, $post_name, $description, $post_content, $post_meta, 'product_cat', @$product['Группы'], $preserve_fields);
 
   // if (isset($product['Пересчет']['Единица'])) {
   //   $quantity = wc1c_parse_decimal($product['Пересчет']['Единица']);
