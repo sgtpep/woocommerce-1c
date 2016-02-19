@@ -16,7 +16,9 @@ Provides data exchange between WooCommerce plugin and business application "1C:E
 
 Предоставляет обмен данными между плагином для электронной коммерции WooCommerce и приложением для бизнеса "1C:Предприятие 8. Управление торговлей" (и совместимыми).
 
-> *Внимание!* В текущей версии изменился рекомендуемый адрес обмена. Необходимо сменить адрес обмена на один из адресов вида: http://example.com/?wc1c=exchange (рекомендуется) или http://example.com/wc1c/exchange.
+> Для достижения корректной работы плагина могут потребоваться базовые навыки администрирования веб-серверов (просмотр логов, изменение настроек php и веб-серверов и др.) А настройка плагина осуществляется добавлением в `functions.php` в папке активной темы констант (посмотреть доступные можно командой: `grep -r "define('WC1C_"`) и функций [фильтров и действий](https://codex.wordpress.org/Plugin_API) (посмотреть доступные можно командой: `grep -r "do_action\|apply_filters"`).
+
+> Нужно проще и с поддержкой? Попробуйте [Товаромен](https://www.tovaromen.ru/) — сервис обмена данными между 1С:Предприятием и WooCommerce.
 
 Особенности:
 
@@ -31,8 +33,6 @@ Provides data exchange between WooCommerce plugin and business application "1C:E
 
 * [инструкцию по установке](./installation/)
 * [часто задаваемые вопросы](./faq/)
-
-По возникшим вопросам и предложениям можно [связаться с автором](http://danil.iamsync.com/).
 
 Поддержать разработку и автора можно взносом через [банковскую карту или Яндекс.Деньги](https://money.yandex.ru/embed/donate.xml?account=410011766586472&quickpay=donate&payment-type-choice=on&default-sum=1000&targets=%D0%9F%D0%BB%D0%B0%D0%B3%D0%B8%D0%BD+%22%D0%9E%D0%B1%D0%BC%D0%B5%D0%BD+%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%BC+%D0%BC%D0%B5%D0%B6%D0%B4%D1%83+WooCommerce+%D0%B8+1%D0%A1%3A%D0%9F%D1%80%D0%B5%D0%B4%D0%BF%D1%80%D0%B8%D1%8F%D1%82%D0%B8%D0%B5%D0%BC%22&target-visibility=on&project-name=&project-site=https%3A%2F%2Fwordpress.org%2Fplugins%2Fwoocommerce-and-1centerprise-data-exchange%2F&button-text=05&fio=on&mail=on&successURL=).
 
@@ -53,8 +53,6 @@ Please, read the following before using this plugin:
 
 * [installation instructions](./installation/)
 * [frequently asked questions](./faq/)
-
-If you have any question or proposal, please [contact the author](http://danil.iamsync.com/).
 
 = License =
 

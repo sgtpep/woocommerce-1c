@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce 1C:Enterprise Integration 0.1-alpha\n"
-"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/woocommerce-and-1centerprise-data-exchange/\n"
-"POT-Creation-Date: 2015-02-19 14:04:13+00:00\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-1c\n"
+"POT-Creation-Date: 2016-02-19 08:35:29+00:00\n"
 "PO-Revision-Date: 2015-09-22 15:39+0300\n"
 "Last-Translator: Danil Semelenov <mail@danil.mobi>\n"
 "Language-Team: Danil Semelenov <mail@danil.mobi>\n"
@@ -14,49 +14,59 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.4\n"
 
-#: admin.php:19 admin.php:51 admin.php:68
+#: admin.php:19 admin.php:51 admin.php:68 admin.php:87
 msgid "1C Id"
 msgstr "Ид. 1С"
 
-#: admin.php:115
-msgid "Request For Premium Customer Support"
-msgstr "Запросить пользовательскую премиум-поддержку"
-
-#: admin.php:115
-msgid "Premium Support"
-msgstr "Премиум-поддержка"
-
-#: admin.php:125
+#: admin.php:135 admin.php:145
 msgid "Say thank you to plugin author"
 msgstr "Сказать спасибо автору плагина"
 
-#: admin.php:125
+#: admin.php:135 admin.php:145
 msgid "Say thank you!"
 msgstr "Сказать спасибо!"
 
-#: admin.php:133
+#: admin.php:153
 msgid "1C"
 msgstr "1С"
 
-#: admin.php:134
+#: admin.php:154
 msgid "Settings"
 msgstr "Настройки"
 
-#: admin.php:135
+#: admin.php:155
 msgid "TODO"
 msgstr "TODO"
 
+#: exchange.php:2
+msgid ""
+"The exchange using direct URL is not supported anymore. Please change your "
+"exchange URL to http://example.com/?wc1c=exchange."
+msgstr ""
+
 #: woocommerce-1c.php:29
-msgid "Plugin <strong>%s</strong> requires plugin <strong>WooCommerce</strong> to be installed and activated."
-msgstr "Плагин <strong>%s</strong> требует установки и активации плагина <strong>WooCommerce</strong>."
+msgid ""
+"Plugin <strong>%s</strong> requires plugin <strong>WooCommerce</strong> to "
+"be installed and activated."
+msgstr ""
+"Плагин <strong>%s</strong> требует установки и активации плагина "
+"<strong>WooCommerce</strong>."
 
 #. Plugin Name of the plugin/theme
-msgid "WooCommerce and 1C:Enterprise (1С:Предприятие) Data Exchange"
+msgid "WooCommerce and 1C:Enterprise/1С:Предприятие Data Exchange"
 msgstr "Обмен данным между WooCommerce и 1С:Предприятием"
 
 #. Description of the plugin/theme
-msgid "Provides data exchange between eCommerce plugin WooCommerce and business application \"1C:Enterprise 8. Trade Management\". If you find the plugin useful you could always <a href=\"https://money.yandex.ru/embed/donate.xml?account=410011766586472&quickpay=donate&payment-type-choice=on&default-sum=1000&targets=%D0%9F%D0%BB%D0%B0%D0%B3%D0%B8%D0%BD+%22%D0%9E%D0%B1%D0%BC%D0%B5%D0%BD+%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%BC+%D0%BC%D0%B5%D0%B6%D0%B4%D1%83+WooCommerce+%D0%B8+1%D0%A1%3A%D0%9F%D1%80%D0%B5%D0%B4%D0%BF%D1%80%D0%B8%D1%8F%D1%82%D0%B8%D0%B5%D0%BC%22&target-visibility=on&project-name=&project-site=https%3A%2F%2Fwordpress.org%2Fplugins%2Fwoocommerce-and-1centerprise-data-exchange%2F&button-text=05&fio=on&mail=on&successURL=\">say \"thanks you\" to the author</a>.</p>"
-msgstr "Предоставляет обмен данными между плагином для электронной коммерции WooCommerce и приложением для бизнеса \"1C:Предприятие 8. Управление торговлей\". Если плагин оказался полезным, то всегда можно <a href=\"https://money.yandex.ru/embed/donate.xml?account=410011766586472&quickpay=donate&payment-type-choice=on&default-sum=1000&targets=%D0%9F%D0%BB%D0%B0%D0%B3%D0%B8%D0%BD+%22%D0%9E%D0%B1%D0%BC%D0%B5%D0%BD+%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%BC+%D0%BC%D0%B5%D0%B6%D0%B4%D1%83+WooCommerce+%D0%B8+1%D0%A1%3A%D0%9F%D1%80%D0%B5%D0%B4%D0%BF%D1%80%D0%B8%D1%8F%D1%82%D0%B8%D0%B5%D0%BC%22&target-visibility=on&project-name=&project-site=https%3A%2F%2Fwordpress.org%2Fplugins%2Fwoocommerce-and-1centerprise-data-exchange%2F&button-text=05&fio=on&mail=on&successURL=\">поблагодарить автора</a>.</p>"
+msgid ""
+"Provides data exchange between eCommerce plugin WooCommerce and business "
+"application \"1C:Enterprise 8. Trade Management\". Try also <a href="
+"\"https://www.tovaromen.ru/\">Tovaromen</a> — the service for data exchange "
+"between 1C:Enterprise and WooCommerce."
+msgstr ""
+"Предоставляет обмен данными между плагином для электронной коммерции "
+"WooCommerce и приложением для бизнеса \"1C:Предприятие 8. Управление "
+"торговлей\". Попробуйте также <a href=\"https://www.tovaromen.ru/\">"
+"Товаромен</a> — сервис обмена данными между 1С:Предприятием и WooCommerce."
 
 #. Author of the plugin/theme
 msgid "Danil Semelenov"
@@ -65,6 +75,3 @@ msgstr "Данил Семеленов"
 #. Author URI of the plugin/theme
 msgid "mailto:mail@danil.mobi"
 msgstr "mailto:mail@danil.mobi"
-
-#~ msgid "View Settings"
-#~ msgstr "Посмотреть настройки"
