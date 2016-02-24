@@ -801,6 +801,23 @@ function wc1c_replace_product($is_full, $guid, $product) {
     );
   }
 
+  foreach ($product['ХарактеристикиТовара'] as $characteristic) {
+    $attribute_values = @$characteristic['Значение'];
+    if (!$attribute_values) continue;
+
+    $product_attribute_name = $characteristic['Наименование'];
+    $product_attribute_key = sanitize_title($product_attribute_name);
+    $product_attribute_position = count($product_attributes);
+    $product_attributes[$product_attribute_key] = array(
+      'name' => wc_clean($product_attribute_name),
+      'value' => implode(" | ", $attribute_values),
+      'position' => $product_attribute_position,
+      'is_visible' => 1,
+      'is_variation' => 0,
+      'is_taxonomy' => 0,
+    );
+  }
+
   if (!in_array('attributes', $preserve_fields)) {
     $old_product_attributes = array_diff_key($current_product_attributes, $product_attributes);
     $old_taxonomies = array();
