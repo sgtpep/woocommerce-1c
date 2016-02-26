@@ -802,15 +802,15 @@ function wc1c_replace_product($is_full, $guid, $product) {
   }
 
   foreach ($product['ХарактеристикиТовара'] as $characteristic) {
-    $attribute_values = @$characteristic['Значение'];
-    if (!$attribute_values) continue;
+    $attribute_value = @$characteristic['Значение'];
+    if (!$attribute_value) continue;
 
     $product_attribute_name = $characteristic['Наименование'];
     $product_attribute_key = sanitize_title($product_attribute_name);
     $product_attribute_position = count($product_attributes);
     $product_attributes[$product_attribute_key] = array(
       'name' => wc_clean($product_attribute_name),
-      'value' => implode(" | ", $attribute_values),
+      'value' => $attribute_value,
       'position' => $product_attribute_position,
       'is_visible' => 1,
       'is_variation' => 0,
