@@ -263,8 +263,10 @@ function wc1c_replace_suboffers($is_full, $suboffers, $are_products = false) {
     $post_id = wc1c_replace_product($suboffers[0]['is_full'], $product_guid, $product);
   }
 
-  $result = wp_set_post_terms($post_id, 'variable', 'product_type');
-  wc1c_check_wp_error($result);
+  if (!WC1C_DISABLE_VARIATIONS) {
+    $result = wp_set_post_terms($post_id, 'variable', 'product_type');
+    wc1c_check_wp_error($result);
+  }
 
   $offer_characteristics = array();
   foreach ($suboffers as $suboffer) {
