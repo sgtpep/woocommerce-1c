@@ -49,7 +49,7 @@ function wc1c_activate() {
 
   $index_table_names = array(
     $wpdb->postmeta,
-    $wpdb->termmeta,
+    "{$wpdb->prefix}woocommerce_termmeta",
     $wpdb->usermeta,
   );
   foreach ($index_table_names as $index_table_name) {
@@ -71,7 +71,7 @@ function wc1c_delete_term($term_id, $tt_id, $taxonomy, $deleted_term) {
 
   if ($taxonomy != 'product_cat' && strpos($taxonomy, 'pa_') !== 0) return;
 
-  $wpdb->delete($wpdb->termmeta, array('term_id' => $term_id));
+  $wpdb->delete($wpdb->woocommerce_termmeta, array('woocommerce_term_id' => $term_id));
   if (function_exists('wc1c_check_wpdb_error')) wc1c_check_wpdb_error();
 }
 add_action('delete_term', 'wc1c_delete_term', 10, 4);

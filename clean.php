@@ -15,7 +15,7 @@ if (!defined('WP_CLI')) {
 
 global $wpdb;
 
-if (!isset($wpdb->termmeta)) exit("WooCommerce plugin is not active");
+if (!isset($wpdb->woocommerce_termmeta)) exit("WooCommerce plugin is not active");
 
 wc1c_disable_time_limit();
 
@@ -34,7 +34,7 @@ wc1c_disable_time_limit();
 //   mkdir(WC1C_DATA_DIR) or wc1c_error(sprintf("Failed to make directory %s", WC1C_DATA_DIR));
 // }
 
-$rows = $wpdb->get_results("SELECT term_id, taxonomy FROM $wpdb->termmeta tm JOIN $wpdb->term_taxonomy tt ON tm.term_id = tt.term_id WHERE meta_key = 'wc1c_guid'");
+$rows = $wpdb->get_results("SELECT term_id, taxonomy FROM $wpdb->woocommerce_termmeta JOIN $wpdb->term_taxonomy ON woocommerce_term_id = term_id WHERE meta_key = 'wc1c_guid'");
 foreach ($rows as $row) {
   wp_delete_term($row->term_id, $row->taxonomy);
 }
