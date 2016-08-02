@@ -20,7 +20,7 @@ if (is_dir(WC1C_DATA_DIR)) {
   rmdir(WC1C_DATA_DIR);
 }
 
-// $term_meta_keys = $wpdb->get_col("SELECT DISTINCT meta_key FROM {$wpdb->prefix}woocommerce_termmeta WHERE meta_key LIKE 'wc1c_%'");
+// $term_meta_keys = $wpdb->get_col("SELECT DISTINCT meta_key FROM $wpdb->termmeta WHERE meta_key LIKE 'wc1c_%'");
 // if ($term_meta_keys) {
 //   foreach ($term_meta_keys as $term_meta_key) {
 //     delete_woocommerce_term_meta(null, $term_meta_key, null, true);
@@ -39,7 +39,7 @@ if (is_dir(WC1C_DATA_DIR)) {
 
 $index_table_names = array(
   $wpdb->postmeta,
-  "{$wpdb->prefix}woocommerce_termmeta",
+  $wpdb->termmeta,
   $wpdb->usermeta,
 );
 foreach ($index_table_names as $index_table_name) {
