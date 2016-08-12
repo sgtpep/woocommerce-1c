@@ -228,7 +228,7 @@ function wc1c_term_id_by_meta($key, $value) {
   $cache_key = "wc1c_term_id_by_meta-$key-$value";
   $term_id = wp_cache_get($cache_key);
   if ($term_id === false) {
-    $term_id = $wpdb->get_var($wpdb->prepare("SELECT term_id FROM $wpdb->termmeta tm JOIN $wpdb->terms t ON tm.term_id = t.term_id WHERE meta_key = %s AND meta_value = %s", $key, $value));
+    $term_id = $wpdb->get_var($wpdb->prepare("SELECT tm.term_id FROM $wpdb->termmeta tm JOIN $wpdb->terms t ON tm.term_id = t.term_id WHERE meta_key = %s AND meta_value = %s", $key, $value));
     wc1c_check_wpdb_error();
 
     if ($term_id) wp_cache_set($cache_key, $term_id);
@@ -902,7 +902,7 @@ function wc1c_clean_woocommerce_categories($is_full) {
 
   if (!$is_full || WC1C_PREVENT_CLEAN) return;
 
-  $term_ids = $wpdb->get_col($wpdb->prepare("SELECT term_id FROM $wpdb->termmeta tm JOIN $wpdb->term_taxonomy tt ON tm.term_id = tt.term_id WHERE taxonomy = 'product_cat' AND meta_key = 'wc1c_timestamp' AND meta_value != %d", WC1C_TIMESTAMP));
+  $term_ids = $wpdb->get_col($wpdb->prepare("SELECT tm.term_id FROM $wpdb->termmeta tm JOIN $wpdb->term_taxonomy tt ON tm.term_id = tt.term_id WHERE taxonomy = 'product_cat' AND meta_key = 'wc1c_timestamp' AND meta_value != %d", WC1C_TIMESTAMP));
   wc1c_check_wpdb_error();
 
   $term_ids = apply_filters('wc1c_clean_categories', $term_ids);
@@ -962,7 +962,7 @@ function wc1c_clean_woocommerce_attribute_options($is_full, $attribute_taxonomy)
 
   if (!$is_full || WC1C_PREVENT_CLEAN) return;
 
-  $term_ids = $wpdb->get_col($wpdb->prepare("SELECT term_id FROM $wpdb->termmeta tm JOIN $wpdb->term_taxonomy tt ON tm.term_id = tt.term_id WHERE taxonomy = %s AND meta_key = 'wc1c_timestamp' AND meta_value != %d", $attribute_taxonomy, WC1C_TIMESTAMP));
+  $term_ids = $wpdb->get_col($wpdb->prepare("SELECT tm.term_id FROM $wpdb->termmeta tm JOIN $wpdb->term_taxonomy tt ON tm.term_id = tt.term_id WHERE taxonomy = %s AND meta_key = 'wc1c_timestamp' AND meta_value != %d", $attribute_taxonomy, WC1C_TIMESTAMP));
   wc1c_check_wpdb_error();
 
   foreach ($term_ids as $term_id) {
@@ -994,7 +994,7 @@ function wc1c_clean_product_terms() {
   $wpdb->query("UPDATE $wpdb->term_taxonomy tt SET count = (SELECT COUNT(*) FROM $wpdb->term_relationships WHERE term_taxonomy_id = tt.term_taxonomy_id) WHERE taxonomy LIKE 'pa_%'");
   wc1c_check_wpdb_error();
 
-  $rows = $wpdb->get_results("SELECT term_id, taxonomy FROM $wpdb->term_taxonomy tt LEFT JOIN $wpdb->termmeta tm ON tt.term_id = tm.term_id AND meta_key = 'wc1c_guid' WHERE meta_value IS NULL AND taxonomy LIKE 'pa_%' AND count = 0");
+  $rows = $wpdb->get_results("SELECT tm.term_id, taxonomy FROM $wpdb->term_taxonomy tt LEFT JOIN $wpdb->termmeta tm ON tt.term_id = tm.term_id AND meta_key = 'wc1c_guid' WHERE meta_value IS NULL AND taxonomy LIKE 'pa_%' AND count = 0");
   wc1c_check_wpdb_error();
 
   foreach ($rows as $row) {
