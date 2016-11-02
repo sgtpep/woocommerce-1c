@@ -320,17 +320,19 @@ function wc1c_replace_document($document) {
 
   $document_products = array();
   $document_services = array();
-  foreach ($document['Товары'] as $i => $document_product) {
-    foreach ($document_product['ЗначенияРеквизитов'] as $document_product_requisite) {
-      if ($document_product_requisite['Наименование'] != 'ТипНоменклатуры') continue;
+  if (isset($document['Товары'])) {
+    foreach ($document['Товары'] as $i => $document_product) {
+      foreach ($document_product['ЗначенияРеквизитов'] as $document_product_requisite) {
+        if ($document_product_requisite['Наименование'] != 'ТипНоменклатуры') continue;
 
-      if ($document_product_requisite['Значение'] == 'Услуга') {
-        $document_services[] = $document_product;
+        if ($document_product_requisite['Значение'] == 'Услуга') {
+          $document_services[] = $document_product;
+        }
+        else {
+          $document_products[] = $document_product;
+        }
+        break;
       }
-      else {
-        $document_products[] = $document_product;
-      }
-      break;
     }
   }
 
