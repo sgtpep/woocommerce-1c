@@ -269,6 +269,7 @@ function wc1c_mode_file($type, $filename) {
     $temp_file = fopen($temp_path, 'r');
     $file = fopen($path, 'a');
     stream_copy_to_stream($temp_file, $file);
+    fclose($temp_file);
     unlink($temp_path);
   }
 
