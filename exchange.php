@@ -335,12 +335,7 @@ function wc1c_unpack_files($type) {
 
   if (@$status !== 0) {
     foreach ($zip_paths as $zip_path) {
-      $zip = new ZipArchive();
-      $result = $zip->open($zip_path);
-      if ($result !== true) wc1c_error(sprintf("Failed open archive %s with error code %d", $zip_path, $result));
-
-      $zip->extractTo($data_dir) or wc1c_error(sprintf("Failed to extract from archive %s", $zip_path));
-      $zip->close() or wc1c_error(sprintf("Failed to close archive %s", $zip_path));
+      system("unzip ".$zip_path." -d ".$data_dir."/");
     }
   }
 
