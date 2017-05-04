@@ -98,6 +98,26 @@ along with "WooCommerce and 1C:Enterprise Data Exchange". If not, see http://www
 
 Если PHP выполняется в режиме FastCGI, а 1С при проверке соединения с сервером просит проверить имя пользователя и пароль, хотя они указаны верно, то необходимо в файл .htaccess после строки `RewriteEngine On` вставить строку `RewriteRule . - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]`, а также попробовать оба варианта адреса обмена (полный и короткий). Необходимо учесть, что изменения в .htaccess перезатираются при сохранении настроек постоянных ссылок и некоторых плагинов из админки WordPress.
 
+Пример конфига пула для PHP7-FPM:
+```
+php_admin_value[post_max_size]=1000M
+php_admin_value[upload_max_filesize]=1000M
+php_admin_value[request_terminate_timeout]=0
+php_admin_value[max_execution_time]=9000000s
+php_admin_value[memory_limit]=512M
+```
+
+Пример конфига nginx:
+```
+server {
+client_max_body_size 1000m;
+# ... etc configs
+location ~ \.php$ {
+# ... etc configs
+fastcgi_read_timeout 60000s;
+}
+```
+
 == Frequently Asked Questions ==
 
 = Предоставляете ли вы поддержку? =
