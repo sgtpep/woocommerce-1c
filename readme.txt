@@ -162,6 +162,16 @@ fastcgi_read_timeout 60000s;
 
 Исходники размещаются в предоставляемом WordPress.org [svn-репозитории](../developers/). Также имеется [git-зеркало](https://github.com/sgtpep/woocommerce-1c).
 
+= Как работать с репозиторием через git-svn? =
+
+Инициализация:
+
+* `git clone git@github.com:sgtpep/woocommerce-1c.git`
+* `cd ./woocommerce-1c`
+* `git svn init https://plugins.svn.wordpress.org/woocommerce-and-1centerprise-data-exchange/trunk/`
+* `git update-ref refs/remotes/git-svn master`
+* `git svn rebase --log-window-size=100000`
+
 == Screenshots ==
 
 1. Список выгруженных из 1С в WooCommerce товаров с колонкой идентификатора позиции номенклатуры в 1С.
