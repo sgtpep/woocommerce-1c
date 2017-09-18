@@ -172,6 +172,11 @@ fastcgi_read_timeout 60000s;
 * `git update-ref refs/remotes/git-svn master`
 * `git svn rebase --log-window-size=100000`
 
+Коммит:
+
+* `git commit`
+* `git svn dcommit`
+
 == Screenshots ==
 
 1. Список выгруженных из 1С в WooCommerce товаров с колонкой идентификатора позиции номенклатуры в 1С.
