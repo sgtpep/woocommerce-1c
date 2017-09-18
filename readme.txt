@@ -176,6 +176,7 @@ fastcgi_read_timeout 60000s;
 
 * `git commit`
 * `git svn dcommit`
+* `git push`
 
 == Screenshots ==
 
