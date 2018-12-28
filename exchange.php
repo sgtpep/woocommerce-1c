@@ -14,12 +14,7 @@ function wc1c_query_vars($query_vars) {
 }
 add_filter('query_vars', 'wc1c_query_vars');
 
-function wc1c_exchange_init() {
-  add_rewrite_rule("wc1c/exchange", "index.php?wc1c=exchange", 'top');
-  add_rewrite_rule("wc1c/clean", "index.php?wc1c=clean");
-  flush_rewrite_rules();
-}
-add_action('init', 'wc1c_exchange_init', 1000);
+add_action('init', 'wc1c_add_rewrite_rules', 1000);
 
 function wc1c_is_debug() {
   return defined('WP_DEBUG') && WP_DEBUG || defined('WC1C_DEBUG') && WC1C_DEBUG;
