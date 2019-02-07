@@ -80,16 +80,7 @@ function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
   elseif (@$names[$depth - 1] == 'Предложения' && $name == 'Предложение') {
     if (strpos($wc1c_offer['Ид'], '#') === false || WC1C_DISABLE_VARIATIONS) {
       $guid = $wc1c_offer['Ид'];
-      $_post_id = wc1c_replace_offer($is_full, $guid, $wc1c_offer);
-      if ($_post_id) {
-        $_product = wc_get_product($_post_id);
-        $_qnty = $_product->get_stock_quantity();
-        if (!$_qnty) {
-          update_post_meta($_post_id, '_stock_status', 'outofstock');
-        }
-        unset($_product, $_qnty);
-      }
-      unset($_post_id);
+      wc1c_replace_offer($is_full, $guid, $wc1c_offer);
     }
     else {
       $guid = $wc1c_offer['Ид'];
@@ -211,7 +202,6 @@ function wc1c_replace_offer($is_full, $guid, $offer) {
   if ($post_id) wc1c_replace_offer_post_meta($is_full, $post_id, $offer);
 
   do_action('wc1c_post_offer', $post_id, $offer, $is_full);
-  return $post_id;
 }
 
 function wc1c_replace_product_variation($guid, $parent_post_id, $order) {
