@@ -126,6 +126,7 @@ foreach ($order_posts as $order_post) {
     if (!$order_shipping_item['cost']) continue;
 
     $products[] = array(
+      'guid' => 'ORDER_DELIVERY',
       'name' => $order_shipping_item['name'],
       'price_per_item' => $order_shipping_item['cost'],
       'quantity' => 1,
