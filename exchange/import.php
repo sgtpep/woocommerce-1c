@@ -646,23 +646,41 @@ function wc1c_replace_product($is_full, $guid, $product) {
   if (!$post_title) return;
 
   $post_content = '';
-  foreach ($product['ЗначенияРеквизитов'] as $i => $requisite) {
-    if ($requisite['Наименование'] == "Полное наименование" && @$requisite['Значение'][0]) {
-      $value = $requisite['Значение'][0];
-      if ($wc1c_is_moysklad) $post_content = $value;
-      else $post_title = $value;
-      unset($product['ЗначенияРеквизитов'][$i]);
-    }
-    elseif ($requisite['Наименование'] == "ОписаниеВФорматеHTML" && @$requisite['Значение'][0]) {
-      $post_content = $requisite['Значение'][0];
-      unset($product['ЗначенияРеквизитов'][$i]);
-    }
-  }
 
   $post_meta = array(
     '_sku' => @$product['Артикул'],
     '_manage_stock' => 'yes',
   );
+
+  foreach ($product['ЗначенияРеквизитов'] as $i => $requisite) {
+    $value = @$requisite['Значение'][0];
+	if (!$value) continue;
+    if ($requisite['Наименование'] == "Полное наименование") {
+      if ($wc1c_is_moysklad) $post_content = $value;
+      else $post_title = $value;
+      unset($product['ЗначенияРеквизитов'][$i]);
+    }
+    elseif ($requisite['Наименование'] == "ОписаниеВФорматеHTML") {
+      $post_content = $value;
+      unset($product['ЗначенияРеквизитов'][$i]);
+    }
+	elseif ($requisite['Наименование'] == "Длина") {
+      $post_meta['_length'] = floatval($value);
+      unset($product['ЗначенияРеквизитов'][$i]);
+    }
+	elseif ($requisite['Наименование'] == "Ширина") {
+      $post_meta['_width'] = floatval($value);
+      unset($product['ЗначенияРеквизитов'][$i]);
+    }
+	elseif ($requisite['Наименование'] == "Высота") {
+      $post_meta['_height'] = floatval($value);
+      unset($product['ЗначенияРеквизитов'][$i]);
+    }
+	elseif ($requisite['Наименование'] == "Вес") {
+      $post_meta['_weight'] = floatval($value);
+      unset($product['ЗначенияРеквизитов'][$i]);
+    }
+  }
 
   $post_name = sanitize_title($post_title);
   $post_name = apply_filters('wc1c_import_product_slug', $post_name, $product, $is_full);
