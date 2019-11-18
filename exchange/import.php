@@ -664,19 +664,19 @@ function wc1c_replace_product($is_full, $guid, $product) {
       $post_content = $value;
       unset($product['ЗначенияРеквизитов'][$i]);
     }
-	elseif ($requisite['Наименование'] == "Длина") {
+    elseif ($requisite['Наименование'] == "Длина") {
       $post_meta['_length'] = floatval($value);
       unset($product['ЗначенияРеквизитов'][$i]);
     }
-	elseif ($requisite['Наименование'] == "Ширина") {
+    elseif ($requisite['Наименование'] == "Ширина") {
       $post_meta['_width'] = floatval($value);
       unset($product['ЗначенияРеквизитов'][$i]);
     }
-	elseif ($requisite['Наименование'] == "Высота") {
+    elseif ($requisite['Наименование'] == "Высота") {
       $post_meta['_height'] = floatval($value);
       unset($product['ЗначенияРеквизитов'][$i]);
     }
-	elseif ($requisite['Наименование'] == "Вес") {
+    elseif ($requisite['Наименование'] == "Вес") {
       $post_meta['_weight'] = floatval($value);
       unset($product['ЗначенияРеквизитов'][$i]);
     }
