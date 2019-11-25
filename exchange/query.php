@@ -212,7 +212,7 @@ echo '<?xml version="1.0" encoding="' . WC1C_XML_CHARSET . '"?>';
                 <?php endforeach ?>
               </АдресРегистрации>
             <?php endif ?>
-			<?php if (defined('WC1C_CLIENT_CONTACT_TYPE')): ?>
+            <?php if (defined('WC1C_CLIENT_CONTACT_TYPE')): ?>
             <Контакты>
               <?php foreach ($contragent['contacts'] as $contact_item_name => $contact_item_value): ?>
                 <Контакт>
@@ -221,7 +221,7 @@ echo '<?xml version="1.0" encoding="' . WC1C_XML_CHARSET . '"?>';
                 </Контакт>
               <?php endforeach ?>
             </Контакты>
-			<?php endif ?>
+            <?php endif ?>
             <?php /*
             <Представители>
               <Представитель>
