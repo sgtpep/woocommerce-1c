@@ -212,15 +212,15 @@ echo '<?xml version="1.0" encoding="' . WC1C_XML_CHARSET . '"?>';
                 <?php endforeach ?>
               </АдресРегистрации>
             <?php endif ?>
+            <?php /*
             <Контакты>
               <?php foreach ($contragent['contacts'] as $contact_item_name => $contact_item_value): ?>
                 <Контакт>
-                  <Тип><?php echo $contact_item_name ?></Тип>
+                  <КонтактВид><?php echo $contact_item_name ?></КонтактВид>
                   <Значение><?php echo $contact_item_value ?></Значение>
                 </Контакт>
               <?php endforeach ?>
             </Контакты>
-            <?php /*
             <Представители>
               <Представитель>
                 <Контрагент>
