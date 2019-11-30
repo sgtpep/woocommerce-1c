@@ -192,7 +192,7 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
         $_product = wc_get_product($_post_id);
         $_qnty = $_product->get_stock_quantity();
         if (!$_qnty) {
-          update_post_meta($_post_id, '_stock_status', 'outofstock');
+          update_post_meta($_post_id, '_stock_status', WC1C_OUTOFSTOCK_STATUS);
         }
         unset($_product, $_qnty);
       }
@@ -675,7 +675,7 @@ function wc1c_replace_product($is_full, $guid, $product) {
   //   if (isset($product['Пересчет']['Коэффициент'])) $quantity *= wc1c_parse_decimal($product['Пересчет']['Коэффициент']);
   //   wc_update_product_stock($post_id, $quantity);
   //
-  //   $stock_status = $quantity > 0 ? 'instock' : 'outofstock';
+  //   $stock_status = $quantity > 0 ? 'instock' : WC1C_OUTOFSTOCK_STATUS;
   //   wc_update_product_stock_status($post_id, $stock_status);
   // }
 

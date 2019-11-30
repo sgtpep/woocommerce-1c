@@ -85,7 +85,7 @@ function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
         $_product = wc_get_product($_post_id);
         $_qnty = $_product->get_stock_quantity();
         if (!$_qnty) {
-          update_post_meta($_post_id, '_stock_status', 'outofstock');
+          update_post_meta($_post_id, '_stock_status', WC1C_OUTOFSTOCK_STATUS);
         }
         unset($_product, $_qnty);
       }
@@ -199,7 +199,7 @@ function wc1c_replace_offer_post_meta($is_full, $post_id, $offer, $attributes = 
     $quantity = wc1c_parse_decimal($quantity);
     wc_update_product_stock($post_id, $quantity);
 
-    $stock_status = $quantity > 0 ? 'instock' : 'outofstock';
+    $stock_status = $quantity > 0 ? 'instock' : WC1C_OUTOFSTOCK_STATUS;
     @wc_update_product_stock_status($post_id, $stock_status);
   }
 
