@@ -6,7 +6,7 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Tags: 1c, 1c-enterprise, commerceml, integration, e-commerce, ecommerce, commerce, shop, cart, woothemes, woocommerce
 Requires at least: 3.8
 Tested up to: 4.8
-Stable tag: 0.8
+Stable tag: 0.9
 
 Provides data exchange between WooCommerce plugin and business application "1C:Enterprise 8. Trade Management" (and compatible ones).
 
@@ -193,6 +193,10 @@ fastcgi_read_timeout 60000s;
 7. Общие свойства товаров WooCommerce, сформированные по выгруженным из 1С свойствам и значениям свойств товаров, с колонкой идентификатора.
 
 == Changelog ==
+
+= 0.9 =
+
+Максим Дубовик [@lufton](https://github.com/lufton) исправил передачу следующих вещей: контакты клиентов, дополнительные типы цен, габариты товаров и добавил возможность переопределять статус "нет в наличии" с помощью константы `WC1C_OUTOFSTOCK_STATUS`.
 
 = 0.8 =
 
