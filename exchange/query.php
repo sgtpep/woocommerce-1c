@@ -139,11 +139,12 @@ foreach ($order_posts as $order_post) {
     'cancelled' => "Отменен",
     'trash' => "Удален",
   );
-  if (array_key_exists($order->get_status(), $statuses)) {
-    $order_status_name = $statuses[$order->get_status()];
+  $status = $order->get_status();
+  if (array_key_exists($status, $statuses)) {
+    $order_status_name = $statuses[$status];
   }
   else {
-    $order_status_name = wc_get_order_status_name($order->get_status());
+    $order_status_name = wc_get_order_status_name($status);
   }
 
   if (WC1C_CURRENCY) $document_currency = WC1C_CURRENCY;
@@ -157,7 +158,7 @@ foreach ($order_posts as $order_post) {
     'contragents' => $contragents,
     'products' => $products,
     'payment_method_title' => @$order_meta['_payment_method_title'],
-    'status' => $order->get_status(),
+    'status' => $status,
     'status_name' => $order_status_name,
     'has_shipping' => count($order_shipping_items) > 0,
     'modified_at' => $order_post->post_modified,
