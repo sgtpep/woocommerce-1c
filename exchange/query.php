@@ -257,36 +257,23 @@ echo '<?xml version="1.0" encoding="' . WC1C_XML_CHARSET . '"?>';
         <?php endforeach ?>
       </Товары>
       <ЗначенияРеквизитов>
-        <?php if ($document['payment_method_title']): ?>
+        <?php
+        $requisites = array(
+          'Заказ оплачен' => !in_array($document['status'], array('on-hold', 'pending')) ? 'true' : 'false',
+          'Доставка разрешена' => $document['has_shipping'] ? 'true' : 'false',
+          'Отменен' => $document['status'] == 'cancelled' ? 'true' : 'false',
+          'Финальный статус' => !in_array($document['status'], array('trash', 'on-hold', 'pending', 'processing')) ? 'true' : 'false',
+          'Статус заказа' => $document['status_name'],
+          'Дата изменения статуса' => $document['modified_at'],
+        );
+        if ($document['payment_method_title']) $requisites['Метод оплаты'] = $document['payment_method_title'];
+        $requisites = apply_filters('wc1c_query_order_requisites', $requisites, $document);
+        foreach ($requisites as $requisite_key => $requisite_value): ?>
           <ЗначениеРеквизита>
-            <Наименование>Метод оплаты</Наименование>
-            <Значение><?php echo $document['payment_method_title'] ?></Значение>
+            <Наименование><?php echo $requisite_key ?></Наименование>
+            <Значение><?php echo $requisite_value ?></Значение>
           </ЗначениеРеквизита>
-        <?php endif ?>
-        <ЗначениеРеквизита>
-          <Наименование>Заказ оплачен</Наименование>
-          <Значение><?php echo !in_array($document['status'], array('on-hold', 'pending')) ? 'true' : 'false' ?></Значение>
-        </ЗначениеРеквизита>
-        <ЗначениеРеквизита>
-          <Наименование>Доставка разрешена</Наименование>
-          <Значение><?php echo $document['has_shipping'] ? 'true' : 'false' ?></Значение>
-        </ЗначениеРеквизита>
-        <ЗначениеРеквизита>
-          <Наименование>Отменен</Наименование>
-          <Значение><?php echo $document['status'] == 'cancelled' ? 'true' : 'false' ?></Значение>
-        </ЗначениеРеквизита>
-        <ЗначениеРеквизита>
-          <Наименование>Финальный статус</Наименование>
-          <Значение><?php echo !in_array($document['status'], array('trash', 'on-hold', 'pending', 'processing')) ? 'true' : 'false' ?></Значение>
-        </ЗначениеРеквизита>
-        <ЗначениеРеквизита>
-          <Наименование>Статус заказа</Наименование>
-          <Значение><?php echo $document['status_name'] ?></Значение>
-        </ЗначениеРеквизита>
-        <ЗначениеРеквизита>
-          <Наименование>Дата изменения статуса</Наименование>
-          <Значение><?php echo $document['modified_at'] ?></Значение>
-        </ЗначениеРеквизита>
+        <?php endforeach; ?>
       </ЗначенияРеквизитов>
     </Документ>
   <?php endforeach ?>
