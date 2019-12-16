@@ -5,8 +5,8 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Tags: 1c, 1c-enterprise, commerceml, integration, e-commerce, ecommerce, commerce, shop, cart, woothemes, woocommerce
 Requires at least: 3.8
-Tested up to: 4.8
-Stable tag: 0.8
+Tested up to: 5.3
+Stable tag: 0.9.1
 
 Provides data exchange between WooCommerce plugin and business application "1C:Enterprise 8. Trade Management" (and compatible ones).
 
@@ -34,7 +34,7 @@ Provides data exchange between WooCommerce plugin and business application "1C:E
 
 Поддержать разработку и автора можно взносом через [банковскую карту или Яндекс.Деньги](https://money.yandex.ru/embed/donate.xml?account=410011766586472&quickpay=donate&payment-type-choice=on&default-sum=1000&targets=%D0%9F%D0%BB%D0%B0%D0%B3%D0%B8%D0%BD+%22%D0%9E%D0%B1%D0%BC%D0%B5%D0%BD+%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%BC+%D0%BC%D0%B5%D0%B6%D0%B4%D1%83+WooCommerce+%D0%B8+1%D0%A1%3A%D0%9F%D1%80%D0%B5%D0%B4%D0%BF%D1%80%D0%B8%D1%8F%D1%82%D0%B8%D0%B5%D0%BC%22&target-visibility=on&project-name=&project-site=https%3A%2F%2Fwordpress.org%2Fplugins%2Fwoocommerce-and-1centerprise-data-exchange%2F&button-text=05&fio=on&mail=on&successURL=).
 
-Соавторы: [@chrme](https://github.com/chrme), [@shsl](https://github.com/shsl), Арсений Дугин [@sklazer](https://github.com/sklazer), Геннадий Ковшенин [@soulseekah](https://github.com/soulseekah).
+Соавторы: Максим Дубовик [@lufton](https://github.com/lufton), [@chrme](https://github.com/chrme), [@shsl](https://github.com/shsl), Арсений Дугин [@sklazer](https://github.com/sklazer), Геннадий Ковшенин [@soulseekah](https://github.com/soulseekah), Vladyslav [@qwave](https://github.com/qwave).
 
 = In English =
 
@@ -54,7 +54,7 @@ Please, read the following before using this plugin:
 * [installation instructions](./installation/)
 * [frequently asked questions](./faq/)
 
-Contributors: [@chrme](https://github.com/chrme), [@shsl](https://github.com/shsl), Arseny Dugin [@sklazer](https://github.com/sklazer), Gennady Kovshenin [@soulseekah](https://github.com/soulseekah).
+Contributors: Maksim Dubovik [@lufton](https://github.com/lufton), [@chrme](https://github.com/chrme), [@shsl](https://github.com/shsl), Arseny Dugin [@sklazer](https://github.com/sklazer), Gennady Kovshenin [@soulseekah](https://github.com/soulseekah), Vladyslav [@qwave](https://github.com/qwave).
 
 = License =
 
@@ -193,6 +193,14 @@ fastcgi_read_timeout 60000s;
 7. Общие свойства товаров WooCommerce, сформированные по выгруженным из 1С свойствам и значениям свойств товаров, с колонкой идентификатора.
 
 == Changelog ==
+
+= 0.9.1 =
+
+Vladyslav [@qwave](https://github.com/qwave) исправил ошибку при получении статусов заказов.
+
+= 0.9 =
+
+Максим Дубовик [@lufton](https://github.com/lufton) исправил передачу следующих вещей: контакты клиентов, дополнительные типы цен, габариты товаров и добавил возможность переопределять статус "нет в наличии" с помощью константы `WC1C_OUTOFSTOCK_STATUS`.
 
 = 0.8 =
 
