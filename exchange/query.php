@@ -63,7 +63,7 @@ foreach ($order_posts as $order_post) {
     $contragent = array();
 
     $name = array();
-    foreach (array('first_name', 'last_name') as $name_key) {
+    foreach (array('last_name', 'first_name') as $name_key) {
       $meta_key = "_{$type}_$name_key";
       if (empty($order_meta[$meta_key])) continue;
 
