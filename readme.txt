@@ -194,6 +194,10 @@ fastcgi_read_timeout 60000s;
 
 == Changelog ==
 
+= 0.9.2 =
+
+Максим Дубовик [@lufton](https://github.com/lufton) добавил возможность переопределять/расширять реквизиты заказов через фильтр 'wc1c_query_order_requisites' и исправил формирование имен контрагентов.
+
 = 0.9.1 =
 
 Vladyslav [@qwave](https://github.com/qwave) исправил ошибку при получении статусов заказов.
