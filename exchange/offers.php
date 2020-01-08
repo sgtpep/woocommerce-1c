@@ -72,7 +72,7 @@ function wc1c_offers_end_element_handler($is_full, $names, $depth, $name) {
   }
   elseif (@$names[$depth - 1] == 'Цены' && $name == 'Цена') {
     if (!isset($wc1c_offer['Цена']) && (!isset($wc1c_price['ИдТипаЦены']) || $wc1c_price['ИдТипаЦены'] == $wc1c_price_type['Ид'])) $wc1c_offer['Цена'] = $wc1c_price;
-    else $wc1c_offer["Цена_{$wc1c_price[ИдТипаЦены]}"] = $wc1c_price;
+    else $wc1c_offer["Цена_{$wc1c_price['ИдТипаЦены']}"] = $wc1c_price;
   }
   elseif (@$names[$depth - 1] == 'ХарактеристикаТовара' && $name == 'Наименование') {
     $i = count($wc1c_offer['ХарактеристикиТовара']) - 1;
