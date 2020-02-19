@@ -333,7 +333,7 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
     wc1c_check_wp_error($result);
 
     $term_id = $result['term_id'];
-    update_woocommerce_term_meta($term_id, 'wc1c_guid', "$taxonomy::$guid");
+    update_term_meta($term_id, 'wc1c_guid', "$taxonomy::$guid");
 
     $is_added = true;
   }
@@ -352,7 +352,7 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
 
   if ($is_full) wc_set_term_order($term_id, $order, $taxonomy);
 
-  update_woocommerce_term_meta($term_id, 'wc1c_timestamp', WC1C_TIMESTAMP);
+  update_term_meta($term_id, 'wc1c_timestamp', WC1C_TIMESTAMP);
 }
 
 function wc1c_replace_group($is_full, $group, $order, $groups) {
