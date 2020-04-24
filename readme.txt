@@ -34,7 +34,7 @@ Provides data exchange between WooCommerce plugin and business application "1C:E
 
 Поддержать разработку и автора можно взносом через [банковскую карту или Яндекс.Деньги](https://money.yandex.ru/embed/donate.xml?account=410011766586472&quickpay=donate&payment-type-choice=on&default-sum=1000&targets=%D0%9F%D0%BB%D0%B0%D0%B3%D0%B8%D0%BD+%22%D0%9E%D0%B1%D0%BC%D0%B5%D0%BD+%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%BC+%D0%BC%D0%B5%D0%B6%D0%B4%D1%83+WooCommerce+%D0%B8+1%D0%A1%3A%D0%9F%D1%80%D0%B5%D0%B4%D0%BF%D1%80%D0%B8%D1%8F%D1%82%D0%B8%D0%B5%D0%BC%22&target-visibility=on&project-name=&project-site=https%3A%2F%2Fwordpress.org%2Fplugins%2Fwoocommerce-and-1centerprise-data-exchange%2F&button-text=05&fio=on&mail=on&successURL=).
 
-Соавторы: Максим Дубовик [@lufton](https://github.com/lufton), [@chrme](https://github.com/chrme), [@shsl](https://github.com/shsl), Арсений Дугин [@sklazer](https://github.com/sklazer), Геннадий Ковшенин [@soulseekah](https://github.com/soulseekah), Vladyslav [@qwave](https://github.com/qwave).
+Соавторы: Максим Дубовик [@lufton](https://github.com/lufton), [@chrme](https://github.com/chrme), [@shsl](https://github.com/shsl), Арсений Дугин [@sklazer](https://github.com/sklazer), Геннадий Ковшенин [@soulseekah](https://github.com/soulseekah), Vladyslav [@qwave](https://github.com/qwave), Александр Воробьев [@Alex01d](https://github.com/Alex01d).
 
 = In English =
 
@@ -54,7 +54,7 @@ Please, read the following before using this plugin:
 * [installation instructions](./installation/)
 * [frequently asked questions](./faq/)
 
-Contributors: Maksim Dubovik [@lufton](https://github.com/lufton), [@chrme](https://github.com/chrme), [@shsl](https://github.com/shsl), Arseny Dugin [@sklazer](https://github.com/sklazer), Gennady Kovshenin [@soulseekah](https://github.com/soulseekah), Vladyslav [@qwave](https://github.com/qwave).
+Contributors: Maksim Dubovik [@lufton](https://github.com/lufton), [@chrme](https://github.com/chrme), [@shsl](https://github.com/shsl), Arseny Dugin [@sklazer](https://github.com/sklazer), Gennady Kovshenin [@soulseekah](https://github.com/soulseekah), Vladyslav [@qwave](https://github.com/qwave), Alexander Vorobyev [@Alex01d](https://github.com/Alex01d).
 
 = License =
 
@@ -92,7 +92,7 @@ along with "WooCommerce and 1C:Enterprise Data Exchange". If not, see http://www
 
 Весь процесс настройки 1С:Предприятия для обмена данными с сайтом хорошо описан в инструкции к одному из коммерческих движков интернет-магазина: http://www.cs-cart.ru/docs/4.1.x/rus_build_pack/1c/instruction/index.html#id3, которой можно следовать до раздела "Настройки в интернет-магазине".
 
-Обратите внимание, что если вы собираетесь учитывать остатки товаров в магазине, включите управление запасами в Woocommerce - настройки - товары - запасы - галочка "Включить управление запасами".
+Обратите внимание, что если вы собираетесь учитывать остатки товаров в магазине, необходимо включитб управление запасами в WooCommerce: "Настройки" → "Товары" → "Запасы" → "Включить управление запасами".
 
 = Технические рекомендации =
 
