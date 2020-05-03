@@ -509,7 +509,7 @@ function wc1c_replace_post($guid, $post_type, $is_deleted, $is_draft, $post_titl
     if (in_array('title', $preserve_fields)) unset($args['post_title']);
     if (in_array('excerpt', $preserve_fields)) unset($args['post_excerpt']);
     if (in_array('body', $preserve_fields)) unset($args['post_content']);
-	if (WC1C_UPDATE_POST_NAME) $args['post_name'] = $post_name;
+    if (WC1C_UPDATE_POST_NAME) $args['post_name'] = $post_name;
 
     foreach ($args as $key => $value) {
       if ($post->$key == $value) continue;
