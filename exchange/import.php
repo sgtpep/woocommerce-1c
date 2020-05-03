@@ -7,6 +7,7 @@ require_once ABSPATH . "wp-admin/includes/image.php";
 
 if (!defined('WC1C_PRODUCT_DESCRIPTION_TO_CONTENT')) define('WC1C_PRODUCT_DESCRIPTION_TO_CONTENT', false);
 if (!defined('WC1C_PREVENT_CLEAN')) define('WC1C_PREVENT_CLEAN', false);
+if (!defined('WC1C_UPDATE_POST_NAME')) define('WC1C_UPDATE_POST_NAME', false);
 
 function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $attrs) {
   global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_requisite_properties, $wc1c_product;
@@ -508,6 +509,7 @@ function wc1c_replace_post($guid, $post_type, $is_deleted, $is_draft, $post_titl
     if (in_array('title', $preserve_fields)) unset($args['post_title']);
     if (in_array('excerpt', $preserve_fields)) unset($args['post_excerpt']);
     if (in_array('body', $preserve_fields)) unset($args['post_content']);
+	if (WC1C_UPDATE_POST_NAME) $args['post_name'] = $post_name;
 
     foreach ($args as $key => $value) {
       if ($post->$key == $value) continue;
