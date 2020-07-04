@@ -6,6 +6,7 @@ if (!defined('WC1C_FILE_LIMIT')) define('WC1C_FILE_LIMIT', null);
 if (!defined('WC1C_XML_CHARSET')) define('WC1C_XML_CHARSET', 'UTF-8');
 if (!defined('WC1C_DISABLE_VARIATIONS')) define('WC1C_DISABLE_VARIATIONS', false);
 if (!defined('WC1C_OUTOFSTOCK_STATUS')) define('WC1C_OUTOFSTOCK_STATUS', 'outofstock');
+if (!defined('WC1C_MANAGE_STOCK')) define('WC1C_MANAGE_STOCK', 'yes');
 define('WC1C_TIMESTAMP', time());
 
 function wc1c_query_vars($query_vars) {
