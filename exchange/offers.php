@@ -141,7 +141,7 @@ function wc1c_replace_offer_post_meta($is_full, $post_id, $offer, $attributes = 
   $post_meta = array();
   if (!is_null($price)) {
     $post_meta['_regular_price'] = $price;
-    $post_meta['_manage_stock'] = WC1C_MANAGE_STOCK;
+    $post_meta['_manage_stock'] = 'yes';
   }
 
   if ($attributes) {
