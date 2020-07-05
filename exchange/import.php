@@ -651,7 +651,7 @@ function wc1c_replace_product($is_full, $guid, $product) {
 
   $post_meta = array(
     '_sku' => @$product['Артикул'],
-    '_manage_stock' => 'yes',
+    '_manage_stock' => WC1C_MANAGE_STOCK,
   );
 
   foreach ($product['ЗначенияРеквизитов'] as $i => $requisite) {
