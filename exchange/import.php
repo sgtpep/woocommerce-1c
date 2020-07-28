@@ -8,6 +8,7 @@ require_once ABSPATH . "wp-admin/includes/image.php";
 if (!defined('WC1C_PRODUCT_DESCRIPTION_TO_CONTENT')) define('WC1C_PRODUCT_DESCRIPTION_TO_CONTENT', false);
 if (!defined('WC1C_PREVENT_CLEAN')) define('WC1C_PREVENT_CLEAN', false);
 if (!defined('WC1C_UPDATE_POST_NAME')) define('WC1C_UPDATE_POST_NAME', false);
+if (!defined('WC1C_MATCH_BY_SKU')) define('WC1C_MATCH_BY_SKU', false);
 
 function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $attrs) {
   global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_requisite_properties, $wc1c_product;
@@ -187,6 +188,12 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
 
     if (strpos($wc1c_product['Ид'], '#') === false || WC1C_DISABLE_VARIATIONS) {
       $guid = $wc1c_product['Ид'];
+	  if (WC1C_MATCH_BY_SKU) {
+        $sku = @$wc1c_product['Артикул'];
+	    if ($sku && $_post_id = wc1c_post_id_by_meta('_sku', $sku)) {
+		  update_post_meta($_post_id, '_wc1c_guid', $guid);
+        }
+      }
       wc1c_replace_product($is_full, $guid, $wc1c_product);
       $_post_id = wc1c_replace_product($is_full, $guid, $wc1c_product);
       if ($_post_id) {
