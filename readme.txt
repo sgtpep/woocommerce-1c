@@ -6,7 +6,7 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Tags: 1c, 1c-enterprise, commerceml, integration, e-commerce, ecommerce, commerce, shop, cart, woothemes, woocommerce
 Requires at least: 3.8
 Tested up to: 5.4
-Stable tag: 0.9.7
+Stable tag: 0.9.8
 
 Provides data exchange between WooCommerce plugin and business application "1C:Enterprise 8. Trade Management" (and compatible ones).
 
@@ -196,7 +196,11 @@ fastcgi_read_timeout 60000s;
 
 == Changelog ==
 
-= 0.9.6 =
+= 0.9.8 =
+
+Максим Дубовик [@lufton](https://github.com/lufton) добавил возможность сопоставлять номенклатуру с товарами в WooCommerce по артикулу с помощью константы `WC1C_MATCH_BY_SKU`.
+
+= 0.9.7 =
 
 Максим Дубовик [@lufton](https://github.com/lufton) добавил возможность отключать управление остатками с помощью константы `WC1C_MANAGE_STOCK`.
 
