@@ -191,7 +191,7 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
       if (WC1C_MATCH_BY_SKU) {
         $sku = @$wc1c_product['Артикул'];
         if ($sku) {
-          $_post_id = wc1c_post_id_by_meta('_sku', $sku)) {
+          $_post_id = wc1c_post_id_by_meta('_sku', $sku);
           if ($_post_id) update_post_meta($_post_id, '_wc1c_guid', $guid);
         }
       }
