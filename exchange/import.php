@@ -188,10 +188,11 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
 
     if (strpos($wc1c_product['Ид'], '#') === false || WC1C_DISABLE_VARIATIONS) {
       $guid = $wc1c_product['Ид'];
-	  if (WC1C_MATCH_BY_SKU) {
+      if (WC1C_MATCH_BY_SKU) {
         $sku = @$wc1c_product['Артикул'];
-	    if ($sku && $_post_id = wc1c_post_id_by_meta('_sku', $sku)) {
-		  update_post_meta($_post_id, '_wc1c_guid', $guid);
+        if ($sku) {
+          $_post_id = wc1c_post_id_by_meta('_sku', $sku)) {
+          if ($_post_id) update_post_meta($_post_id, '_wc1c_guid', $guid);
         }
       }
       wc1c_replace_product($is_full, $guid, $wc1c_product);
