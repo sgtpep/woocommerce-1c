@@ -9,6 +9,7 @@ if (!defined('WC1C_PRODUCT_DESCRIPTION_TO_CONTENT')) define('WC1C_PRODUCT_DESCRI
 if (!defined('WC1C_PREVENT_CLEAN')) define('WC1C_PREVENT_CLEAN', false);
 if (!defined('WC1C_UPDATE_POST_NAME')) define('WC1C_UPDATE_POST_NAME', false);
 if (!defined('WC1C_MATCH_BY_SKU')) define('WC1C_MATCH_BY_SKU', false);
+if (!defined('WC1C_MATCH_CATEGORIES_BY_TITLE')) define('WC1C_MATCH_CATEGORIES_BY_TITLE', false);
 
 function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $attrs) {
   global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_requisite_properties, $wc1c_product;
@@ -324,6 +325,10 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
   global $wpdb;
 
   $term_id = wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$guid");
+  if ($taxonomy === 'product_cat' && !$term_id && WC1C_MATCH_CATEGORIES_BY_TITLE) {
+    $term_id = $wpdb->get_var($wpdb->prepare("SELECT term_id FROM {$wpdb->prefix}terms WHERE name = %s LIMIT 1", $name));
+    update_term_meta($term_id, 'wc1c_guid', "$taxonomy::$guid");
+  }
   if ($term_id) $term = get_term($term_id, $taxonomy);
 
   $parent = $parent_guid ? wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$parent_guid") : null;
