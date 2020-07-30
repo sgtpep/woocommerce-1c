@@ -126,6 +126,7 @@ function wc1c_update_currency($currency) {
 
   $currency_position = array(
     'RUB' => 'right_space',
+    'UAH' => 'right_space',
     'USD' => 'left',
   );
   if (isset($currency_position[$currency])) update_option('woocommerce_currency_pos', $currency_position[$currency]);
