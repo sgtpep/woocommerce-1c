@@ -6,7 +6,7 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Tags: 1c, 1c-enterprise, commerceml, integration, e-commerce, ecommerce, commerce, shop, cart, woothemes, woocommerce
 Requires at least: 3.8
 Tested up to: 5.4
-Stable tag: 0.9.9
+Stable tag: 0.9.10
 
 Provides data exchange between WooCommerce plugin and business application "1C:Enterprise 8. Trade Management" (and compatible ones).
 
@@ -196,37 +196,20 @@ fastcgi_read_timeout 60000s;
 
 == Changelog ==
 
-= 0.9.9 =
+= 0.9.10 =
 
-Максим Дубовик [@lufton](https://github.com/lufton) ускорил импорт товаров, удалив дублирующий код.
-
-= 0.9.8 =
-
-Максим Дубовик [@lufton](https://github.com/lufton) добавил возможность сопоставлять номенклатуру с товарами в WooCommerce по артикулу с помощью константы `WC1C_MATCH_BY_SKU`.
-
-= 0.9.7 =
-
-Максим Дубовик [@lufton](https://github.com/lufton) добавил возможность отключать управление остатками с помощью константы `WC1C_MANAGE_STOCK`.
-
-= 0.9.6 =
-
-Арсений Дугин [@sklazer](https://github.com/sklazer) исправил ошибку "Failed open archive %s with error code 19" при обмене данными с архивом большого размера.
+- Максим Дубовик [@lufton](https://github.com/lufton) исправил отображение символа UAH.
+- Максим Дубовик [@lufton](https://github.com/lufton) ускорил импорт товаров, удалив дублирующий код.
+- Максим Дубовик [@lufton](https://github.com/lufton) добавил возможность сопоставлять номенклатуру с товарами в WooCommerce по артикулу с помощью константы `WC1C_MATCH_BY_SKU`.
+- Максим Дубовик [@lufton](https://github.com/lufton) добавил возможность отключать управление остатками с помощью константы `WC1C_MANAGE_STOCK`.
+- Арсений Дугин [@sklazer](https://github.com/sklazer) исправил ошибку "Failed open archive %s with error code 19" при обмене данными с архивом большого размера.
 
 = 0.9.5 =
 
-Максим Дубовик [@lufton](https://github.com/lufton) добавил возможность обновлять постоянную ссылку продукта при каждом импорте.
-
-= 0.9.4 =
-
-[@krakazyabra](https://github.com/krakazyabra) заменил устаревшую функцию `update_woocommerce_term_meta` на `update_term_meta`.
-
-= 0.9.3 =
-
-Максим Дубовик [@lufton](https://github.com/lufton) добавил возможность переопределять/расширять реквизиты заказов через фильтр 'wc1c_query_order_requisites' и исправил формирование имен контрагентов и получение цен.
-
-= 0.9.1 =
-
-Vladyslav [@qwave](https://github.com/qwave) исправил ошибку при получении статусов заказов.
+- Максим Дубовик [@lufton](https://github.com/lufton) добавил возможность обновлять постоянную ссылку продукта при каждом импорте.
+- [@krakazyabra](https://github.com/krakazyabra) заменил устаревшую функцию `update_woocommerce_term_meta` на `update_term_meta`.
+- Максим Дубовик [@lufton](https://github.com/lufton) добавил возможность переопределять/расширять реквизиты заказов через фильтр 'wc1c_query_order_requisites' и исправил формирование имен контрагентов и получение цен.
+- Vladyslav [@qwave](https://github.com/qwave) исправил ошибку при получении статусов заказов.
 
 = 0.9 =
 
