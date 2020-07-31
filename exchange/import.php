@@ -325,8 +325,8 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
   global $wpdb;
 
   $term_id = wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$guid");
-  if ($taxonomy === 'product_cat' && !$term_id && WC1C_MATCH_CATEGORIES_BY_TITLE) {
-    $term_id = $wpdb->get_var($wpdb->prepare("SELECT term_id FROM {$wpdb->prefix}terms WHERE name = %s LIMIT 1", $name));
+  if (WC1C_MATCH_CATEGORIES_BY_TITLE && $taxonomy === 'product_cat' && !$term_id) {
+    $term_id = $wpdb->get_var($wpdb->prepare("SELECT term_id FROM $wpdb->terms WHERE name = %s LIMIT 1", $name));
     update_term_meta($term_id, 'wc1c_guid', "$taxonomy::$guid");
   }
   if ($term_id) $term = get_term($term_id, $taxonomy);
