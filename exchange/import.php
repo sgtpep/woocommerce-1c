@@ -9,6 +9,9 @@ if (!defined('WC1C_PRODUCT_DESCRIPTION_TO_CONTENT')) define('WC1C_PRODUCT_DESCRI
 if (!defined('WC1C_PREVENT_CLEAN')) define('WC1C_PREVENT_CLEAN', false);
 if (!defined('WC1C_UPDATE_POST_NAME')) define('WC1C_UPDATE_POST_NAME', false);
 if (!defined('WC1C_MATCH_BY_SKU')) define('WC1C_MATCH_BY_SKU', false);
+if (!defined('WC1C_MATCH_CATEGORIES_BY_TITLE')) define('WC1C_MATCH_CATEGORIES_BY_TITLE', false);
+if (!defined('WC1C_MATCH_PROPERTIES_BY_TITLE')) define('WC1C_MATCH_PROPERTIES_BY_TITLE', false);
+if (!defined('WC1C_MATCH_PROPERTY_OPTIONS_BY_TITLE')) define('WC1C_MATCH_PROPERTY_OPTIONS_BY_TITLE', false);
 
 function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $attrs) {
   global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_requisite_properties, $wc1c_product;
@@ -324,6 +327,14 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
   global $wpdb;
 
   $term_id = wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$guid");
+  if (!$term_id) {
+    if (WC1C_MATCH_CATEGORIES_BY_TITLE && $taxonomy === 'product_cat') {
+      $term_id = $wpdb->get_var($wpdb->prepare("SELECT term_id FROM {$wpdb->prefix}terms WHERE name = %s LIMIT 1", $name));
+    } elseif (WC1C_MATCH_PROPERTY_OPTIONS_BY_TITLE && substr($taxonomy, 0, 3) === 'pa_') {
+      $term_id = $wpdb->get_var($wpdb->prepare("SELECT t.term_id FROM $wpdb->terms t LEFT JOIN $wpdb->term_taxonomy tt ON t.term_id = tt.term_id WHERE t.name = %s AND tt.taxonomy = %s LIMIT 1", $name, $taxonomy));
+    }
+    if ($term_id) update_term_meta($term_id, 'wc1c_guid', "$taxonomy::$guid");
+  }
   if ($term_id) $term = get_term($term_id, $taxonomy);
 
   $parent = $parent_guid ? wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$parent_guid") : null;
@@ -411,6 +422,12 @@ function wc1c_replace_woocommerce_attribute($is_full, $guid, $attribute_label, $
 
   $data = compact('attribute_label', 'attribute_type');
 
+  if (WC1C_MATCH_PROPERTIES_BY_TITLE && !$attribute_id) {
+    $attribute_id = $wpdb->get_var($wpdb->prepare("SELECT attribute_id FROM {$wpdb->prefix}woocommerce_attribute_taxonomies WHERE attribute_label = %s", $attribute_label));
+    $guids[$guid] = $attribute_id;
+    update_option('wc1c_guid_attributes', $guids);
+  }
+  
   if (!$attribute_id) {
     $attribute_name = wc1c_unique_woocommerce_attribute_name($attribute_label);
     $data = array_merge($data, array(
