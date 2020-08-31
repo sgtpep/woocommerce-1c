@@ -7,6 +7,7 @@ if (!defined('WC1C_XML_CHARSET')) define('WC1C_XML_CHARSET', 'UTF-8');
 if (!defined('WC1C_DISABLE_VARIATIONS')) define('WC1C_DISABLE_VARIATIONS', false);
 if (!defined('WC1C_OUTOFSTOCK_STATUS')) define('WC1C_OUTOFSTOCK_STATUS', 'outofstock');
 if (!defined('WC1C_MANAGE_STOCK')) define('WC1C_MANAGE_STOCK', 'yes');
+if (!defined('WC1C_CLEANUP_GARBAGE')) define('WC1C_CLEANUP_GARBAGE', true);
 define('WC1C_TIMESTAMP', time());
 
 function wc1c_query_vars($query_vars) {
@@ -151,6 +152,14 @@ function wc1c_fix_fastcgi_get() {
   }
 }
 
+function wc1c_cleanup_dir($path_dir) {
+  $files = array_diff(scandir($path_dir), array('.', '..'));
+  foreach ($files as $file) {
+    $path = "$path_dir/$file";
+    (is_dir($path) ? wc1c_cleanup_dir($path) : unlink($path));
+  }
+}
+
 function wc1c_check_permissions($user) {
   if (!user_can($user, 'shop_manager') && !user_can($user, 'administrator')) wc1c_error("No permissions");
 }
@@ -227,6 +236,7 @@ function wc1c_filesize_to_bytes($filesize) {
 }
 
 function wc1c_mode_init($type) {
+  if (WC1C_CLEANUP_GARBAGE) wc1c_cleanup_dir(WC1C_DATA_DIR . $type);
   @exec("which unzip", $_, $status);
   $is_zip = @$status === 0 || class_exists('ZipArchive');
   if (!$is_zip) wc1c_error("The PHP extension zip is required.");
