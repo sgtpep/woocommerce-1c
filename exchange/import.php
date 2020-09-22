@@ -12,6 +12,7 @@ if (!defined('WC1C_MATCH_BY_SKU')) define('WC1C_MATCH_BY_SKU', false);
 if (!defined('WC1C_MATCH_CATEGORIES_BY_TITLE')) define('WC1C_MATCH_CATEGORIES_BY_TITLE', false);
 if (!defined('WC1C_MATCH_PROPERTIES_BY_TITLE')) define('WC1C_MATCH_PROPERTIES_BY_TITLE', false);
 if (!defined('WC1C_MATCH_PROPERTY_OPTIONS_BY_TITLE')) define('WC1C_MATCH_PROPERTY_OPTIONS_BY_TITLE', false);
+if (!defined('WC1C_USE_GUID_AS_PROPERTY_OPTION_SLUG')) define('WC1C_USE_GUID_AS_PROPERTY_OPTION_SLUG', true);
 
 function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $attrs) {
   global $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_requisite_properties, $wc1c_product;
@@ -470,7 +471,7 @@ function wc1c_replace_woocommerce_attribute($is_full, $guid, $attribute_label, $
 function wc1c_replace_property_option($property_option, $attribute_taxonomy, $order) {
   if (!isset($property_option['ИдЗначения'], $property_option['Значение'])) return;
 
-  wc1c_replace_term(true, $property_option['ИдЗначения'], null, $property_option['Значение'], $attribute_taxonomy, $order, true);
+  wc1c_replace_term(true, $property_option['ИдЗначения'], null, $property_option['Значение'], $attribute_taxonomy, $order, WC1C_USE_GUID_AS_PROPERTY_OPTION_SLUG);
 }
 
 function wc1c_replace_property($is_full, $property, $order) {
