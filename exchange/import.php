@@ -54,6 +54,9 @@ function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $att
       'ЗначенияСвойств' => array(),
       'ЗначенияРеквизитов' => array(),
     );
+    if (isset($attrs['Статус'])) {
+      $wc1c_product['Статус'] = $attrs['Статус'];
+    }
   }
   elseif (@$names[$depth - 1] == 'Товар' && $name == 'Группы') {
     $wc1c_product['Группы'] = array();
