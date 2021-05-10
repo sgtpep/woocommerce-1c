@@ -274,26 +274,21 @@ function wc1c_replace_document($document) {
   else {
     $args = array(
       'order_id' => $order->id,
-      'status' => 'on-hold',
     );
 
-    $is_paid = false;
     foreach ($document['ЗначенияРеквизитов'] as $requisite) {
-      if (!in_array($requisite['Наименование'], array("Дата оплаты по 1С", "Дата отгрузки по 1С"))) continue;
-        
-      $is_paid = true;
+      if ($requisite['Наименование'] != 'Статуса заказа ИД' || !in_array($requisite['Значение'], array("pending", "processing", "on-hold", "completed", "cancelled", "refunded", "failed"))) continue;
+      
+      $args['status'] = $requisite['Значение'];
       break;
     }
-    if ($is_paid) $args['status'] = 'processing';
-
-    $is_passed = false;
-    foreach ($document['ЗначенияРеквизитов'] as $requisite) {
-      if ($requisite['Наименование'] != 'Проведен' || $requisite['Значение'] != 'true') continue;
-        
-      $is_passed = true;
-      break;
+	
+	foreach ($document['ЗначенияРеквизитов'] as $requisite) {
+     if ($requisite['Наименование'] != 'Отменен' || $requisite['Значение'] != 'true') continue;
+       
+     $args['status'] = 'cancelled';
+     break;
     }
-    if ($is_passed) $args['status'] = 'completed';
 
     $order = wc_update_order($args);
     wc1c_check_wp_error($order);
