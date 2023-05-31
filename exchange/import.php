@@ -27,7 +27,7 @@ function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $att
   }
   elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Группы' && $name == 'Группа') {
     $wc1c_group_depth++;
-    $wc1c_groups[] = array('ИдРодителя' => isset($wc1c_groups[$wc1c_group_depth - 1]) && isset($wc1c_groups[$wc1c_group_depth - 1]['Ид']) && $wc1c_groups[$wc1c_group_depth - 1]['Ид']);
+    $wc1c_groups[] = array('ИдРодителя' => (isset($wc1c_groups[$wc1c_group_depth - 1]) && isset($wc1c_groups[$wc1c_group_depth - 1]['Ид'])) ? $wc1c_groups[$wc1c_group_depth - 1]['Ид'] : null);
   }
   elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Группа' && $name == 'Группы') {
     $result = wc1c_replace_group($is_full, $wc1c_groups[$wc1c_group_depth], $wc1c_group_order, $wc1c_groups);
@@ -209,7 +209,7 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
     if (!str_contains((string) $wc1c_product['Ид'], '#') || WC1C_DISABLE_VARIATIONS) {
       $guid = $wc1c_product['Ид'];
       if (WC1C_MATCH_BY_SKU) {
-        $sku = array_key_exists('Артикул', $wc1c_product) && $wc1c_product['Артикул'];
+        $sku = array_key_exists('Артикул', $wc1c_product) ? $wc1c_product['Артикул'] : null;
         if ($sku) {
           $_post_id = wc1c_post_id_by_meta('_sku', $sku);
           if ($_post_id) update_post_meta($_post_id, '_wc1c_guid', $guid);
@@ -430,7 +430,7 @@ function wc1c_replace_woocommerce_attribute($is_full, $guid, $attribute_label, $
   global $wpdb;
 
   $guids = get_option('wc1c_guid_attributes', array());
-  $attribute_id = array_key_exists($guid, $guids) && $guids[$guid];
+  $attribute_id = array_key_exists($guid, $guids) ? $guids[$guid] : null;
 
   if ($attribute_id) {
     $attribute_id = $wpdb->get_var($wpdb->prepare("SELECT attribute_id FROM {$wpdb->prefix}woocommerce_attribute_taxonomies WHERE attribute_id = %d", $attribute_id));
@@ -584,7 +584,7 @@ function wc1c_replace_post($guid, $post_type, $is_deleted, $is_draft, $post_titl
   }
 
   foreach ($post_meta as $meta_key => $meta_value) {
-    $current_meta_value = array_key_exists($meta_key, $current_post_meta) && $current_post_meta[$meta_key];
+    $current_meta_value = array_key_exists($meta_key, $current_post_meta) ? $current_post_meta[$meta_key] : null;
     if ($current_meta_value == $meta_value) continue;
 
     update_post_meta($post_id, $meta_key, $meta_value);
@@ -651,13 +651,13 @@ function wc1c_replace_post_attachments($post_id, $attachments) {
     if (!file_exists($attachment_path)) continue;
 
     $attachment_hash = $attachment_hash_by_path[$attachment_path];
-    $attachment_id = isset($post_attachment_id_by_hash[$attachment_hash]) && $post_attachment_id_by_hash[$attachment_hash];
+    $attachment_id = isset($post_attachment_id_by_hash[$attachment_hash]) ? $post_attachment_id_by_hash[$attachment_hash] : null;
     if (!$attachment_id) {
       $file = array(
         'tmp_name' => $attachment_path,
         'name' => basename($attachment_path),
       );
-      $attachment_id = isset($attachment['description']) && media_handle_sideload($file, $post_id, $attachment['description']);
+      $attachment_id = isset($attachment['description']) ? media_handle_sideload($file, $post_id, $attachment['description']) : null;
       wc1c_check_wp_error($attachment_id);
       
       $uploaded_attachment_path = get_attached_file($attachment_id);
@@ -682,21 +682,21 @@ function wc1c_replace_product($is_full, $guid, $product) {
 
   $preserve_fields = apply_filters('wc1c_import_preserve_product_fields', array(), $product, $is_full);
 
-  $is_deleted = isset($product['Статус']) && $product['Статус'] == 'Удален';
-  $is_draft = isset($product['Статус']) && $product['Статус'] == 'Черновик';
+  $is_deleted = isset($product['Статус']) ? $product['Статус'] == 'Удален' : null;
+  $is_draft = isset($product['Статус']) ? $product['Статус'] == 'Черновик' : null;
 
-  $post_title = isset($product['Наименование']) && $product['Наименование'];
+  $post_title = isset($product['Наименование']) ? $product['Наименование'] : null;
   if (!$post_title) return;
 
   $post_content = '';
 
   $post_meta = array(
-    '_sku' => isset($product['Артикул']) && $product['Артикул'],
+    '_sku' => isset($product['Артикул']) ? $product['Артикул'] : null,
     '_manage_stock' => WC1C_MANAGE_STOCK,
   );
 
   foreach ($product['ЗначенияРеквизитов'] as $i => $requisite) {
-    $value = isset($requisite['Значение'][0]) && $requisite['Значение'][0];
+    $value = isset($requisite['Значение'][0]) ? $requisite['Значение'][0] : null;
 	if (!$value) continue;
     if ($requisite['Наименование'] == "Полное наименование") {
       if ($wc1c_is_moysklad) $post_content = $value;
@@ -774,7 +774,7 @@ function wc1c_replace_product($is_full, $guid, $product) {
     $terms = array();
     foreach ($product['ЗначенияСвойств'] as $property) {
       $attribute_guid = $property['Ид'];
-      $attribute_id = isset($attribute_guids[$attribute_guid]) && $attribute_guids[$attribute_guid];
+      $attribute_id = isset($attribute_guids[$attribute_guid]) ? $attribute_guids[$attribute_guid] : null;
       if (!$attribute_id) continue;
 
       $attribute = wc1c_woocommerce_attribute_by_id($attribute_id);
@@ -872,7 +872,7 @@ function wc1c_replace_product($is_full, $guid, $product) {
   }
 
   foreach ($product['ХарактеристикиТовара'] as $characteristic) {
-    $attribute_value = isset($characteristic['Значение']) && $characteristic['Значение'];
+    $attribute_value = isset($characteristic['Значение']) ? $characteristic['Значение'] : null;
     if (!$attribute_value) continue;
 
     $product_attribute_name = $characteristic['Наименование'];
@@ -948,7 +948,7 @@ function wc1c_replace_product($is_full, $guid, $product) {
 
       $new_post_meta = array(
         '_product_image_gallery' => implode(',', array_slice($attachment_ids, 1)),
-        '_thumbnail_id' => isset($attachment_ids[0]) && $attachment_ids[0],
+        '_thumbnail_id' => isset($attachment_ids[0]) ? $attachment_ids[0] : null,
       );
       foreach ($new_post_meta as $meta_key => $meta_value) {
         if (!isset($post_meta[$meta_key]) || $meta_value != $post_meta[$meta_key]) update_post_meta($post_id, $meta_key, $meta_value);

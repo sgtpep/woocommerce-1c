@@ -135,7 +135,7 @@ function wc1c_replace_document_products($order, $document_products) {
       $total = wc1c_parse_decimal($document_product['Сумма']);
     }
     else {
-      $price = wc1c_parse_decimal(isset($document_product['ЦенаЗаЕдиницу']) && $document_product['ЦенаЗаЕдиницу']);
+      $price = wc1c_parse_decimal(isset($document_product['ЦенаЗаЕдиницу']) ? $document_product['ЦенаЗаЕдиницу'] : null);
       $total = $price * $quantity;
     }
 
@@ -242,10 +242,10 @@ function wc1c_replace_document($document) {
   if (!$order) {
     $args = array(
       'status' => 'on-hold',
-      'customer_note' => isset($document['Комментарий']) && $document['Комментарий'],
+      'customer_note' => isset($document['Комментарий']) ? $document['Комментарий'] : null,
     );
 
-    $contragent_name = isset($document['Контрагенты'][0]['Наименование']) && $document['Контрагенты'][0]['Наименование'];
+    $contragent_name = isset($document['Контрагенты'][0]['Наименование']) ? $document['Контрагенты'][0]['Наименование'] : null;
     if ($contragent_name == "Гость") {
       $user_id = 0;
     }
@@ -266,7 +266,7 @@ function wc1c_replace_document($document) {
       'ID' => $order->get_id(),
     );
 
-    $date = isset($document['Дата']) && $document['Дата'];
+    $date = isset($document['Дата']) ? $document['Дата'] : null;
     if ($date && !empty($document['Время'])) $date .= " {$document['Время']}";
     $timestamp = strtotime((string) $date);
     $args['post_date'] = date("Y-m-d H:i:s", $timestamp);
@@ -346,7 +346,7 @@ function wc1c_replace_document($document) {
   }
  
   foreach ($post_meta as $meta_key => $meta_value) {
-    $current_meta_value = isset($current_post_meta[$meta_key]) && $current_post_meta[$meta_key];
+    $current_meta_value = isset($current_post_meta[$meta_key]) ? $current_post_meta[$meta_key] : null;
     if ($current_meta_value == $meta_value) continue;
 
     update_post_meta($order->get_id(), $meta_key, $meta_value);

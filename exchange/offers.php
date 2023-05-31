@@ -171,9 +171,9 @@ function wc1c_replace_offer_post_meta($is_full, $post_id, $offer, $attributes = 
   }
 
   if (!is_null($price)) {
-    $sale_price = isset($current_post_meta['_sale_price']) && $current_post_meta['_sale_price'];
-    $sale_price_from = isset($current_post_meta['_sale_price_dates_from']) && $current_post_meta['_sale_price_dates_from'];
-    $sale_price_to = isset($current_post_meta['_sale_price_dates_to']) && $current_post_meta['_sale_price_dates_to'];
+    $sale_price = isset($current_post_meta['_sale_price']) ? $current_post_meta['_sale_price'] : null;
+    $sale_price_from = isset($current_post_meta['_sale_price_dates_from']) ? $current_post_meta['_sale_price_dates_from'] : null;
+    $sale_price_to = isset($current_post_meta['_sale_price_dates_to']) ? $current_post_meta['_sale_price_dates_to'] : null;
     if (empty($current_post_meta['_sale_price'])) {
       $post_meta['_price'] = $price;
     }
@@ -196,14 +196,14 @@ function wc1c_replace_offer_post_meta($is_full, $post_id, $offer, $attributes = 
   }
 
   foreach ($post_meta as $meta_key => $meta_value) {
-    $current_meta_value = isset($current_post_meta[$meta_key]) && $current_post_meta[$meta_key];
+    $current_meta_value = isset($current_post_meta[$meta_key]) ? $current_post_meta[$meta_key] : null;
     if ($meta_value !== '' && $current_meta_value == $meta_value) continue;
     if ($meta_value === '' && $current_meta_value === $meta_value) continue;
 
     update_post_meta($post_id, $meta_key, $meta_value);
   }
 
-  $quantity = isset($offer['Количество']) ? $offer['Количество'] : isset($offer['КоличествоНаСкладе']) && $offer['КоличествоНаСкладе'];
+  $quantity = isset($offer['Количество']) ? $offer['Количество'] : (isset($offer['КоличествоНаСкладе']) ? $offer['КоличествоНаСкладе'] : null);
   if (!is_null($quantity)) {
     $quantity = wc1c_parse_decimal($quantity);
     wc_update_product_stock($post_id, $quantity);
@@ -294,7 +294,7 @@ function wc1c_replace_suboffers($is_full, $suboffers, $are_products = false) {
         $characteristic_name = $suboffer_characteristic['Наименование'];
         if (!isset($offer_characteristics[$characteristic_name])) $offer_characteristics[$characteristic_name] = array();
 
-        $characteristic_value = isset($suboffer_characteristic['Значение']) && $suboffer_characteristic['Значение'];
+        $characteristic_value = isset($suboffer_characteristic['Значение']) ? $suboffer_characteristic['Значение'] : null;
         if (!in_array($characteristic_value, $offer_characteristics[$characteristic_name])) $offer_characteristics[$characteristic_name][] = $characteristic_value;
       }
     }
@@ -349,7 +349,7 @@ function wc1c_replace_suboffers($is_full, $suboffers, $are_products = false) {
     $attributes = array_fill_keys(array_keys($offer_characteristics), '');
     if (isset($suboffer['offer']['ХарактеристикиТовара'])) {
       foreach ($suboffer['offer']['ХарактеристикиТовара'] as $suboffer_characteristic) {
-        $suboffer_characteristic_value = isset($suboffer_characteristic['Значение']) && $suboffer_characteristic['Значение'];
+        $suboffer_characteristic_value = isset($suboffer_characteristic['Значение']) ? $suboffer_characteristic['Значение'] : null;
         if ($suboffer_characteristic_value) $attributes[$suboffer_characteristic['Наименование']] = $suboffer_characteristic_value;
       }
     }
