@@ -20,35 +20,35 @@ function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $att
   if (!$depth && $name != 'КоммерческаяИнформация') {
     wc1c_error("XML parser misbehavior.");
   }
-  elseif (@$names[$depth - 1] == 'Классификатор' && $name == 'Группы') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Классификатор' && $name == 'Группы') {
     $wc1c_groups = array();
     $wc1c_group_depth = -1;
     $wc1c_group_order = 1;
   }
-  elseif (@$names[$depth - 1] == 'Группы' && $name == 'Группа') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Группы' && $name == 'Группа') {
     $wc1c_group_depth++;
-    $wc1c_groups[] = array('ИдРодителя' => @$wc1c_groups[$wc1c_group_depth - 1]['Ид']);
+    $wc1c_groups[] = array('ИдРодителя' => isset($wc1c_groups[$wc1c_group_depth - 1]) && isset($wc1c_groups[$wc1c_group_depth - 1]['Ид']) && $wc1c_groups[$wc1c_group_depth - 1]['Ид']);
   }
-  elseif (@$names[$depth - 1] == 'Группа' && $name == 'Группы') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Группа' && $name == 'Группы') {
     $result = wc1c_replace_group($is_full, $wc1c_groups[$wc1c_group_depth], $wc1c_group_order, $wc1c_groups);
     if ($result) $wc1c_group_order++;
 
     $wc1c_groups[$wc1c_group_depth]['Группы'] = true;
   }
-  elseif (@$names[$depth - 1] == 'Классификатор' && $name == 'Свойства') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Классификатор' && $name == 'Свойства') {
     $wc1c_property_order = 1;
     $wc1c_requisite_properties = array();
   }
-  elseif (@$names[$depth - 1] == 'Свойства' && $name == 'Свойство') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Свойства' && $name == 'Свойство') {
     $wc1c_property = array();
   }
-  elseif (@$names[$depth - 1] == 'Свойство' && $name == 'ВариантыЗначений') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Свойство' && $name == 'ВариантыЗначений') {
     $wc1c_property['ВариантыЗначений'] = array();
   }
-  elseif (@$names[$depth - 1] == 'ВариантыЗначений' && $name == 'Справочник') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'ВариантыЗначений' && $name == 'Справочник') {
     $wc1c_property['ВариантыЗначений'][] = array();
   }
-  elseif (@$names[$depth - 1] == 'Товары' && $name == 'Товар') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Товары' && $name == 'Товар') {
     $wc1c_product = array(
       'ХарактеристикиТовара' => array(),
       'ЗначенияСвойств' => array(),
@@ -58,34 +58,34 @@ function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $att
       $wc1c_product['Статус'] = $attrs['Статус'];
     }
   }
-  elseif (@$names[$depth - 1] == 'Товар' && $name == 'Группы') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Товар' && $name == 'Группы') {
     $wc1c_product['Группы'] = array();
   }
-  elseif (@$names[$depth - 1] == 'Группы' && $name == 'Ид') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Группы' && $name == 'Ид') {
     $wc1c_product['Группы'][] = '';
   }
-  elseif (@$names[$depth - 1] == 'Товар' && $name == 'Картинка') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Товар' && $name == 'Картинка') {
     if (!isset($wc1c_product['Картинка'])) $wc1c_product['Картинка'] = array();
     $wc1c_product['Картинка'][] = '';
   }
-  elseif (@$names[$depth - 1] == 'Товар' && $name == 'Изготовитель') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Товар' && $name == 'Изготовитель') {
     $wc1c_product['Изготовитель'] = array();
   }
-  elseif (@$names[$depth - 1] == 'ХарактеристикиТовара' && $name == 'ХарактеристикаТовара') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'ХарактеристикиТовара' && $name == 'ХарактеристикаТовара') {
     $wc1c_product['ХарактеристикиТовара'][] = array();
   }
-  elseif (@$names[$depth - 1] == 'ЗначенияСвойств' && $name == 'ЗначенияСвойства') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'ЗначенияСвойств' && $name == 'ЗначенияСвойства') {
     $wc1c_product['ЗначенияСвойств'][] = array();
   }
-  elseif (@$names[$depth - 1] == 'ЗначенияСвойства' && $name == 'Значение') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'ЗначенияСвойства' && $name == 'Значение') {
     $i = count($wc1c_product['ЗначенияСвойств']) - 1;
     if (!isset($wc1c_product['ЗначенияСвойств'][$i]['Значение'])) $wc1c_product['ЗначенияСвойств'][$i]['Значение'] = array();
     $wc1c_product['ЗначенияСвойств'][$i]['Значение'][] = '';
   }
-  elseif (@$names[$depth - 1] == 'ЗначенияРеквизитов' && $name == 'ЗначениеРеквизита') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'ЗначенияРеквизитов' && $name == 'ЗначениеРеквизита') {
     $wc1c_product['ЗначенияРеквизитов'][] = array();
   }
-  elseif (@$names[$depth - 1] == 'ЗначениеРеквизита' && $name == 'Значение') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'ЗначениеРеквизита' && $name == 'Значение') {
     $i = count($wc1c_product['ЗначенияРеквизитов']) - 1;
     if (!isset($wc1c_product['ЗначенияРеквизитов'][$i]['Значение'])) $wc1c_product['ЗначенияРеквизитов'][$i]['Значение'] = array();
     $wc1c_product['ЗначенияРеквизитов'][$i]['Значение'][] = '';
@@ -95,55 +95,68 @@ function wc1c_import_start_element_handler($is_full, $names, $depth, $name, $att
 function wc1c_import_character_data_handler($is_full, $names, $depth, $name, $data) {
   global $wc1c_groups, $wc1c_group_depth, $wc1c_property, $wc1c_product;
 
-  if (@$names[$depth - 2] == 'Группы' && @$names[$depth - 1] == 'Группа' && $name != 'Группы') {
-    @$wc1c_groups[$wc1c_group_depth][$name] .= $data;
+  if (array_key_exists($depth - 2, $names) && $names[$depth - 2] == 'Группы' && array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Группа' && $name != 'Группы') {
+    isset($wc1c_groups[$wc1c_group_depth][$name]) || $wc1c_groups[$wc1c_group_depth][$name] = '';
+    $wc1c_groups[$wc1c_group_depth][$name] .= $data;
   }
-  elseif (@$names[$depth - 2] == 'Свойства' && @$names[$depth - 1] == 'Свойство' && $name != 'ВариантыЗначений') {
-    @$wc1c_property[$name] .= $data;
+  elseif (array_key_exists($depth - 2, $names) && $names[$depth - 2] == 'Свойства' && array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Свойство' && $name != 'ВариантыЗначений') {
+    isset($wc1c_property[$name]) || $wc1c_property[$name] = '';
+    $wc1c_property[$name] .= $data;
   }
-  elseif (@$names[$depth - 2] == 'ХарактеристикиТовара' && @$names[$depth - 1] == 'ХарактеристикаТовара') {
+  elseif (array_key_exists($depth - 2, $names) && $names[$depth - 2] == 'ХарактеристикиТовара' && array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'ХарактеристикаТовара') {
     $i = count($wc1c_product['ХарактеристикиТовара']) - 1;
-    @$wc1c_product['ХарактеристикиТовара'][$i][$name] .= $data;
+    isset($wc1c_product['ХарактеристикиТовара'][$i][$name]) || $wc1c_product['ХарактеристикиТовара'][$i][$name] = '';
+    $wc1c_product['ХарактеристикиТовара'][$i][$name] .= $data;
   }
-  elseif (@$names[$depth - 2] == 'ВариантыЗначений' && @$names[$depth - 1] == 'Справочник') {
+  elseif (array_key_exists($depth - 2, $names) && $names[$depth - 2] == 'ВариантыЗначений' && array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Справочник') {
     $i = count($wc1c_property['ВариантыЗначений']) - 1;
-    @$wc1c_property['ВариантыЗначений'][$i][$name] .= $data;
+    isset($wc1c_property['ВариантыЗначений'][$i][$name]) || $wc1c_property['ВариантыЗначений'][$i][$name] = '';
+    $wc1c_property['ВариантыЗначений'][$i][$name] .= $data;
   }
-  elseif (@$names[$depth - 2] == 'Товары' && @$names[$depth - 1] == 'Товар' && !in_array($name, array('Группы', 'Картинка', 'Изготовитель', 'ХарактеристикиТовара', 'ЗначенияСвойств', 'СтавкиНалогов', 'ЗначенияРеквизитов'))) {
-    @$wc1c_product[$name] .= $data;
+  elseif (array_key_exists($depth - 2, $names) && $names[$depth - 2] == 'Товары' && array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Товар' && !in_array($name, array('Группы', 'Картинка', 'Изготовитель', 'ХарактеристикиТовара', 'ЗначенияСвойств', 'СтавкиНалогов', 'ЗначенияРеквизитов'))) {
+    isset($wc1c_product[$name]) || $wc1c_product[$name] = '';
+    $wc1c_product[$name] .= $data;
   }
-  elseif (@$names[$depth - 2] == 'БазоваяЕдиница' && @$names[$depth - 1] == 'Пересчет') {
-    @$wc1c_product['Пересчет'][$name] .= $data;
+  elseif (array_key_exists($depth - 2, $names) && $names[$depth - 2] == 'БазоваяЕдиница' && array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Пересчет') {
+    isset($wc1c_product['Пересчет'][$name]) || $wc1c_product['Пересчет'][$name] = '';
+    $wc1c_product['Пересчет'][$name] .= $data;
   }
-  elseif (@$names[$depth - 2] == 'Товар' && @$names[$depth - 1] == 'Группы' && $name == 'Ид') {
+  elseif (array_key_exists($depth - 2, $names) && $names[$depth - 2] == 'Товар' && array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Группы' && $name == 'Ид') {
     $i = count($wc1c_product['Группы']) - 1;
-    @$wc1c_product['Группы'][$i] .= $data;
+    isset($wc1c_product['Группы'][$i]) || $wc1c_product['Группы'][$i] = '';
+    $wc1c_product['Группы'][$i] .= $data;
   }
-  elseif (@$names[$depth - 2] == 'Товары' && @$names[$depth - 1] == 'Товар' && $name == 'Картинка') {
+  elseif (array_key_exists($depth - 2, $names) && $names[$depth - 2] == 'Товары' && array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Товар' && $name == 'Картинка') {
     $i = count($wc1c_product['Картинка']) - 1;
-    @$wc1c_product['Картинка'][$i] .= $data;
+    isset($wc1c_product['Картинка'][$i]) || $wc1c_product['Картинка'][$i] = '';
+    $wc1c_product['Картинка'][$i] .= $data;
   }
-  elseif (@$names[$depth - 2] == 'Товар' && @$names[$depth - 1] == 'Изготовитель') {
-    @$wc1c_product['Изготовитель'][$name] .= $data;
+  elseif (array_key_exists($depth - 2, $names) && $names[$depth - 2] == 'Товар' && array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Изготовитель') {
+    isset($wc1c_product['Изготовитель'][$name]) || $wc1c_product['Изготовитель'][$name] = '';
+    $wc1c_product['Изготовитель'][$name] .= $data;
   }
-  elseif (@$names[$depth - 2] == 'ЗначенияСвойств' && @$names[$depth - 1] == 'ЗначенияСвойства') {
+  elseif (array_key_exists($depth - 2, $names) && $names[$depth - 2] == 'ЗначенияСвойств' && array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'ЗначенияСвойства') {
     $i = count($wc1c_product['ЗначенияСвойств']) - 1;
     if ($name != 'Значение') {
-      @$wc1c_product['ЗначенияСвойств'][$i][$name] .= $data;
+      isset($wc1c_product['ЗначенияСвойств'][$i][$name]) || $wc1c_product['ЗначенияСвойств'][$i][$name] = '';
+      $wc1c_product['ЗначенияСвойств'][$i][$name] .= $data;
     }
     else {
       $j = count($wc1c_product['ЗначенияСвойств'][$i]['Значение']) - 1;
-      @$wc1c_product['ЗначенияСвойств'][$i]['Значение'][$j] .= $data;
+      isset($wc1c_product['ЗначенияСвойств'][$i]['Значение'][$j]) || $wc1c_product['ЗначенияСвойств'][$i]['Значение'][$j] = '';
+      $wc1c_product['ЗначенияСвойств'][$i]['Значение'][$j] .= $data;
     }
   }
-  elseif (@$names[$depth - 2] == 'ЗначенияРеквизитов' && @$names[$depth - 1] == 'ЗначениеРеквизита') {
+  elseif (array_key_exists($depth - 2, $names) && $names[$depth - 2] == 'ЗначенияРеквизитов' && array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'ЗначениеРеквизита') {
     $i = count($wc1c_product['ЗначенияРеквизитов']) - 1;
     if ($name != 'Значение') {
-      @$wc1c_product['ЗначенияРеквизитов'][$i][$name] .= $data;
+      isset($wc1c_product['ЗначенияРеквизитов'][$i][$name]) || $wc1c_product['ЗначенияРеквизитов'][$i][$name] = '';
+      $wc1c_product['ЗначенияРеквизитов'][$i][$name] .= $data;
     }
     else {
       $j = count($wc1c_product['ЗначенияРеквизитов'][$i]['Значение']) - 1;
-      @$wc1c_product['ЗначенияРеквизитов'][$i]['Значение'][$j] .= $data;
+      isset($wc1c_product['ЗначенияРеквизитов'][$i]['Значение'][$j]) || $wc1c_product['ЗначенияРеквизитов'][$i]['Значение'][$j] = '';
+      $wc1c_product['ЗначенияРеквизитов'][$i]['Значение'][$j] .= $data;
     }
   }
 }
@@ -151,7 +164,7 @@ function wc1c_import_character_data_handler($is_full, $names, $depth, $name, $da
 function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
   global $wpdb, $wc1c_groups, $wc1c_group_depth, $wc1c_group_order, $wc1c_property, $wc1c_property_order, $wc1c_requisite_properties, $wc1c_product, $wc1c_subproducts;
 
-  if (@$names[$depth - 1] == 'Группы' && $name == 'Группа') {
+  if (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Группы' && $name == 'Группа') {
     if (empty($wc1c_groups[$wc1c_group_depth]['Группы'])) {
       $result = wc1c_replace_group($is_full, $wc1c_groups[$wc1c_group_depth], $wc1c_group_order, $wc1c_groups);
       if ($result) $wc1c_group_order++;
@@ -160,10 +173,10 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
     array_pop($wc1c_groups);
     $wc1c_group_depth--;
   }
-  if (@$names[$depth - 1] == 'Классификатор' && $name == 'Группы') {
+  if (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Классификатор' && $name == 'Группы') {
     wc1c_clean_woocommerce_categories($is_full);
   }
-  elseif (@$names[$depth - 1] == 'Свойства' && $name == 'Свойство') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Свойства' && $name == 'Свойство') {
     $result = wc1c_replace_property($is_full, $wc1c_property, $wc1c_property_order);
     if ($result) {
       $attribute_taxonomy = $result;
@@ -175,12 +188,12 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
       $wc1c_requisite_properties[$wc1c_property['Ид']] = $wc1c_property;
     }
   }
-  elseif (@$names[$depth - 1] == 'Классификатор' && $name == 'Свойства') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Классификатор' && $name == 'Свойства') {
     wc1c_clean_woocommerce_attributes($is_full);
 
     delete_transient('wc_attribute_taxonomies');
   }
-  elseif (@$names[$depth - 1] == 'Товары' && $name == 'Товар') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Товары' && $name == 'Товар') {
     if ($wc1c_requisite_properties) {
       foreach ($wc1c_product['ЗначенияСвойств'] as $product_property) {
         if (!array_key_exists($product_property['Ид'], $wc1c_requisite_properties)) continue;
@@ -193,10 +206,10 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
       }
     }
 
-    if (strpos($wc1c_product['Ид'], '#') === false || WC1C_DISABLE_VARIATIONS) {
+    if (!str_contains((string) $wc1c_product['Ид'], '#') || WC1C_DISABLE_VARIATIONS) {
       $guid = $wc1c_product['Ид'];
       if (WC1C_MATCH_BY_SKU) {
-        $sku = @$wc1c_product['Артикул'];
+        $sku = array_key_exists('Артикул', $wc1c_product) && $wc1c_product['Артикул'];
         if ($sku) {
           $_post_id = wc1c_post_id_by_meta('_sku', $sku);
           if ($_post_id) update_post_meta($_post_id, '_wc1c_guid', $guid);
@@ -215,7 +228,7 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
     }
     else {
       $guid = $wc1c_product['Ид'];
-      list($product_guid, ) = explode('#', $guid, 2);
+      list($product_guid, ) = explode('#', (string) $guid, 2);
 
       if (empty($wc1c_subproducts) || $wc1c_subproducts[0]['product_guid'] != $product_guid) {
         if ($wc1c_subproducts) wc1c_replace_subproducts($is_full, $wc1c_subproducts);
@@ -231,7 +244,7 @@ function wc1c_import_end_element_handler($is_full, $names, $depth, $name) {
       );
     }
   }
-  elseif (@$names[$depth - 1] == 'Каталог' && $name == 'Товары') {
+  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Каталог' && $name == 'Товары') {
     if ($wc1c_subproducts) wc1c_replace_subproducts($is_full, $wc1c_subproducts);
 
     wc1c_clean_products($is_full);
@@ -265,7 +278,7 @@ function wc1c_term_id_by_meta($key, $value) {
 function wc1c_unique_term_name($name, $taxonomy, $parent = null) {
   global $wpdb;
 
-  $name = htmlspecialchars($name);
+  $name = htmlspecialchars((string) $name);
 
   $sql = "SELECT * FROM $wpdb->terms NATURAL JOIN $wpdb->term_taxonomy WHERE name = %s AND taxonomy = %s AND parent = %d LIMIT 1";
   if (!$parent) $parent = 0;
@@ -289,9 +302,9 @@ function wc1c_unique_term_slug($slug, $taxonomy, $parent = null) {
 
   while (true) {
     $sanitized_slug = sanitize_title($slug);
-    if (strlen($sanitized_slug) <= 195) break;
+    if (strlen((string) $sanitized_slug) <= 195) break;
 
-    $slug = mb_substr($slug, 0, mb_strlen($slug) - 3);
+    $slug = mb_substr((string) $slug, 0, mb_strlen((string) $slug) - 3);
   }
 
   $sql = "SELECT * FROM $wpdb->terms NATURAL JOIN $wpdb->term_taxonomy WHERE slug = %s AND taxonomy = %s AND parent = %d LIMIT 1";
@@ -313,15 +326,15 @@ function wc1c_unique_term_slug($slug, $taxonomy, $parent = null) {
 }
 
 function wc1c_wp_unique_term_slug($slug, $term, $original_slug) {
-  if (mb_strlen($slug) <= 200) return $slug;
+  if (mb_strlen((string) $slug) <= 200) return $slug;
 
   do {
-    $slug = urldecode($slug);
+    $slug = urldecode((string) $slug);
     $slug = mb_substr($slug, 0, mb_strlen($slug) - 1);
     $slug = urlencode($slug);
     $slug = wp_unique_term_slug($slug, $term);
   }
-  while (mb_strlen($slug) > 200);
+  while (mb_strlen((string) $slug) > 200);
 
   return $slug;
 }
@@ -334,7 +347,7 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
   if (!$term_id) {
     if (WC1C_MATCH_CATEGORIES_BY_TITLE && $taxonomy === 'product_cat') {
       $term_id = $wpdb->get_var($wpdb->prepare("SELECT term_id FROM {$wpdb->prefix}terms WHERE name = %s LIMIT 1", $name));
-    } elseif (WC1C_MATCH_PROPERTY_OPTIONS_BY_TITLE && substr($taxonomy, 0, 3) === 'pa_') {
+    } elseif (WC1C_MATCH_PROPERTY_OPTIONS_BY_TITLE && str_starts_with((string) $taxonomy, 'pa_')) {
       $term_id = $wpdb->get_var($wpdb->prepare("SELECT t.term_id FROM $wpdb->terms t LEFT JOIN $wpdb->term_taxonomy tt ON t.term_id = tt.term_id WHERE t.name = %s AND tt.taxonomy = %s LIMIT 1", $name, $taxonomy));
     }
     if ($term_id) update_term_meta($term_id, 'wc1c_guid', "$taxonomy::$guid");
@@ -362,7 +375,7 @@ function wc1c_replace_term($is_full, $guid, $parent_guid, $name, $taxonomy, $ord
   }
 
   if (empty($is_added)) {
-    if (trim($name) != $term->name) $name = wc1c_unique_term_name($name, $taxonomy, $parent);
+    if (trim((string) $name) != $term->name) $name = wc1c_unique_term_name($name, $taxonomy, $parent);
     $parent = $parent_guid ? wc1c_term_id_by_meta('wc1c_guid', "$taxonomy::$parent_guid") : null;
     $args = array(
       'name' => $name,
@@ -394,8 +407,8 @@ function wc1c_unique_woocommerce_attribute_name($attribute_label) {
 
   $attribute_name = wc_sanitize_taxonomy_name($attribute_label);
   $max_length = 32 - strlen('pa_') - strlen('-00');
-  while (strlen($attribute_name) > $max_length) {
-    $attribute_name = mb_substr($attribute_name, 0, mb_strlen($attribute_name) - 1);
+  while (strlen((string) $attribute_name) > $max_length) {
+    $attribute_name = mb_substr((string) $attribute_name, 0, mb_strlen((string) $attribute_name) - 1);
   }
 
   $sql = "SELECT * FROM {$wpdb->prefix}woocommerce_attribute_taxonomies WHERE attribute_name = %s";
@@ -417,7 +430,7 @@ function wc1c_replace_woocommerce_attribute($is_full, $guid, $attribute_label, $
   global $wpdb;
 
   $guids = get_option('wc1c_guid_attributes', array());
-  $attribute_id = @$guids[$guid];
+  $attribute_id = array_key_exists($guid, $guids) && $guids[$guid];
 
   if ($attribute_id) {
     $attribute_id = $wpdb->get_var($wpdb->prepare("SELECT attribute_id FROM {$wpdb->prefix}woocommerce_attribute_taxonomies WHERE attribute_id = %d", $attribute_id));
@@ -571,7 +584,7 @@ function wc1c_replace_post($guid, $post_type, $is_deleted, $is_draft, $post_titl
   }
 
   foreach ($post_meta as $meta_key => $meta_value) {
-    $current_meta_value = @$current_post_meta[$meta_key];
+    $current_meta_value = array_key_exists($meta_key, $current_post_meta) && $current_post_meta[$meta_key];
     if ($current_meta_value == $meta_value) continue;
 
     update_post_meta($post_id, $meta_key, $meta_value);
@@ -620,7 +633,7 @@ function wc1c_replace_post_attachments($post_id, $attachments) {
   foreach ($post_attachments as $post_attachment) {
     $post_attachment_path = get_attached_file($post_attachment->ID, true);
     if (file_exists($post_attachment_path)) {
-      $post_attachment_hash = basename($post_attachment_path) . md5_file($post_attachment_path);
+      $post_attachment_hash = basename((string) $post_attachment_path) . md5_file($post_attachment_path);
       $post_attachment_id_by_hash[$post_attachment_hash] = $post_attachment->ID;
       if (isset($attachment_path_by_hash[$post_attachment_hash])) {
         unset($attachment_path_by_hash[$post_attachment_hash]);
@@ -638,13 +651,13 @@ function wc1c_replace_post_attachments($post_id, $attachments) {
     if (!file_exists($attachment_path)) continue;
 
     $attachment_hash = $attachment_hash_by_path[$attachment_path];
-    $attachment_id = @$post_attachment_id_by_hash[$attachment_hash];
+    $attachment_id = isset($post_attachment_id_by_hash[$attachment_hash]) && $post_attachment_id_by_hash[$attachment_hash];
     if (!$attachment_id) {
       $file = array(
         'tmp_name' => $attachment_path,
         'name' => basename($attachment_path),
       );
-      $attachment_id = @media_handle_sideload($file, $post_id, @$attachment['description']);
+      $attachment_id = isset($attachment['description']) && media_handle_sideload($file, $post_id, $attachment['description']);
       wc1c_check_wp_error($attachment_id);
       
       $uploaded_attachment_path = get_attached_file($attachment_id);
@@ -658,7 +671,7 @@ function wc1c_replace_post_attachments($post_id, $attachments) {
 }
 
 function wc1c_replace_requisite_name_callback($matches) {
-  return ' ' . mb_convert_case($matches[0], MB_CASE_LOWER, "UTF-8");
+  return ' ' . mb_convert_case((string) $matches[0], MB_CASE_LOWER, "UTF-8");
 }
 
 function wc1c_replace_product($is_full, $guid, $product) {
@@ -669,21 +682,21 @@ function wc1c_replace_product($is_full, $guid, $product) {
 
   $preserve_fields = apply_filters('wc1c_import_preserve_product_fields', array(), $product, $is_full);
 
-  $is_deleted = @$product['Статус'] == 'Удален';
-  $is_draft = @$product['Статус'] == 'Черновик';
+  $is_deleted = isset($product['Статус']) && $product['Статус'] == 'Удален';
+  $is_draft = isset($product['Статус']) && $product['Статус'] == 'Черновик';
 
-  $post_title = @$product['Наименование'];
+  $post_title = isset($product['Наименование']) && $product['Наименование'];
   if (!$post_title) return;
 
   $post_content = '';
 
   $post_meta = array(
-    '_sku' => @$product['Артикул'],
+    '_sku' => isset($product['Артикул']) && $product['Артикул'],
     '_manage_stock' => WC1C_MANAGE_STOCK,
   );
 
   foreach ($product['ЗначенияРеквизитов'] as $i => $requisite) {
-    $value = @$requisite['Значение'][0];
+    $value = isset($requisite['Значение'][0]) && $requisite['Значение'][0];
 	if (!$value) continue;
     if ($requisite['Наименование'] == "Полное наименование") {
       if ($wc1c_is_moysklad) $post_content = $value;
@@ -716,7 +729,7 @@ function wc1c_replace_product($is_full, $guid, $product) {
   $post_name = apply_filters('wc1c_import_product_slug', $post_name, $product, $is_full);
 
   $description = isset($product['Описание']) ? $product['Описание'] : '';
-  list($is_added, $post_id, $post_meta) = wc1c_replace_post($guid, 'product', $is_deleted, $is_draft, $post_title, $post_name, $description, $post_content, $post_meta, 'product_cat', @$product['Группы'], $preserve_fields);
+  list($is_added, $post_id, $post_meta) = wc1c_replace_post($guid, 'product', $is_deleted, $is_draft, $post_title, $post_name, $description, $post_content, $post_meta, 'product_cat', isset($product['Группы']) ? $product['Группы'] : [], $preserve_fields);
 
   // if (isset($product['Пересчет']['Единица'])) {
   //   $quantity = wc1c_parse_decimal($product['Пересчет']['Единица']);
@@ -741,7 +754,7 @@ function wc1c_replace_product($is_full, $guid, $product) {
 
   $product_attribute_values = array();
   if (!empty($product['Изготовитель']['Наименование'])) $product_attribute_values["Наименование изготовителя"] = $product['Изготовитель']['Наименование'];
-  if (!empty($product['БазоваяЕдиница']) && trim($product['БазоваяЕдиница'])) $product_attribute_values["Базовая единица"] = trim($product['БазоваяЕдиница']);
+  if (!empty($product['БазоваяЕдиница']) && trim((string) $product['БазоваяЕдиница'])) $product_attribute_values["Базовая единица"] = trim((string) $product['БазоваяЕдиница']);
 
   foreach ($product_attribute_values as $product_attribute_name => $product_attribute_value) {
     $product_attribute_key = sanitize_title($product_attribute_name);
@@ -761,7 +774,7 @@ function wc1c_replace_product($is_full, $guid, $product) {
     $terms = array();
     foreach ($product['ЗначенияСвойств'] as $property) {
       $attribute_guid = $property['Ид'];
-      $attribute_id = @$attribute_guids[$attribute_guid];
+      $attribute_id = isset($attribute_guids[$attribute_guid]) && $attribute_guids[$attribute_guid];
       if (!$attribute_id) continue;
 
       $attribute = wc1c_woocommerce_attribute_by_id($attribute_id);
@@ -769,12 +782,12 @@ function wc1c_replace_product($is_full, $guid, $product) {
 
       $attribute_terms = array();
       $attribute_values = array();
-      $property_values = @$property['Значение'];
+      $property_values = isset($property['Значение']) ? $property['Значение'] : [];
       if ($property_values) {
         foreach ($property_values as $property_value) {
           if (!$property_value) continue;
 
-          if ($attribute['attribute_type'] == 'select' && preg_match("/^\w+-\w+-\w+-\w+-\w+$/", $property_value)) {
+          if ($attribute['attribute_type'] == 'select' && preg_match("/^\w+-\w+-\w+-\w+-\w+$/", (string) $property_value)) {
             $term_id = wc1c_term_id_by_meta('wc1c_guid', "{$attribute['taxonomy']}::$property_value");
             if ($term_id) $attribute_terms[] = (int) $term_id;
           }
@@ -783,7 +796,7 @@ function wc1c_replace_product($is_full, $guid, $product) {
               $attribute_values[] = $property_value;
             }
             else {
-              $term_names = explode(WC1C_MULTIPLE_VALUES_DELIMETER, $property_value);
+              $term_names = explode(WC1C_MULTIPLE_VALUES_DELIMETER, (string) $property_value);
               $term_names = array_map('trim', $term_names);
               foreach ($term_names as $term_name) {
                 $result = get_term_by('name', $term_name, $attribute['taxonomy'], ARRAY_A);
@@ -840,12 +853,12 @@ function wc1c_replace_product($is_full, $guid, $product) {
   }
 
   foreach ($product['ЗначенияРеквизитов'] as $requisite) {
-    $attribute_values = @$requisite['Значение'];
+    $attribute_values = isset($requisite['Значение']) ? $requisite['Значение'] : [];
     if (!$attribute_values) continue;
-    if (strpos($attribute_values[0], "import_files/") === 0) continue;
+    if (str_starts_with((string) $attribute_values[0], "import_files/")) continue;
 
     $requisite_name = $requisite['Наименование'];
-    $product_attribute_name = strpos($requisite_name, ' ') === false ? preg_replace_callback("/(?<!^)\p{Lu}/u", 'wc1c_replace_requisite_name_callback', $requisite_name) : $requisite_name;
+    $product_attribute_name = !str_contains((string) $requisite_name, ' ') ? preg_replace_callback("/(?<!^)\p{Lu}/u", 'wc1c_replace_requisite_name_callback', (string) $requisite_name) : $requisite_name;
     $product_attribute_key = sanitize_title($requisite_name);
     $product_attribute_position = count($product_attributes);
     $product_attributes[$product_attribute_key] = array(
@@ -859,7 +872,7 @@ function wc1c_replace_product($is_full, $guid, $product) {
   }
 
   foreach ($product['ХарактеристикиТовара'] as $characteristic) {
-    $attribute_value = @$characteristic['Значение'];
+    $attribute_value = isset($characteristic['Значение']) && $characteristic['Значение'];
     if (!$attribute_value) continue;
 
     $product_attribute_name = $characteristic['Наименование'];
@@ -916,13 +929,13 @@ function wc1c_replace_product($is_full, $guid, $product) {
         $attribute_name = $requisite['Наименование'];
         if (!isset($attachment_keys[$attribute_name])) continue;
 
-        $attribute_values = @$requisite['Значение'];
+        $attribute_values = isset($requisite['Значение']) ? $requisite['Значение'] : [];
         if (!$attribute_values) continue;
 
         $attribute_value = $attribute_values[0];
-        if (strpos($attribute_value, "import_files/") !== 0) continue;
+        if (!str_starts_with((string) $attribute_value, "import_files/")) continue;
           
-        list($picture_path, $attribute_value) = explode('#', $attribute_value, 2);
+        list($picture_path, $attribute_value) = explode('#', (string) $attribute_value, 2);
         if (!isset($attachments[$picture_path])) continue;
 
         $attachment_key = $attachment_keys[$attribute_name];
@@ -935,10 +948,10 @@ function wc1c_replace_product($is_full, $guid, $product) {
 
       $new_post_meta = array(
         '_product_image_gallery' => implode(',', array_slice($attachment_ids, 1)),
-        '_thumbnail_id' => @$attachment_ids[0],
+        '_thumbnail_id' => isset($attachment_ids[0]) && $attachment_ids[0],
       );
       foreach ($new_post_meta as $meta_key => $meta_value) {
-        if ($meta_value != @$post_meta[$meta_key]) update_post_meta($post_id, $meta_key, $meta_value);
+        if (!isset($post_meta[$meta_key]) || $meta_value != $post_meta[$meta_key]) update_post_meta($post_id, $meta_key, $meta_value);
       }
     }
   }
