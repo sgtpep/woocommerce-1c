@@ -39,7 +39,7 @@ function wc1c_wpdb_end($is_commit = false, $no_check = false) {
 
 function wc1c_full_request_uri() {
   $uri = 'http';
-  if (@$_SERVER['HTTPS'] == 'on') $uri .= 's';
+  if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') $uri .= 's';
   $uri .= "://{$_SERVER['SERVER_NAME']}";
   if ($_SERVER['SERVER_PORT'] != 80) $uri .= ":{$_SERVER['SERVER_PORT']}";
   if (isset($_SERVER['REQUEST_URI'])) $uri .= $_SERVER['REQUEST_URI'];
@@ -96,7 +96,7 @@ function wc1c_output_callback($buffer) {
   global $wc1c_is_error;
 
   if (!headers_sent()) {
-    $is_xml = @$_GET['mode'] == 'query';
+    $is_xml = isset($_GET['mode']) ? $_GET['mode'] == 'query' : null;
     $content_type = !$is_xml || $wc1c_is_error ? 'text/plain' : 'text/xml';
     header("Content-Type: $content_type; charset=" . WC1C_XML_CHARSET);
   }
@@ -237,8 +237,8 @@ function wc1c_filesize_to_bytes($filesize) {
 
 function wc1c_mode_init($type) {
   if (WC1C_CLEANUP_GARBAGE) wc1c_cleanup_dir(WC1C_DATA_DIR . $type);
-  @exec("which unzip", $_, $status);
-  $is_zip = @$status === 0 || class_exists('ZipArchive');
+  exec("which unzip", $_, $status);
+  $is_zip = (isset($status) && $status === 0) || class_exists('ZipArchive');
   if (!$is_zip) wc1c_error("The PHP extension zip is required.");
 
   $file_limits = array(
@@ -246,8 +246,8 @@ function wc1c_mode_init($type) {
     wc1c_filesize_to_bytes(ini_get('post_max_size')),
     wc1c_filesize_to_bytes(ini_get('memory_limit')),
   );
-  @exec("grep ^MemFree: /proc/meminfo", $output, $status);
-  if (@$status === 0 && $output) {
+  exec("grep ^MemFree: /proc/meminfo", $output, $status);
+  if (isset($status) && $status === 0 && $output) {
     $output = preg_split("/\s+/", $output[0]);
     $file_limits[] = intval($output[1] * 1000 * 0.7);
   }
@@ -308,7 +308,7 @@ function wc1c_check_wpdb_error() {
 
 function wc1c_disable_time_limit() {
   $disabled_functions = explode(',', ini_get('disable_functions'));
-  if (!in_array('set_time_limit', $disabled_functions)) @set_time_limit(0);
+  if (!in_array('set_time_limit', $disabled_functions)) set_time_limit(0);
 }
 
 function wc1c_set_transaction_mode() {
@@ -339,9 +339,9 @@ function wc1c_unpack_files($type) {
   ob_end_clean();
 
   $command = sprintf("unzip -qqo -x %s -d %s", implode(' ', array_map('escapeshellarg', $zip_paths)), escapeshellarg($data_dir));
-  @exec($command, $_, $status);
+  exec($command, $_, $status);
 
-  if (@$status !== 0) {
+  if (isset($status) && $status !== 0) {
     foreach ($zip_paths as $zip_path) {
       $zip = new ZipArchive();
       $result = $zip->open($zip_path);

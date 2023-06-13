@@ -148,22 +148,22 @@ foreach ($order_posts as $order_post) {
   }
 
   if (WC1C_CURRENCY) $document_currency = WC1C_CURRENCY;
-  else $document_currency = get_option('wc1c_currency', @$order_meta['_order_currency']);
+  else $document_currency = get_option('wc1c_currency', isset($order_meta['_order_currency']) ? $order_meta['_order_currency'] : null);
 
   $document = array(
     'order_id' => $order_post->ID,
     'currency' => $document_currency,
-    'total' => @$order_meta['_order_total'],
+    'total' => isset($order_meta['_order_total']) ? $order_meta['_order_total'] : null,
     'comment' => $order_post->post_excerpt,
     'contragents' => $contragents,
     'products' => $products,
-    'payment_method_title' => @$order_meta['_payment_method_title'],
+    'payment_method_title' => isset($order_meta['_payment_method_title']) ? $order_meta['_payment_method_title'] : null,
     'status' => $status,
     'status_name' => $order_status_name,
     'has_shipping' => count($order_shipping_items) > 0,
     'modified_at' => $order_post->post_modified,
   );
-  list($document['date'], $document['time']) = explode(' ', $order_post->post_date, 2);
+  list($document['date'], $document['time']) = explode(' ', (string) $order_post->post_date, 2);
 
   $documents[] = $document;
 }
@@ -235,7 +235,7 @@ echo '<?xml version="1.0" encoding="' . WC1C_XML_CHARSET . '"?>';
             </Представители>
             */ ?>
           </Контрагент>
-        <?php endforeach ?>
+<?php endforeach ?>
       </Контрагенты>
       <Товары>
         <?php foreach ($document['products'] as $product): ?>
