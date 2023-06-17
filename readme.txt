@@ -6,7 +6,7 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Tags: 1c, 1c-enterprise, commerceml, integration, e-commerce, ecommerce, commerce, shop, cart, woothemes, woocommerce
 Requires at least: 3.8
 Tested up to: 5.4
-Stable tag: 0.9.20
+Stable tag: 0.9.19
 
 Provides data exchange between WooCommerce plugin and business application "1C:Enterprise 8. Trade Management" (and compatible ones).
 
@@ -196,9 +196,9 @@ fastcgi_read_timeout 60000s;
 
 == Changelog ==
 
-= 0.9.20 =
+= 0.9.17 =
 
-- Александр Воробьев [@Alex01d](https://github.com/Alex01d) обновил код для совместимости с PHP 8.
+- Максим Дубовик [@lufton](https://github.com/lufton) исправил использование использование устаревших геттеров и `OUTOFSTOCK_STATUS`.
 
 = 0.9.18 =
 
@@ -214,10 +214,6 @@ fastcgi_read_timeout 60000s;
 - Максим Дубовик [@lufton](https://github.com/lufton) добавил возможность отключать управление остатками с помощью константы `WC1C_MANAGE_STOCK`.
 - Арсений Дугин [@sklazer](https://github.com/sklazer) исправил ошибку "Failed open archive %s with error code 19" при обмене данными с архивом большого размера.
 - [@Lomerill](https://github.com/Lomerill) добавил поддержку чтения статуса товара из элемента `Товар.Статус`.
-
-= 0.9.17 =
-
-- Максим Дубовик [@lufton](https://github.com/lufton) исправил использование использование устаревших геттеров и `OUTOFSTOCK_STATUS`.
 
 = 0.9.5 =
 
