@@ -25,7 +25,7 @@ function wc1c_manage_edit_taxonomy_columns($columns) {
 function wc1c_manage_taxonomy_custom_column($columns, $column, $id) {
   if ($column == 'wc1c_guid') {
     $guid = get_woocommerce_term_meta($id, 'wc1c_guid');
-    list($taxonomy, $guid) = explode('::', (string) $guid);
+    list($taxonomy, $guid) = explode('::', $guid);
     $columns .= $guid ? "<small>$guid</small>" : '<span class="na">–</span>';
   }
 
@@ -42,7 +42,7 @@ function wc1c_woocommerce_attribute_taxonomy_compare($a, $b) {
 }
 
 function wc1c_woocommerce_attribute_taxonomies($attribute_taxonomies) {
-  if (is_admin() && isset($_GET['page']) && $_GET['page'] == 'product_attributes') {
+  if (is_admin() && @$_GET['page'] == 'product_attributes') {
     $guids = get_option('wc1c_guid_attributes', array());
     $attribute_ids = array_values($guids);
 
