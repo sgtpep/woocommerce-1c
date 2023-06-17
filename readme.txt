@@ -196,9 +196,9 @@ fastcgi_read_timeout 60000s;
 
 == Changelog ==
 
-= 0.9.17 =
+= 0.9.20 =
 
-- Максим Дубовик [@lufton](https://github.com/lufton) исправил использование использование устаревших геттеров и `OUTOFSTOCK_STATUS`.
+- Александр Воробьев [@Alex01d](https://github.com/Alex01d) обновил код для совместимости с PHP 8.
 
 = 0.9.18 =
 
@@ -214,6 +214,10 @@ fastcgi_read_timeout 60000s;
 - Максим Дубовик [@lufton](https://github.com/lufton) добавил возможность отключать управление остатками с помощью константы `WC1C_MANAGE_STOCK`.
 - Арсений Дугин [@sklazer](https://github.com/sklazer) исправил ошибку "Failed open archive %s with error code 19" при обмене данными с архивом большого размера.
 - [@Lomerill](https://github.com/Lomerill) добавил поддержку чтения статуса товара из элемента `Товар.Статус`.
+
+= 0.9.17 =
+
+- Максим Дубовик [@lufton](https://github.com/lufton) исправил использование использование устаревших геттеров и `OUTOFSTOCK_STATUS`.
 
 = 0.9.5 =
 
