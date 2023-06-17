@@ -6,7 +6,7 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Tags: 1c, 1c-enterprise, commerceml, integration, e-commerce, ecommerce, commerce, shop, cart, woothemes, woocommerce
 Requires at least: 3.8
 Tested up to: 5.4
-Stable tag: 0.9.20
+Stable tag: 0.9.21
 
 Provides data exchange between WooCommerce plugin and business application "1C:Enterprise 8. Trade Management" (and compatible ones).
 
@@ -196,9 +196,9 @@ fastcgi_read_timeout 60000s;
 
 == Changelog ==
 
-= 0.9.20 =
+= 0.9.21 =
 
-- Александр Воробьев [@Alex01d](https://github.com/Alex01d) обновил код для совместимости с PHP 8.
+- Александр Воробьев [@Alex01d](https://github.com/Alex01d) и Максим Дубовик [@lufton](https://github.com/lufton) обновили код для совместимости с PHP 8 с сохранением обратной совместимости.
 
 = 0.9.18 =
 
