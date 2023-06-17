@@ -18,7 +18,7 @@ if (!defined('__DIR__')) define('__DIR__', dirname(__FILE__));
 
 define('WC1C_PLUGIN_DIR', __DIR__ . '/');
 define('WC1C_PLUGIN_BASENAME', plugin_basename(__FILE__));
-define('WC1C_PLUGIN_BASEDIR', dirname((string) WC1C_PLUGIN_BASENAME) . '/');
+define('WC1C_PLUGIN_BASEDIR', dirname(WC1C_PLUGIN_BASENAME) . '/');
 $upload_dir = wp_upload_dir();
 define('WC1C_DATA_DIR', "{$upload_dir['basedir']}/woocommerce-1c/");
 
@@ -79,7 +79,7 @@ function wc1c_add_rewrite_rules() {
 function wc1c_delete_term($term_id, $tt_id, $taxonomy, $deleted_term) {
   global $wpdb;
 
-  if ($taxonomy != 'product_cat' && !str_starts_with((string) $taxonomy, 'pa_')) return;
+  if ($taxonomy != 'product_cat' && strpos($taxonomy, 'pa_') !== 0) return;
 
   $wpdb->delete($wpdb->termmeta, array('term_id' => $term_id));
   if (function_exists('wc1c_check_wpdb_error')) wc1c_check_wpdb_error();
@@ -124,7 +124,7 @@ function wc1c_delete_woocommerce_attribute($attribute_id) {
 }
 
 function wc1c_parse_decimal($number) {
-  $number = str_replace(array(',', ' '), array('.', ''), (string) $number);
+  $number = str_replace(array(',', ' '), array('.', ''), $number);
 
   return (float) $number;
 }

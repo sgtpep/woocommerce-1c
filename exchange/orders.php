@@ -4,41 +4,41 @@ if (!defined('ABSPATH')) exit;
 function wc1c_orders_start_element_handler($is_full, $names, $depth, $name, $attrs) {
   global $wc1c_document;
 
-  if (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'КоммерческаяИнформация' && $name == 'Документ') {
+  if (@$names[$depth - 1] == 'КоммерческаяИнформация' && $name == 'Документ') {
     $wc1c_document = array();
   }
-  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Документ' && $name == 'Контрагенты') {
+  elseif (@$names[$depth - 1] == 'Документ' && $name == 'Контрагенты') {
     $wc1c_document['Контрагенты'] = array();
   }
-  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Контрагенты' && $name == 'Контрагент') {
+  elseif (@$names[$depth - 1] == 'Контрагенты' && $name == 'Контрагент') {
     $wc1c_document['Контрагенты'][] = array();
   }
-  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Документ' && $name == 'Товары') {
+  elseif (@$names[$depth - 1] == 'Документ' && $name == 'Товары') {
     $wc1c_document['Товары'] = array();
   }
-  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Товары' && $name == 'Товар') {
+  elseif (@$names[$depth - 1] == 'Товары' && $name == 'Товар') {
     $wc1c_document['Товары'][] = array();
   }
-  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Товар' && $name == 'ЗначенияРеквизитов') {
+  elseif (@$names[$depth - 1] == 'Товар' && $name == 'ЗначенияРеквизитов') {
     $i = count($wc1c_document['Товары']) - 1;
     $wc1c_document['Товары'][$i]['ЗначенияРеквизитов'] = array();
   }
-  elseif (array_key_exists($depth - 2, $names) && $names[$depth - 2] == 'Товар' && array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'ЗначенияРеквизитов' && $name == 'ЗначениеРеквизита') {
+  elseif (@$names[$depth - 2] == 'Товар' && @$names[$depth - 1] == 'ЗначенияРеквизитов' && $name == 'ЗначениеРеквизита') {
     $i = count($wc1c_document['Товары']) - 1;
     $wc1c_document['Товары'][$i]['ЗначенияРеквизитов'][] = array();
   }
-  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Товар' && $name == 'ХарактеристикиТовара') {
+  elseif (@$names[$depth - 1] == 'Товар' && $name == 'ХарактеристикиТовара') {
     $i = count($wc1c_document['Товары']) - 1;
     $wc1c_document['Товары'][$i]['ХарактеристикиТовара'] = array();
   }
-  elseif (array_key_exists($depth - 2, $names) && $names[$depth - 2] == 'Товар' && array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'ХарактеристикиТовара' && $name == 'ХарактеристикаТовара') {
+  elseif (@$names[$depth - 2] == 'Товар' && @$names[$depth - 1] == 'ХарактеристикиТовара' && $name == 'ХарактеристикаТовара') {
     $i = count($wc1c_document['Товары']) - 1;
     $wc1c_document['Товары'][$i]['ХарактеристикиТовара'][] = array();
   }
-  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Документ' && $name == 'ЗначенияРеквизитов') {
+  elseif (@$names[$depth - 1] == 'Документ' && $name == 'ЗначенияРеквизитов') {
     $wc1c_document['ЗначенияРеквизитов'] = array();
   }
-  elseif (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'ЗначенияРеквизитов' && $name == 'ЗначениеРеквизита') {
+  elseif (@$names[$depth - 1] == 'ЗначенияРеквизитов' && $name == 'ЗначениеРеквизита') {
     $wc1c_document['ЗначенияРеквизитов'][] = array();
   }
 }
@@ -46,43 +46,37 @@ function wc1c_orders_start_element_handler($is_full, $names, $depth, $name, $att
 function wc1c_orders_character_data_handler($is_full, $names, $depth, $name, $data) {
   global $wc1c_document;
 
-  if (array_key_exists($depth - 2, $names) && $names[$depth - 2] == 'КоммерческаяИнформация' && array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Документ' && !in_array($name, array('Контрагенты', 'Товары', 'ЗначенияРеквизитов'))) {
-    isset($wc1c_document[$name]) || $wc1c_document[$name] = '';
-    $wc1c_document[$name] .= $data;
+  if (@$names[$depth - 2] == 'КоммерческаяИнформация' && @$names[$depth - 1] == 'Документ' && !in_array($name, array('Контрагенты', 'Товары', 'ЗначенияРеквизитов'))) {
+    @$wc1c_document[$name] .= $data;
   }
-  elseif (array_key_exists($depth - 2, $names) && $names[$depth - 2] == 'Контрагенты' && array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Контрагент') {
+  elseif (@$names[$depth - 2] == 'Контрагенты' && @$names[$depth - 1] == 'Контрагент') {
     $i = count($wc1c_document['Контрагенты']) - 1;
-    isset($wc1c_document['Контрагенты'][$i][$name]) || $wc1c_document['Контрагенты'][$i][$name] = '';
-    $wc1c_document['Контрагенты'][$i][$name] .= $data;
+    @$wc1c_document['Контрагенты'][$i][$name] .= $data;
   }
-  elseif (array_key_exists($depth - 2, $names) && $names[$depth - 2] == 'Товары' && array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'Товар' && !in_array($name, array('СтавкиНалогов', 'ЗначенияРеквизитов', 'ХарактеристикиТовара'))) {
+  elseif (@$names[$depth - 2] == 'Товары' && @$names[$depth - 1] == 'Товар' && !in_array($name, array('СтавкиНалогов', 'ЗначенияРеквизитов', 'ХарактеристикиТовара'))) {
     $i = count($wc1c_document['Товары']) - 1;
-    isset($wc1c_document['Товары'][$i][$name]) || $wc1c_document['Товары'][$i][$name] = '';
-    $wc1c_document['Товары'][$i][$name] .= $data;
+    @$wc1c_document['Товары'][$i][$name] .= $data;
   }
-  elseif (array_key_exists($depth - 3, $names) && $names[$depth - 3] == 'Товар' && array_key_exists($depth - 2, $names) && $names[$depth - 2] == 'ЗначенияРеквизитов' && array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'ЗначениеРеквизита') {
+  elseif (@$names[$depth - 3] == 'Товар' && @$names[$depth - 2] == 'ЗначенияРеквизитов' && @$names[$depth - 1] == 'ЗначениеРеквизита') {
     $i = count($wc1c_document['Товары']) - 1;
     $j = count($wc1c_document['Товары'][$i]['ЗначенияРеквизитов']) - 1;
-    isset($wc1c_document['Товары'][$i]['ЗначенияРеквизитов'][$j][$name]) || $wc1c_document['Товары'][$i]['ЗначенияРеквизитов'][$j][$name] = '';
-    $wc1c_document['Товары'][$i]['ЗначенияРеквизитов'][$j][$name] .= $data;
+    @$wc1c_document['Товары'][$i]['ЗначенияРеквизитов'][$j][$name] .= $data;
   }
-  elseif (array_key_exists($depth - 3, $names) && $names[$depth - 3] == 'Товар' && array_key_exists($depth - 2, $names) && $names[$depth - 2] == 'ХарактеристикиТовара' && array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'ХарактеристикаТовара') {
+  elseif (@$names[$depth - 3] == 'Товар' && @$names[$depth - 2] == 'ХарактеристикиТовара' && @$names[$depth - 1] == 'ХарактеристикаТовара') {
     $i = count($wc1c_document['Товары']) - 1;
     $j = count($wc1c_document['Товары'][$i]['ХарактеристикиТовара']) - 1;
-    isset($wc1c_document['Товары'][$i]['ХарактеристикиТовара'][$j][$name]) || $wc1c_document['Товары'][$i]['ХарактеристикиТовара'][$j][$name] = '';
-    $wc1c_document['Товары'][$i]['ХарактеристикиТовара'][$j][$name] .= $data;
+    @$wc1c_document['Товары'][$i]['ХарактеристикиТовара'][$j][$name] .= $data;
   }
-  elseif (array_key_exists($depth - 3, $names) && $names[$depth - 3] == 'Документ' && array_key_exists($depth - 2, $names) && $names[$depth - 2] == 'ЗначенияРеквизитов' && array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'ЗначениеРеквизита') {
+  elseif (@$names[$depth - 3] == 'Документ' && @$names[$depth - 2] == 'ЗначенияРеквизитов' && @$names[$depth - 1] == 'ЗначениеРеквизита') {
     $i = count($wc1c_document['ЗначенияРеквизитов']) - 1;
-    isset($wc1c_document['ЗначенияРеквизитов'][$i][$name]) || $wc1c_document['ЗначенияРеквизитов'][$i][$name] = '';
-    $wc1c_document['ЗначенияРеквизитов'][$i][$name] .= $data;
+    @$wc1c_document['ЗначенияРеквизитов'][$i][$name] .= $data;
   }
 }
 
 function wc1c_orders_end_element_handler($is_full, $names, $depth, $name) {
   global $wpdb, $wc1c_document;
 
-  if (array_key_exists($depth - 1, $names) && $names[$depth - 1] == 'КоммерческаяИнформация' && $name == 'Документ') {
+  if (@$names[$depth - 1] == 'КоммерческаяИнформация' && $name == 'Документ') {
     wc1c_replace_document($wc1c_document);
   }
   elseif (!$depth && $name == 'КоммерческаяИнформация') {
@@ -135,7 +129,7 @@ function wc1c_replace_document_products($order, $document_products) {
       $total = wc1c_parse_decimal($document_product['Сумма']);
     }
     else {
-      $price = wc1c_parse_decimal(isset($document_product['ЦенаЗаЕдиницу']) ? $document_product['ЦенаЗаЕдиницу'] : null);
+      $price = wc1c_parse_decimal(@$document_product['ЦенаЗаЕдиницу']);
       $total = $price * $quantity;
     }
 
@@ -149,11 +143,11 @@ function wc1c_replace_document_products($order, $document_products) {
     if (!isset($document_product['product'])) continue;
     $product = $document_product['product'];
 
-    if ($product->get_id()) {
+    if ($product->variation_id) {
       $attributes = $product->get_variation_attributes();
       $variation = array();
       foreach ($attributes as $attribute_key => $attribute_value) {
-        $variation[urldecode((string) $attribute_key)] = urldecode((string) $attribute_value);
+        $variation[urldecode($attribute_key)] = urldecode($attribute_value);
       }
       $args['variation'] = $variation;
     }
@@ -184,9 +178,10 @@ function wc1c_replace_document_services($order, $document_services) {
   }
 
   if (!$shipping_methods) {
-    $shipping = WC()?->shipping;
-    $shipping?->load_shipping_methods();
-    $shipping_methods = $shipping?->get_shipping_methods();
+    if ($shipping = WC()->shipping) {
+      $shipping->load_shipping_methods();
+      $shipping_methods = $shipping->get_shipping_methods();
+    }
   }
 
   $shipping_cost_sum = 0;
@@ -242,15 +237,15 @@ function wc1c_replace_document($document) {
   if (!$order) {
     $args = array(
       'status' => 'on-hold',
-      'customer_note' => isset($document['Комментарий']) ? $document['Комментарий'] : null,
+      'customer_note' => @$document['Комментарий'],
     );
 
-    $contragent_name = isset($document['Контрагенты'][0]['Наименование']) ? $document['Контрагенты'][0]['Наименование'] : null;
+    $contragent_name = @$document['Контрагенты'][0]['Наименование'];
     if ($contragent_name == "Гость") {
       $user_id = 0;
     }
-    elseif (str_contains((string) $contragent_name, ' ')) {
-      list($first_name, $last_name) = explode(' ', (string) $contragent_name, 2);
+    elseif (strpos($contragent_name, ' ') !== false) {
+      list($first_name, $last_name) = explode(' ', $contragent_name, 2);
       $result = $wpdb->get_var($wpdb->prepare("SELECT u1.user_id FROM $wpdb->usermeta u1 JOIN $wpdb->usermeta u2 ON u1.user_id = u2.user_id WHERE (u1.meta_key = 'billing_first_name' AND u1.meta_value = %s AND u2.meta_key = 'billing_last_name' AND u2.meta_value = %s) OR (u1.meta_key = 'shipping_first_name' AND u1.meta_value = %s AND u2.meta_key = 'shipping_last_name' AND u2.meta_value = %s)", $first_name, $last_name, $first_name, $last_name));
       wc1c_check_wpdb_error();
       if ($result) $user_id = $result;
@@ -266,9 +261,9 @@ function wc1c_replace_document($document) {
       'ID' => $order->get_id(),
     );
 
-    $date = isset($document['Дата']) ? $document['Дата'] : null;
+    $date = @$document['Дата'];
     if ($date && !empty($document['Время'])) $date .= " {$document['Время']}";
-    $timestamp = strtotime((string) $date);
+    $timestamp = strtotime($date);
     $args['post_date'] = date("Y-m-d H:i:s", $timestamp);
 
     $result = wp_update_post($args);
@@ -346,7 +341,7 @@ function wc1c_replace_document($document) {
   }
  
   foreach ($post_meta as $meta_key => $meta_value) {
-    $current_meta_value = isset($current_post_meta[$meta_key]) ? $current_post_meta[$meta_key] : null;
+    $current_meta_value = @$current_post_meta[$meta_key];
     if ($current_meta_value == $meta_value) continue;
 
     update_post_meta($order->get_id(), $meta_key, $meta_value);
