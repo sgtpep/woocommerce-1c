@@ -143,7 +143,7 @@ function wc1c_replace_document_products($order, $document_products) {
     if (!isset($document_product['product'])) continue;
     $product = $document_product['product'];
 
-    if ($product->variation_id) {
+    if ($product instanceof WC_Product_Variation) {
       $attributes = $product->get_variation_attributes();
       $variation = array();
       foreach ($attributes as $attribute_key => $attribute_value) {
