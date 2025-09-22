@@ -1,6 +1,5 @@
-=== WooCommerce and 1C:Enterprise/1С:Предприятие Data Exchange ===
+=== Data Exchange for WooCommerce and 1C:Enterprise/1С:Предприятие ===
 Contributors: sgtpep
-Donate link: https://money.yandex.ru/embed/donate.xml?account=410011766586472&quickpay=donate&payment-type-choice=on&default-sum=1000&targets=%D0%9F%D0%BB%D0%B0%D0%B3%D0%B8%D0%BD+%22%D0%9E%D0%B1%D0%BC%D0%B5%D0%BD+%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%BC+%D0%BC%D0%B5%D0%B6%D0%B4%D1%83+WooCommerce+%D0%B8+1%D0%A1%3A%D0%9F%D1%80%D0%B5%D0%B4%D0%BF%D1%80%D0%B8%D1%8F%D1%82%D0%B8%D0%B5%D0%BC%22&target-visibility=on&project-name=&project-site=https%3A%2F%2Fwordpress.org%2Fplugins%2Fwoocommerce-and-1centerprise-data-exchange%2F&button-text=05&fio=on&mail=on&successURL=
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Tags: 1c, 1c-enterprise, commerceml, integration, e-commerce, ecommerce, commerce, shop, cart, woothemes, woocommerce
@@ -8,7 +7,7 @@ Requires at least: 3.8
 Tested up to: 5.4
 Stable tag: 0.9.20
 
-Provides data exchange between WooCommerce plugin and business application "1C:Enterprise 8. Trade Management" (and compatible ones).
+Provides data exchange between the WooCommerce plugin and business application "1C:Enterprise 8. Trade Management" (and compatible ones).
 
 == Description ==
 
@@ -32,13 +31,11 @@ Provides data exchange between WooCommerce plugin and business application "1C:E
 * [инструкцию по установке](./installation/)
 * [часто задаваемые вопросы](./faq/)
 
-Поддержать разработку и автора можно взносом через [банковскую карту или Яндекс.Деньги](https://money.yandex.ru/embed/donate.xml?account=410011766586472&quickpay=donate&payment-type-choice=on&default-sum=1000&targets=%D0%9F%D0%BB%D0%B0%D0%B3%D0%B8%D0%BD+%22%D0%9E%D0%B1%D0%BC%D0%B5%D0%BD+%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%BC+%D0%BC%D0%B5%D0%B6%D0%B4%D1%83+WooCommerce+%D0%B8+1%D0%A1%3A%D0%9F%D1%80%D0%B5%D0%B4%D0%BF%D1%80%D0%B8%D1%8F%D1%82%D0%B8%D0%B5%D0%BC%22&target-visibility=on&project-name=&project-site=https%3A%2F%2Fwordpress.org%2Fplugins%2Fwoocommerce-and-1centerprise-data-exchange%2F&button-text=05&fio=on&mail=on&successURL=).
-
 Соавторы: Максим Дубовик [@lufton](https://github.com/lufton), [@chrme](https://github.com/chrme), [@shsl](https://github.com/shsl), Арсений Дугин [@sklazer](https://github.com/sklazer), Геннадий Ковшенин [@soulseekah](https://github.com/soulseekah), Vladyslav [@qwave](https://github.com/qwave), Александр Воробьев [@Alex01d](https://github.com/Alex01d).
 
 = In English =
 
-Provides data exchange between eCommerce plugin WooCommerce and business application "1C:Enterprise 8. Trade Management".
+Provides data exchange between the eCommerce plugin WooCommerce and business application "1C:Enterprise 8. Trade Management".
 
 Features:
 
@@ -58,18 +55,18 @@ Contributors: Maksim Dubovik [@lufton](https://github.com/lufton), [@chrme](http
 
 = License =
 
-"WooCommerce and 1C:Enterprise Data Exchange" is free software: you can redistribute it and/or modify
+"Data Exchange for WooCommerce and 1C:Enterprise" is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 of the License, or
 any later version.
  
-"WooCommerce and 1C:Enterprise Data Exchange" is distributed in the hope that it will be useful,
+"Data Exchange for WooCommerce and 1C:Enterprise" is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
  
 You should have received a copy of the GNU General Public License
-along with "WooCommerce and 1C:Enterprise Data Exchange". If not, see http://www.gnu.org/licenses/gpl-3.0.html.
+along with "Data Exchange for WooCommerce and 1C:Enterprise". If not, see http://www.gnu.org/licenses/gpl-3.0.html.
 
 == Installation ==
 

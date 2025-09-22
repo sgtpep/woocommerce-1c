@@ -1,9 +1,8 @@
-# Copyright (C) 2016 WooCommerce and 1C:Enterprise/1С:Предприятие Data Exchange
-# This file is distributed under the same license as the WooCommerce and 1C:Enterprise/1С:Предприятие Data Exchange package.
+# Copyright (C) 2016 Data Exchange for WooCommerce and 1C:Enterprise/1С:Предприятие
+# This file is distributed under the same license as the 'Data Exchange for WooCommerce and 1C:Enterprise/1С:Предприятие' package.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce and 1C:Enterprise/1С:Предприятие Data "
-"Exchange 0.7\n"
+"Project-Id-Version: Data Exchange for WooCommerce and 1C:Enterprise/1С:Предприятие 0.7\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-1c\n"
 "POT-Creation-Date: 2016-02-23 20:19:20+00:00\n"
 "MIME-Version: 1.0\n"
@@ -50,7 +49,7 @@ msgid ""
 msgstr ""
 
 #. Plugin Name of the plugin/theme
-msgid "WooCommerce and 1C:Enterprise/1С:Предприятие Data Exchange"
+msgid "Data Exchange for WooCommerce and 1C:Enterprise/1С:Предприятие"
 msgstr ""
 
 #. Description of the plugin/theme
