@@ -23,24 +23,8 @@ foreach ($order_posts as $order_post) {
   if (!$order) wc1c_error("Failed to get order");
 
   $order_post_ids[] = $order_post->ID;
-
   $order_line_items = $order->get_items();
-
-  // $has_missing_item = false;
-  foreach ($order_line_items as $key => $order_line_item) {
-    $product_id = $order_line_item['variation_id'] ? $order_line_item['variation_id'] : $order_line_item['product_id'];
-    $guid = get_post_meta($product_id, '_wc1c_guid', true);
-    // if (!$guid) {
-    //   $has_missing_item = true;
-    //   break;
-    // }
-
-    $order_line_items[$key]['wc1c_guid'] = $guid;
-  }
-  // if ($has_missing_item) continue;
-
   $order_shipping_items = $order->get_shipping_methods();
-
   $order_meta = get_post_meta($order_post->ID, null, true);
   foreach ($order_meta as $meta_key => $meta_value) {
     $order_meta[$meta_key] = $meta_value[0];
@@ -112,8 +96,10 @@ foreach ($order_posts as $order_post) {
 
   $products = array();
   foreach ($order_line_items as $order_line_item) {
+    $product_id = $order_line_item['variation_id'] ? $order_line_item['variation_id'] : $order_line_item['product_id'];
+    $guid = get_post_meta($product_id, '_wc1c_guid', true);
     $products[] = array(
-      'guid' => $order_line_item['wc1c_guid'],
+      'guid' => $guid,
       'name' => $order_line_item['name'],
       'price_per_item' => $order_line_item['line_total'] / $order_line_item['qty'],
       'quantity' => $order_line_item['qty'],
